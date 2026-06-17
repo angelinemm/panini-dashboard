@@ -168,6 +168,16 @@ function App() {
     .slice(0, 3);
   const getTopTeamsByTypes = (types) => {
     const allowedTypes = new Set(types);
+    const getTeamProgress = (snapshotStickers, teamName) => {
+      const teamStickers = snapshotStickers.filter((sticker) => {
+        return (
+          String(sticker.Equipe).trim() === teamName &&
+          allowedTypes.has(String(sticker.Type).trim())
+        );
+      });
+
+      return teamStickers.filter(isOwned).length;
+    };
 
     return Object.values(
       stickers.reduce((teams, sticker) => {
@@ -201,12 +211,15 @@ function App() {
         ...team,
         percentage:
           team.total === 0 ? 0 : Math.round((team.owned / team.total) * 100),
+        reachedDate:
+          history.find((snapshot) => {
+            return getTeamProgress(snapshot.stickers, team.name) >= team.owned;
+          })?.date ?? "",
       }))
       .sort((teamA, teamB) => {
         return (
           teamB.owned - teamA.owned ||
-          teamB.percentage - teamA.percentage ||
-          teamB.total - teamA.total ||
+          teamA.reachedDate.localeCompare(teamB.reachedDate) ||
           teamA.name.localeCompare(teamB.name)
         );
       })
@@ -352,6 +365,7 @@ function App() {
                   <strong>{team.name}</strong>
                   <span>
                     {team.owned} sur {team.total} collectés
+                    {team.reachedDate ? ` depuis le ${team.reachedDate}` : ""}
                   </span>
                 </div>
                 <div className="team-progress">
