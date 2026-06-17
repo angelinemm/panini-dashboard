@@ -1,0 +1,11 @@
+Number,On a,Doubles,Type,Name,Country,Equipe,Packet,Fav?,Top 3
+1,TRUE,,Logo,Logo Alpin,,EQUIPE ALPINE,1,,
+2,TRUE,,Equipe,Equipe Alpine,,EQUIPE ALPINE,1,,
+3,FALSE,,Coureur,Luc Martin,FRA,EQUIPE ALPINE,2,,
+4,TRUE,,Coureur,Noah Bernard,BEL,EQUIPE ALPINE,2,⭐,1
+5,FALSE,,Maillot,Maillot Alpine,,EQUIPE ALPINE,3,,
+6,FALSE,,Vélo,Vélo Alpine,,EQUIPE ALPINE,3,,
+7,TRUE,,Coureuse,Clara Dupont,FRA,EQUIPE SOLEIL,4,⭐,2
+8,FALSE,,Coureuse,Emma Laurent,BEL,EQUIPE SOLEIL,4,,
+9,FALSE,,Ville,Lyon,,,5,,
+10,TRUE,1,Ville,Paris,,,5,⭐,3

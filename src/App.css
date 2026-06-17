@@ -1,0 +1,566 @@
+.dashboard {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 48px 20px;
+  overflow: hidden;
+}
+
+.dashboard::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(115deg, rgba(255, 221, 0, 0.74), rgba(255, 221, 0, 0.08) 38%),
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.96) 0 2px, transparent 3px),
+    radial-gradient(circle at 82% 20%, rgba(227, 20, 45, 0.52) 0 3px, transparent 4px),
+    radial-gradient(circle at 74% 76%, rgba(0, 132, 86, 0.34) 0 3px, transparent 4px),
+    linear-gradient(145deg, #f8f2d8 0%, #fff8dc 44%, #d9edf4 100%);
+}
+
+.dashboard::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  opacity: 0.28;
+  background:
+    linear-gradient(27deg, transparent 0 46%, rgba(10, 43, 60, 0.34) 47% 48%, transparent 49%),
+    linear-gradient(151deg, transparent 0 42%, rgba(10, 43, 60, 0.2) 43% 44%, transparent 45%),
+    repeating-linear-gradient(90deg, transparent 0 54px, rgba(10, 43, 60, 0.08) 55px 56px);
+  transform: rotate(-5deg);
+}
+
+.race-panel {
+  width: min(100%, 920px);
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, var(--yellow) 0 14px, transparent 14px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 250, 224, 0.93));
+  border: 1px solid rgba(13, 43, 60, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(13, 43, 60, 0.2);
+  padding: 34px;
+}
+
+.race-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.eyebrow,
+.stage-label,
+.stat span,
+.race-badge small {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--blue);
+}
+
+.race-panel h1 {
+  max-width: 600px;
+  margin: 8px 0 0;
+  font-size: clamp(2.5rem, 7vw, 5.7rem);
+  line-height: 0.86;
+  font-weight: 950;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.race-badge {
+  flex: 0 0 auto;
+  width: 132px;
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.55), transparent 42%),
+    var(--yellow);
+  border: 4px solid #fff6b5;
+  border-radius: 50%;
+  box-shadow: inset 0 -12px 0 rgba(13, 43, 60, 0.08), 0 14px 30px rgba(13, 43, 60, 0.18);
+}
+
+.race-badge span {
+  font-size: 2.55rem;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.route-card {
+  position: relative;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(13, 43, 60, 0.9), rgba(16, 77, 101, 0.84)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0 10px, transparent 10px 20px);
+  border-radius: 8px;
+  color: #fffbea;
+  overflow: hidden;
+}
+
+.route-card__copy {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.stage-label {
+  color: var(--yellow);
+}
+
+.route-card strong {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.1;
+  text-align: right;
+}
+
+.progress {
+  position: relative;
+  height: 28px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px 10%),
+    rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  min-width: 12px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, var(--yellow), #fff172 58%, var(--green)),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0 10px, transparent 10px 20px);
+  box-shadow: 0 0 24px rgba(255, 221, 0, 0.5);
+}
+
+.route-card__markers {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: rgba(255, 251, 234, 0.8);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.stat {
+  min-height: 142px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(13, 43, 60, 0.14);
+  color: var(--ink);
+  box-shadow: inset 0 -8px 0 rgba(13, 43, 60, 0.05);
+}
+
+.stat span {
+  color: rgba(13, 43, 60, 0.72);
+}
+
+.stat strong {
+  font-size: clamp(2.2rem, 5vw, 3.9rem);
+  line-height: 0.9;
+  font-weight: 950;
+}
+
+.stat p {
+  margin: 0;
+  font-weight: 750;
+}
+
+.stat--yellow {
+  background: var(--yellow);
+}
+
+.stat--green {
+  color: #fff;
+  background: var(--green);
+}
+
+.stat--green span {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.stat--polka {
+  background:
+    radial-gradient(circle at 20% 22%, var(--red) 0 13px, transparent 14px),
+    radial-gradient(circle at 78% 36%, var(--red) 0 11px, transparent 12px),
+    radial-gradient(circle at 42% 78%, var(--red) 0 12px, transparent 13px),
+    #fffdf4;
+}
+
+.stat--white {
+  background:
+    linear-gradient(135deg, rgba(13, 43, 60, 0.08), transparent 48%),
+    #ffffff;
+}
+
+.history-card {
+  margin-top: 18px;
+  padding: 22px;
+  color: #fffbea;
+  background:
+    linear-gradient(135deg, rgba(13, 43, 60, 0.95), rgba(0, 114, 188, 0.82)),
+    repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 18px);
+  border-radius: 8px;
+}
+
+.history-chart {
+  padding: 10px 0 2px;
+  overflow-x: auto;
+}
+
+.history-chart svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  overflow: visible;
+}
+
+.history-axis {
+  stroke: rgba(255, 251, 234, 0.42);
+  stroke-width: 2;
+}
+
+.history-grid {
+  stroke: rgba(255, 251, 234, 0.13);
+  stroke-width: 1;
+}
+
+.history-line {
+  fill: none;
+  stroke: var(--yellow);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+  filter: drop-shadow(0 7px 8px rgba(0, 0, 0, 0.22));
+}
+
+.history-point {
+  fill: var(--yellow);
+  stroke: #fffbea;
+  stroke-width: 3;
+}
+
+.history-x-label,
+.history-y-label {
+  fill: rgba(255, 251, 234, 0.72);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.history-x-label {
+  text-anchor: middle;
+}
+
+.history-y-label {
+  text-anchor: end;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.history-summary div {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.history-summary span,
+.history-summary strong {
+  display: block;
+}
+
+.history-summary span {
+  color: rgba(255, 251, 234, 0.66);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.history-summary strong {
+  margin-top: 5px;
+  color: #ffffff;
+  font-size: 1.02rem;
+  line-height: 1.15;
+}
+
+.favourite-cards {
+  margin-top: 18px;
+  padding: 22px;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(255, 221, 0, 0.9), rgba(255, 248, 179, 0.94)),
+    repeating-linear-gradient(120deg, rgba(13, 43, 60, 0.09) 0 1px, transparent 1px 18px);
+  border: 1px solid rgba(13, 43, 60, 0.14);
+  border-radius: 8px;
+  box-shadow: inset 0 -8px 0 rgba(13, 43, 60, 0.05);
+}
+
+.favourite-cards .stage-label {
+  color: var(--ink);
+}
+
+.favourite-cards .team-standings__header span {
+  color: rgba(13, 43, 60, 0.68);
+}
+
+.favourite-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.favourite-card {
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgba(13, 43, 60, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.favourite-medal {
+  display: block;
+  width: fit-content;
+  font-size: 2.3rem;
+  line-height: 1;
+  filter: drop-shadow(0 7px 10px rgba(13, 43, 60, 0.18));
+}
+
+.favourite-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.12rem;
+  line-height: 1.1;
+}
+
+.favourite-card span:last-child {
+  display: block;
+  margin-top: 8px;
+  color: rgba(13, 43, 60, 0.7);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.team-standings {
+  margin-top: 18px;
+  padding: 22px;
+  color: #fffbea;
+  background:
+    linear-gradient(135deg, rgba(13, 43, 60, 0.94), rgba(20, 88, 102, 0.9)),
+    repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 16px);
+  border-radius: 8px;
+}
+
+.team-standings__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.team-standings__header span {
+  color: rgba(255, 251, 234, 0.72);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.team-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 62px;
+  align-items: center;
+  gap: 14px;
+  min-height: 74px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.team-rank {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: var(--yellow);
+  border-radius: 50%;
+  font-size: 1.15rem;
+  font-weight: 950;
+}
+
+.team-row__main {
+  min-width: 0;
+}
+
+.team-row__text {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.team-row__text strong {
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-row__text span {
+  flex: 0 0 auto;
+  color: rgba(255, 251, 234, 0.72);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.team-progress {
+  height: 10px;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.team-progress div {
+  height: 100%;
+  min-width: 6px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--yellow), var(--green));
+}
+
+.team-percent {
+  color: var(--yellow);
+  font-size: 1.35rem;
+  font-weight: 950;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .dashboard {
+    padding: 18px;
+    place-items: stretch;
+  }
+
+  .race-panel {
+    padding: 22px;
+  }
+
+  .race-panel__header,
+  .route-card__copy {
+    flex-direction: column;
+  }
+
+  .race-badge {
+    width: 106px;
+    min-height: 106px;
+  }
+
+  .race-badge span {
+    font-size: 2rem;
+  }
+
+  .route-card strong {
+    text-align: left;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .favourite-list {
+    grid-template-columns: 1fr;
+  }
+
+  .history-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .team-standings__header,
+  .team-row__text {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .team-row {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .team-rank {
+    width: 38px;
+    height: 38px;
+  }
+
+  .team-percent {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .team-row__text strong {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 460px) {
+  .race-panel {
+    padding: 18px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    min-height: 118px;
+  }
+}
