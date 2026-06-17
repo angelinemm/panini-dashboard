@@ -102,6 +102,27 @@ Important fields:
 - `Fav?`: any non-empty value marks a favourite
 - `Top 3`: use `1`, `2`, or `3` for personal favourite-card ranking
 
+## Chases
+
+Private chase data can live in:
+
+```text
+public/chases.json
+```
+
+That file is ignored by Git. Use `public/chases.example.json` as a template:
+
+```json
+{
+  "stickers": [
+    { "number": 145, "note": "Movistar rider" }
+  ],
+  "teams": ["MOVISTAR TEAM"]
+}
+```
+
+The dashboard uses the latest snapshot to show whether chased stickers are collected and how followed teams are progressing.
+
 ## Team Standings
 
 Men's team standings include:

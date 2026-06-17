@@ -1,0 +1,20 @@
+{
+  "stickers": [
+    {
+      "number": 145,
+      "note": "Movistar rider"
+    },
+    {
+      "number": 149,
+      "note": "Movistar maillot"
+    },
+    {
+      "number": 154,
+      "note": "Movistar rider"
+    }
+  ],
+  "teams": [
+    "MOVISTAR TEAM",
+    "INEOS GRENADIERS"
+  ]
+}

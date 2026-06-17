@@ -58,16 +58,49 @@ const fetchSnapshotsIndex = () => {
   });
 };
 
+const fetchJsonIfAvailable = (file) => {
+  return fetch(file).then((response) => {
+    if (!response.ok) {
+      return null;
+    }
+
+    return response.json();
+  });
+};
+
+const fetchChases = () => {
+  return fetchJsonIfAvailable("/chases.json")
+    .then((chases) => {
+      if (chases !== null) {
+        return chases;
+      }
+
+      return fetchJsonIfAvailable("/chases.example.json");
+    })
+    .then((chases) => {
+      return {
+        stickers: chases?.stickers ?? [],
+        teams: chases?.teams ?? [],
+      };
+    });
+};
+
 function App() {
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
+  const [chases, setChases] = useState({
+    stickers: [],
+    teams: [],
+  });
 
   useEffect(() => {
-    fetchSnapshotsIndex()
-      .then((snapshots) => {
-        const sortedSnapshots = [...snapshots].sort((snapshotA, snapshotB) => {
-          return snapshotA.date.localeCompare(snapshotB.date);
-        });
+    Promise.all([
+      fetchSnapshotsIndex().then((snapshots) => {
+        const sortedSnapshots = [...snapshots].sort(
+          (snapshotA, snapshotB) => {
+            return snapshotA.date.localeCompare(snapshotB.date);
+          },
+        );
 
         if (sortedSnapshots.length === 0) {
           throw new Error("No snapshots found");
@@ -95,11 +128,13 @@ function App() {
               });
           }),
         );
-      })
-      .then((snapshotHistory) => {
-        setHistory(snapshotHistory);
-        setStickers(snapshotHistory[snapshotHistory.length - 1].stickers);
-      });
+      }),
+      fetchChases(),
+    ]).then(([snapshotHistory, chaseData]) => {
+      setHistory(snapshotHistory);
+      setStickers(snapshotHistory[snapshotHistory.length - 1].stickers);
+      setChases(chaseData);
+    });
   }, []);
 
   const total = stickers.length;
@@ -186,6 +221,51 @@ function App() {
     "Vélo",
   ]);
   const womensTeams = getTopTeamsByTypes(["Coureuse"]);
+  const teamStickerTypes = new Set([
+    "Coureur",
+    "Coureuse",
+    "Maillot",
+    "Logo",
+    "Equipe",
+    "Velo",
+    "Vélo",
+  ]);
+  const chaseStickers = chases.stickers
+    .map((chase) => {
+      const chaseNumber =
+        typeof chase === "object" ? chase.number : Number.parseInt(chase, 10);
+      const sticker = stickers.find((currentSticker) => {
+        return Number.parseInt(currentSticker.Number, 10) === chaseNumber;
+      });
+
+      return {
+        note: typeof chase === "object" ? chase.note : "",
+        number: chaseNumber,
+        owned: sticker ? isOwned(sticker) : false,
+        sticker,
+      };
+    })
+    .filter((chase) => !Number.isNaN(chase.number));
+  const chaseTeams = chases.teams.map((teamName) => {
+    const teamStickers = stickers.filter((sticker) => {
+      return (
+        String(sticker.Equipe).trim() === teamName &&
+        teamStickerTypes.has(String(sticker.Type).trim())
+      );
+    });
+    const teamOwned = teamStickers.filter(isOwned).length;
+
+    return {
+      name: teamName,
+      owned: teamOwned,
+      percentage:
+        teamStickers.length === 0
+          ? 0
+          : Math.round((teamOwned / teamStickers.length) * 100),
+      total: teamStickers.length,
+    };
+  });
+  const chaseMissing = chaseStickers.filter((chase) => !chase.owned).length;
   const historyStart = history[0];
   const historyEnd = history[history.length - 1];
   const historyGain =
@@ -446,6 +526,78 @@ function App() {
             <p>favoris marqués</p>
           </article>
         </div>
+
+        {(chaseStickers.length > 0 || chaseTeams.length > 0) && (
+          <section className="chase-card" aria-labelledby="chase-heading">
+            <div className="team-standings__header">
+              <p className="stage-label" id="chase-heading">
+                À chasser
+              </p>
+              <span>
+                {chaseMissing} sticker{chaseMissing > 1 ? "s" : ""} manquant
+                {chaseMissing > 1 ? "s" : ""}
+              </span>
+            </div>
+
+            {chaseStickers.length > 0 && (
+              <ol className="chase-list">
+                {chaseStickers.map((chase) => {
+                  const title =
+                    String(chase.sticker?.Name ?? "").trim() ||
+                    chase.note ||
+                    `Sticker ${chase.number}`;
+                  const details = [
+                    String(chase.sticker?.Type ?? "").trim(),
+                    String(chase.sticker?.Equipe ?? "").trim(),
+                    String(chase.sticker?.Country ?? "").trim(),
+                  ].filter(Boolean);
+
+                  return (
+                    <li
+                      className={`chase-item ${
+                        chase.owned ? "chase-item--owned" : ""
+                      }`}
+                      key={chase.number}
+                    >
+                      <span className="chase-status">
+                        {chase.owned ? "Collecté" : "Manquant"}
+                      </span>
+                      <div>
+                        <strong>{title}</strong>
+                        <span>
+                          N° {chase.number}
+                          {details.length > 0
+                            ? ` - ${details.join(" - ")}`
+                            : ""}
+                        </span>
+                        {chase.note && <em>{chase.note}</em>}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
+
+            {chaseTeams.length > 0 && (
+              <div className="chase-teams">
+                {chaseTeams.map((team) => (
+                  <article className="chase-team" key={team.name}>
+                    <div className="chase-team__text">
+                      <strong>{team.name}</strong>
+                      <span>
+                        {team.owned} sur {team.total} collectés
+                      </span>
+                    </div>
+                    <div className="team-progress">
+                      <div style={{ width: `${team.percentage}%` }} />
+                    </div>
+                    <span className="team-percent">{team.percentage}%</span>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         {topCards.length > 0 && (
           <section className="favourite-cards" aria-labelledby="favourite-cards-heading">
