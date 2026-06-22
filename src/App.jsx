@@ -19,14 +19,21 @@ const isOwned = (sticker) => {
   return String(sticker["On a"]).trim().toUpperCase() === "TRUE";
 };
 
-const countDuplicatePackets = (value) => {
+const getPacketNumbers = (value) => {
   const packetList = String(value).trim();
 
   if (packetList === "") {
-    return 0;
+    return [];
   }
 
-  return packetList.split(/[,\s;/]+/).filter(Boolean).length;
+  return packetList
+    .split(/[,\s;/]+/)
+    .map((packet) => Number.parseInt(packet, 10))
+    .filter((packet) => !Number.isNaN(packet));
+};
+
+const countDuplicatePackets = (value) => {
+  return getPacketNumbers(value).length;
 };
 
 const parseStickerCsv = (csvText) => {
@@ -153,6 +160,14 @@ function App() {
   const remaining = total - owned;
   const doubles = stickers.reduce((sum, sticker) => {
     return sum + countDuplicatePackets(sticker.Doubles);
+  }, 0);
+  const packetsOpened = stickers.reduce((highestPacket, sticker) => {
+    const stickerPackets = [
+      ...getPacketNumbers(sticker.Packet),
+      ...getPacketNumbers(sticker.Doubles),
+    ];
+
+    return Math.max(highestPacket, 0, ...stickerPackets);
   }, 0);
   const favourites = stickers.filter((sticker) => {
     return String(sticker["Fav?"]).trim() !== "";
@@ -406,9 +421,12 @@ function App() {
         <div className="route-card">
           <div className="route-card__copy">
             <p className="stage-label">Étape de collection</p>
-            <strong>
-              {owned} sur {total} stickers collectés
-            </strong>
+            <div className="route-card__summary">
+              <strong>
+                {owned} sur {total} stickers collectés
+              </strong>
+              <span>{packetsOpened} paquets ouverts</span>
+            </div>
           </div>
           <div className="progress" aria-label={`${percentage}% complété`}>
             <div style={{ width: `${percentage}%` }} />
