@@ -19,6 +19,16 @@ const isOwned = (sticker) => {
   return String(sticker["On a"]).trim().toUpperCase() === "TRUE";
 };
 
+const countDuplicatePackets = (value) => {
+  const packetList = String(value).trim();
+
+  if (packetList === "") {
+    return 0;
+  }
+
+  return packetList.split(/[,\s;/]+/).filter(Boolean).length;
+};
+
 const parseStickerCsv = (csvText) => {
   const result = Papa.parse(csvText, {
     skipEmptyLines: true,
@@ -142,8 +152,7 @@ function App() {
   const percentage = total === 0 ? 0 : Math.round((owned / total) * 100);
   const remaining = total - owned;
   const doubles = stickers.reduce((sum, sticker) => {
-    const count = Number.parseInt(sticker.Doubles, 10);
-    return sum + (Number.isNaN(count) ? 0 : count);
+    return sum + countDuplicatePackets(sticker.Doubles);
   }, 0);
   const favourites = stickers.filter((sticker) => {
     return String(sticker["Fav?"]).trim() !== "";

@@ -96,7 +96,7 @@ Newer snapshots may include the header row. Older snapshots without headers are 
 Important fields:
 
 - `On a`: `TRUE` when the sticker is collected
-- `Doubles`: number of duplicates
+- `Doubles`: packet number(s) where duplicate copies were received, for example `28` or `10, 28`
 - `Type`: sticker type, such as `Coureur`, `Coureuse`, `Maillot`, `Logo`, `Equipe`, or `Vélo`
 - `Equipe`: team name
 - `Fav?`: any non-empty value marks a favourite
