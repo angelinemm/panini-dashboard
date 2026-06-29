@@ -76,30 +76,26 @@ const fetchSnapshotsIndex = () => {
 };
 
 const fetchJsonIfAvailable = (file) => {
-  return fetch(file).then((response) => {
-    if (!response.ok) {
-      return null;
-    }
+  return fetch(file)
+    .then((response) => {
+      const contentType = response.headers.get("content-type") ?? "";
 
-    return response.json();
-  });
+      if (!response.ok || !contentType.includes("application/json")) {
+        return null;
+      }
+
+      return response.json().catch(() => null);
+    })
+    .catch(() => null);
 };
 
 const fetchChases = () => {
-  return fetchJsonIfAvailable("/chases.json")
-    .then((chases) => {
-      if (chases !== null) {
-        return chases;
-      }
-
-      return fetchJsonIfAvailable("/chases.example.json");
-    })
-    .then((chases) => {
-      return {
-        stickers: chases?.stickers ?? [],
-        teams: chases?.teams ?? [],
-      };
-    });
+  return fetchJsonIfAvailable("/chases.json").then((chases) => {
+    return {
+      stickers: Array.isArray(chases?.stickers) ? chases.stickers : [],
+      teams: Array.isArray(chases?.teams) ? chases.teams : [],
+    };
+  });
 };
 
 function App() {
