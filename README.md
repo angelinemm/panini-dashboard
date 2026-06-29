@@ -59,25 +59,27 @@ Private local snapshots live in:
 public/snapshots/
 ```
 
-The app reads `public/snapshots.json` to find available private snapshots:
+Copy each snapshot into that directory using its date as the filename:
 
-```json
-[
-  { "date": "2026-06-16", "file": "/snapshots/2026-06-16.csv" }
-]
+```text
+public/snapshots/2026-06-16.csv
 ```
+
+Vite discovers the files and generates `snapshots.json` automatically. It also
+checks the filename, CSV header and column count, sticker numbers, and `On a`
+values. An invalid snapshot stops the development server or production build
+with an error identifying the file and row.
 
 The real collection files are intentionally ignored by Git:
 
 ```text
-public/snapshots.json
 public/snapshots/*.csv
 ```
 
-If `public/snapshots.json` is not available, the app falls back to the committed demo data:
+If there are no private snapshots, Vite generates the index from the committed
+demo data:
 
 ```text
-public/demo-snapshots.json
 public/demo-snapshots/
 ```
 
