@@ -4,13 +4,15 @@
 
 # Panini Tour de France Dashboard
 
-A small React dashboard for tracking a Panini Tour de France 2026 sticker collection.
+A small React dashboard for tracking Panini Tour de France sticker collections
+from 2020 onward.
 
 The app reads dated CSV snapshots, picks the latest snapshot for the main dashboard, and uses all snapshots to show collection progress over time.
 
 ## Features
 
 - Overall collection progress
+- Year-by-year album navigation and coming-soon states
 - Tour de France-inspired visual design
 - Snapshot history chart
 - Top 3 personal favourite cards
@@ -51,9 +53,29 @@ Run linting:
 npm run lint
 ```
 
+## Albums
+
+Albums are explicitly listed in `albums.config.json`, so every configured year
+appears in the dashboard even when it has no data. An album without snapshots
+shows the coming-soon illustration.
+
+Each entry provides its display details and private data locations:
+
+```json
+{
+  "id": "tdf-2025",
+  "year": 2025,
+  "title": "Tour de France 2025",
+  "snapshotsDirectory": "albums/tdf-2025/snapshots",
+  "chases": "/albums/tdf-2025/chases.json"
+}
+```
+
+The selected album is stored in the URL, for example `/?album=tdf-2025`.
+
 ## Snapshot Data
 
-Private local snapshots live in:
+The existing 2026 snapshots continue to live in:
 
 ```text
 public/snapshots/
@@ -65,7 +87,14 @@ Copy each snapshot into that directory using its date as the filename:
 public/snapshots/2026-06-16.csv
 ```
 
-Vite discovers the files and generates `snapshots.json` automatically. It also
+Older albums use their configured directory:
+
+```text
+public/albums/tdf-2025/snapshots/2025-07-12.csv
+```
+
+Vite enriches the explicit album list with discovered snapshots and generates
+`albums.json` automatically. It also
 checks the filename, CSV header and column count, sticker numbers, and `On a`
 values. An invalid snapshot stops the development server or production build
 with an error identifying the file and row.
@@ -74,6 +103,7 @@ The real collection files are intentionally ignored by Git:
 
 ```text
 public/snapshots/*.csv
+public/albums/*/snapshots/*.csv
 ```
 
 If there are no private snapshots, Vite generates the index from the committed
@@ -111,6 +141,9 @@ Private chase data can live in:
 ```text
 public/chases.json
 ```
+
+For older albums, use the album-specific path from `albums.config.json`, such
+as `public/albums/tdf-2025/chases.json`.
 
 That file is ignored by Git. Use `public/chases.example.json` as a template:
 

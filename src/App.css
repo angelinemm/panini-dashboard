@@ -44,6 +44,117 @@
   padding: 34px;
 }
 
+.album-nav {
+  margin: -8px 0 30px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.album-tabs {
+  min-width: max-content;
+  display: flex;
+  gap: 8px;
+  padding-bottom: 6px;
+}
+
+.album-tabs button {
+  min-width: 76px;
+  display: grid;
+  gap: 1px;
+  padding: 9px 15px;
+  color: var(--muted);
+  background: rgba(13, 43, 60, 0.06);
+  border: 1px solid rgba(13, 43, 60, 0.14);
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 900;
+  line-height: 1.1;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.album-tabs button:hover {
+  transform: translateY(-1px);
+}
+
+.album-tabs button:focus-visible {
+  outline: 3px solid rgba(0, 114, 188, 0.35);
+  outline-offset: 2px;
+}
+
+.album-tabs button.is-active {
+  color: var(--ink);
+  background: var(--yellow);
+  border-color: rgba(13, 43, 60, 0.28);
+}
+
+.album-tabs button span {
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.coming-soon {
+  position: relative;
+  min-height: 520px;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--ink);
+}
+
+.coming-soon::after {
+  content: "";
+  position: absolute;
+  inset: 28% 0 0;
+  background: linear-gradient(transparent, rgba(13, 43, 60, 0.94));
+}
+
+.coming-soon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coming-soon__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 690px;
+  padding: 42px;
+  color: #fffbea;
+}
+
+.coming-soon__copy .eyebrow {
+  color: var(--yellow);
+}
+
+.race-panel .coming-soon__copy h1,
+.dashboard-message h1 {
+  margin-top: 12px;
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+}
+
+.race-panel .coming-soon__copy h1 {
+  color: #fffbea;
+}
+
+.coming-soon__copy > p:last-child,
+.dashboard-message > p:last-child {
+  max-width: 580px;
+  margin: 20px 0 0;
+  font-size: 1.05rem;
+}
+
+.dashboard-message {
+  min-height: 300px;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+}
+
 .race-panel__header {
   display: flex;
   align-items: flex-start;
@@ -624,6 +735,18 @@
 
   .race-panel {
     padding: 22px;
+  }
+
+  .album-nav {
+    margin-bottom: 22px;
+  }
+
+  .coming-soon {
+    min-height: 470px;
+  }
+
+  .coming-soon__copy {
+    padding: 26px;
   }
 
   .race-panel__header,

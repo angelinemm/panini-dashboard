@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tdf-2020",
+    "year": 2020,
+    "title": "Tour de France 2020",
+    "snapshotsDirectory": "albums/tdf-2020/snapshots",
+    "chases": "/albums/tdf-2020/chases.json"
+  },
+  {
+    "id": "tdf-2021",
+    "year": 2021,
+    "title": "Tour de France 2021",
+    "snapshotsDirectory": "albums/tdf-2021/snapshots",
+    "chases": "/albums/tdf-2021/chases.json"
+  },
+  {
+    "id": "tdf-2022",
+    "year": 2022,
+    "title": "Tour de France 2022",
+    "snapshotsDirectory": "albums/tdf-2022/snapshots",
+    "chases": "/albums/tdf-2022/chases.json"
+  },
+  {
+    "id": "tdf-2023",
+    "year": 2023,
+    "title": "Tour de France 2023",
+    "snapshotsDirectory": "albums/tdf-2023/snapshots",
+    "chases": "/albums/tdf-2023/chases.json"
+  },
+  {
+    "id": "tdf-2024",
+    "year": 2024,
+    "title": "Tour de France 2024",
+    "snapshotsDirectory": "albums/tdf-2024/snapshots",
+    "chases": "/albums/tdf-2024/chases.json"
+  },
+  {
+    "id": "tdf-2025",
+    "year": 2025,
+    "title": "Tour de France 2025",
+    "snapshotsDirectory": "albums/tdf-2025/snapshots",
+    "chases": "/albums/tdf-2025/chases.json"
+  },
+  {
+    "id": "tdf-2026",
+    "year": 2026,
+    "title": "Tour de France 2026",
+    "snapshotsDirectory": "snapshots",
+    "fallbackSnapshotsDirectory": "demo-snapshots",
+    "chases": "/chases.json"
+  }
+]

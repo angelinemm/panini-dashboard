@@ -59,19 +59,13 @@ const parseStickerCsv = (csvText) => {
   });
 };
 
-const fetchSnapshotsIndex = () => {
-  return fetch("/snapshots.json").then((response) => {
-    if (response.ok) {
-      return response.json();
+const fetchAlbums = () => {
+  return fetch("/albums.json").then((response) => {
+    if (!response.ok) {
+      throw new Error("No album index found");
     }
 
-    return fetch("/demo-snapshots.json").then((demoResponse) => {
-      if (!demoResponse.ok) {
-        throw new Error("No snapshot index found");
-      }
-
-      return demoResponse.json();
-    });
+    return response.json();
   });
 };
 
@@ -89,8 +83,12 @@ const fetchJsonIfAvailable = (file) => {
     .catch(() => null);
 };
 
-const fetchChases = () => {
-  return fetchJsonIfAvailable("/chases.json").then((chases) => {
+const fetchChases = (file) => {
+  if (!file) {
+    return Promise.resolve({ stickers: [], teams: [] });
+  }
+
+  return fetchJsonIfAvailable(file).then((chases) => {
     return {
       stickers: Array.isArray(chases?.stickers) ? chases.stickers : [],
       teams: Array.isArray(chases?.teams) ? chases.teams : [],
@@ -98,17 +96,101 @@ const fetchChases = () => {
   });
 };
 
+const AlbumTabs = ({ albums, selectedAlbumId, onSelect }) => {
+  return (
+    <nav className="album-nav" aria-label="Albums Tour de France">
+      <div className="album-tabs" role="tablist">
+        {albums.map((album) => (
+          <button
+            aria-selected={album.id === selectedAlbumId}
+            className={album.id === selectedAlbumId ? "is-active" : ""}
+            key={album.id}
+            onClick={() => onSelect(album.id)}
+            role="tab"
+            type="button"
+          >
+            {album.year}
+            {album.snapshots.length === 0 && <span>À venir</span>}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+};
+
 function App() {
+  const [albums, setAlbums] = useState([]);
+  const [selectedAlbumId, setSelectedAlbumId] = useState("");
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
   const [chases, setChases] = useState({
     stickers: [],
     teams: [],
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
+    fetchAlbums()
+      .then((albumData) => {
+        setAlbums(albumData);
+
+        const requestedAlbum = new URLSearchParams(window.location.search).get(
+          "album",
+        );
+        const initialAlbum =
+          albumData.find((album) => album.id === requestedAlbum) ??
+          [...albumData].reverse().find((album) => album.snapshots.length > 0) ??
+          albumData[albumData.length - 1];
+
+        setSelectedAlbumId(initialAlbum?.id ?? "");
+        if (initialAlbum?.snapshots.length === 0) {
+          setLoading(false);
+        }
+      })
+      .catch((loadError) => {
+        setError(loadError.message);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    const handleHistoryChange = () => {
+      const requestedAlbum = new URLSearchParams(window.location.search).get(
+        "album",
+      );
+
+      const requestedAlbumData = albums.find(
+        (album) => album.id === requestedAlbum,
+      );
+
+      if (requestedAlbumData) {
+        setError("");
+        setLoading(requestedAlbumData.snapshots.length > 0);
+        setSelectedAlbumId(requestedAlbum);
+      }
+    };
+
+    window.addEventListener("popstate", handleHistoryChange);
+    return () => window.removeEventListener("popstate", handleHistoryChange);
+  }, [albums]);
+
+  useEffect(() => {
+    const album = albums.find(
+      (currentAlbum) => currentAlbum.id === selectedAlbumId,
+    );
+
+    if (!album) {
+      return undefined;
+    }
+
+    if (album.snapshots.length === 0) {
+      return undefined;
+    }
+
+    let cancelled = false;
     Promise.all([
-      fetchSnapshotsIndex().then((snapshots) => {
+      Promise.resolve(album.snapshots).then((snapshots) => {
         const sortedSnapshots = [...snapshots].sort(
           (snapshotA, snapshotB) => {
             return snapshotA.date.localeCompare(snapshotB.date);
@@ -142,13 +224,87 @@ function App() {
           }),
         );
       }),
-      fetchChases(),
-    ]).then(([snapshotHistory, chaseData]) => {
-      setHistory(snapshotHistory);
-      setStickers(snapshotHistory[snapshotHistory.length - 1].stickers);
-      setChases(chaseData);
-    });
-  }, []);
+      fetchChases(album.chases),
+    ])
+      .then(([snapshotHistory, chaseData]) => {
+        if (!cancelled) {
+          setHistory(snapshotHistory);
+          setStickers(snapshotHistory[snapshotHistory.length - 1].stickers);
+          setChases(chaseData);
+          setLoading(false);
+        }
+      })
+      .catch((loadError) => {
+        if (!cancelled) {
+          setError(loadError.message);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [albums, selectedAlbumId]);
+
+  const selectedAlbum = albums.find((album) => album.id === selectedAlbumId);
+  const selectAlbum = (albumId) => {
+    const album = albums.find((currentAlbum) => currentAlbum.id === albumId);
+    const url = new URL(window.location.href);
+    url.searchParams.set("album", albumId);
+    window.history.pushState({}, "", url);
+    setError("");
+    setLoading(album?.snapshots.length > 0);
+    setSelectedAlbumId(albumId);
+  };
+
+  if (!selectedAlbum || loading || error) {
+    return (
+      <main className="dashboard">
+        <section className="race-panel">
+          {albums.length > 0 && (
+            <AlbumTabs
+              albums={albums}
+              onSelect={selectAlbum}
+              selectedAlbumId={selectedAlbumId}
+            />
+          )}
+          <div className="dashboard-message" role={error ? "alert" : "status"}>
+            <p className="eyebrow">Album Panini</p>
+            <h1>{error ? "Impossible de charger l’album" : "Chargement…"}</h1>
+            {error && <p>{error}</p>}
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (selectedAlbum.snapshots.length === 0) {
+    return (
+      <main className="dashboard">
+        <section className="race-panel">
+          <AlbumTabs
+            albums={albums}
+            onSelect={selectAlbum}
+            selectedAlbumId={selectedAlbumId}
+          />
+          <section className="coming-soon" aria-labelledby="coming-soon-title">
+            <img
+              alt="Cycliste gravissant une route de montagne"
+              src="/cyclist-coming-soon.jpg"
+            />
+            <div className="coming-soon__copy">
+              <p className="eyebrow">{selectedAlbum.title}</p>
+              <h1 id="coming-soon-title">Bientôt sur la ligne de départ</h1>
+              <p>
+                Cette collection est au programme. Son suivi apparaîtra ici dès
+                que le premier snapshot sera ajouté.
+              </p>
+            </div>
+          </section>
+        </section>
+      </main>
+    );
+  }
 
   const total = stickers.length;
   const owned = stickers.filter(isOwned).length;
@@ -266,9 +422,11 @@ function App() {
   const chaseStickers = chases.stickers
     .map((chase) => {
       const chaseNumber =
-        typeof chase === "object" ? chase.number : Number.parseInt(chase, 10);
+        typeof chase === "object"
+          ? String(chase.number ?? "").trim()
+          : String(chase).trim();
       const sticker = stickers.find((currentSticker) => {
-        return Number.parseInt(currentSticker.Number, 10) === chaseNumber;
+        return String(currentSticker.Number).trim() === chaseNumber;
       });
 
       return {
@@ -278,7 +436,7 @@ function App() {
         sticker,
       };
     })
-    .filter((chase) => !Number.isNaN(chase.number));
+    .filter((chase) => chase.number !== "");
   const chaseTeams = chases.teams.map((teamName) => {
     const teamStickers = stickers.filter((sticker) => {
       return (
@@ -403,10 +561,15 @@ function App() {
   return (
     <main className="dashboard">
       <section className="race-panel">
+        <AlbumTabs
+          albums={albums}
+          onSelect={selectAlbum}
+          selectedAlbumId={selectedAlbumId}
+        />
         <div className="race-panel__header">
           <div>
             <p className="eyebrow">Album Panini</p>
-            <h1>Tour de France 2026</h1>
+            <h1>{selectedAlbum.title}</h1>
           </div>
           <div className="race-badge" aria-label={`${percentage}% complété`}>
             <span>{percentage}%</span>

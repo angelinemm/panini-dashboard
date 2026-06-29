@@ -87,9 +87,8 @@ const validateSnapshot = (filePath) => {
       );
     }
 
-    const stickerNumber = String(row[0]).trim();
-    if (!/^\d+$/.test(stickerNumber)) {
-      fail(displayFile, `row ${rowNumber} has an invalid sticker Number`);
+    if (String(row[0]).trim() === "") {
+      fail(displayFile, `row ${rowNumber} has an empty sticker Number`);
     }
 
     const owned = String(row[1]).trim().toUpperCase();
@@ -122,40 +121,77 @@ const readSnapshotDirectory = (publicDir, directoryName) => {
 };
 
 export const snapshotIndexPlugin = () => {
+  let root;
   let publicDir;
 
-  const getSnapshotIndex = () => {
-    const privateSnapshots = readSnapshotDirectory(publicDir, "snapshots");
-    const snapshots =
-      privateSnapshots.length > 0
-        ? privateSnapshots
-        : readSnapshotDirectory(publicDir, "demo-snapshots");
+  const getAlbumsIndex = () => {
+    const configFile = path.join(root, "albums.config.json");
+    const albums = JSON.parse(fs.readFileSync(configFile, "utf8"));
 
-    if (snapshots.length === 0) {
-      throw new Error("No private or demo snapshots found");
+    if (!Array.isArray(albums) || albums.length === 0) {
+      throw new Error("albums.config.json must contain at least one album");
     }
 
-    return `${JSON.stringify(snapshots, null, 2)}\n`;
+    const albumIds = new Set();
+    const albumYears = new Set();
+    const indexedAlbums = albums.map((album) => {
+      if (
+        typeof album.id !== "string" ||
+        typeof album.title !== "string" ||
+        !Number.isInteger(album.year) ||
+        typeof album.snapshotsDirectory !== "string"
+      ) {
+        throw new Error(
+          "Each album needs an id, title, integer year, and snapshotsDirectory",
+        );
+      }
+
+      if (albumIds.has(album.id) || albumYears.has(album.year)) {
+        throw new Error(`Duplicate album id or year for ${album.id}`);
+      }
+      albumIds.add(album.id);
+      albumYears.add(album.year);
+
+      const discoveredSnapshots = readSnapshotDirectory(
+        publicDir,
+        album.snapshotsDirectory,
+      );
+      const snapshots =
+        discoveredSnapshots.length > 0 || !album.fallbackSnapshotsDirectory
+          ? discoveredSnapshots
+          : readSnapshotDirectory(publicDir, album.fallbackSnapshotsDirectory);
+
+      return {
+        id: album.id,
+        year: album.year,
+        title: album.title,
+        chases: album.chases ?? null,
+        snapshots,
+      };
+    });
+
+    return `${JSON.stringify(indexedAlbums, null, 2)}\n`;
   };
 
   return {
     name: "snapshot-index",
     configResolved(config) {
+      root = config.root;
       publicDir = config.publicDir;
     },
     buildStart() {
-      getSnapshotIndex();
+      getAlbumsIndex();
     },
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
-        if (request.url?.split("?", 1)[0] !== "/snapshots.json") {
+        if (request.url?.split("?", 1)[0] !== "/albums.json") {
           next();
           return;
         }
 
         try {
           response.setHeader("Content-Type", "application/json");
-          response.end(getSnapshotIndex());
+          response.end(getAlbumsIndex());
         } catch (error) {
           next(error);
         }
@@ -164,8 +200,8 @@ export const snapshotIndexPlugin = () => {
     generateBundle() {
       this.emitFile({
         type: "asset",
-        fileName: "snapshots.json",
-        source: getSnapshotIndex(),
+        fileName: "albums.json",
+        source: getAlbumsIndex(),
       });
     },
   };
