@@ -36,6 +36,50 @@ const countDuplicatePackets = (value) => {
   return getPacketNumbers(value).length;
 };
 
+const getStickerNumber = (sticker) => String(sticker.Number).trim();
+
+const isSpecialSticker = (sticker) => {
+  return !/^\d+$/.test(getStickerNumber(sticker));
+};
+
+const backfillSpecialStickers = (snapshots) => {
+  const specialStickers = new Map();
+
+  snapshots.forEach((snapshot) => {
+    snapshot.stickers.filter(isSpecialSticker).forEach((sticker) => {
+      specialStickers.set(getStickerNumber(sticker), sticker);
+    });
+  });
+
+  return snapshots.map((snapshot) => {
+    const existingNumbers = new Set(snapshot.stickers.map(getStickerNumber));
+    const missingSpecialStickers = [...specialStickers.entries()]
+      .filter(([number]) => !existingNumbers.has(number))
+      .map(([number, sticker]) => ({
+        ...sticker,
+        Number: number,
+        "On a": "FALSE",
+        Doubles: "",
+        Packet: "",
+        "Fav?": "",
+        "Top 3": "",
+      }));
+    const stickers = [...snapshot.stickers, ...missingSpecialStickers];
+    const owned = stickers.filter(isOwned).length;
+
+    return {
+      ...snapshot,
+      owned,
+      percentage:
+        stickers.length === 0
+          ? 0
+          : Math.round((owned / stickers.length) * 100),
+      stickers,
+      total: stickers.length,
+    };
+  });
+};
+
 const parseStickerCsv = (csvText) => {
   const result = Papa.parse(csvText, {
     skipEmptyLines: true,
@@ -207,22 +251,14 @@ function App() {
               .then((response) => response.text())
               .then((csvText) => {
                 const snapshotStickers = parseStickerCsv(csvText);
-                const snapshotTotal = snapshotStickers.length;
-                const snapshotOwned = snapshotStickers.filter(isOwned).length;
 
                 return {
                   ...snapshot,
-                  owned: snapshotOwned,
-                  percentage:
-                    snapshotTotal === 0
-                      ? 0
-                      : Math.round((snapshotOwned / snapshotTotal) * 100),
                   stickers: snapshotStickers,
-                  total: snapshotTotal,
                 };
               });
           }),
-        );
+        ).then(backfillSpecialStickers);
       }),
       fetchChases(album.chases),
     ])
@@ -426,7 +462,7 @@ function App() {
           ? String(chase.number ?? "").trim()
           : String(chase).trim();
       const sticker = stickers.find((currentSticker) => {
-        return String(currentSticker.Number).trim() === chaseNumber;
+        return getStickerNumber(currentSticker) === chaseNumber;
       });
 
       return {

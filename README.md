@@ -127,12 +127,18 @@ Newer snapshots may include the header row. Older snapshots without headers are 
 
 Important fields:
 
+- `Number`: a sticker identifier; both numeric values and special identifiers such as `T01` are supported
 - `On a`: `TRUE` when the sticker is collected
 - `Doubles`: packet number(s) where duplicate copies were received, for example `28` or `10, 28`
 - `Type`: sticker type, such as `Coureur`, `Coureuse`, `Maillot`, `Logo`, `Equipe`, or `Vélo`
 - `Equipe`: team name
 - `Fav?`: any non-empty value marks a favourite
 - `Top 3`: use `1`, `2`, or `3` for personal favourite-card ranking
+
+When a special sticker first appears in a newer snapshot, the dashboard also
+adds it as uncollected to every older snapshot where it was absent. This repairs
+historical totals after a spreadsheet export omitted non-numeric identifiers,
+without inventing packet, duplicate, favourite, or ranking history.
 
 ## Chases
 

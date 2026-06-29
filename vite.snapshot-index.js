@@ -77,6 +77,8 @@ const validateSnapshot = (filePath) => {
     fail(displayFile, "file has a header but no sticker rows");
   }
 
+  const specialStickerNumbers = new Set();
+
   rows.forEach((row, index) => {
     const rowNumber = index + (hasHeader ? 2 : 1);
 
@@ -87,8 +89,20 @@ const validateSnapshot = (filePath) => {
       );
     }
 
-    if (String(row[0]).trim() === "") {
+    const stickerNumber = String(row[0]).trim();
+
+    if (stickerNumber === "") {
       fail(displayFile, `row ${rowNumber} has an empty sticker Number`);
+    }
+
+    if (!/^\d+$/.test(stickerNumber)) {
+      if (specialStickerNumbers.has(stickerNumber)) {
+        fail(
+          displayFile,
+          `row ${rowNumber} has duplicate special sticker Number "${stickerNumber}"`,
+        );
+      }
+      specialStickerNumbers.add(stickerNumber);
     }
 
     const owned = String(row[1]).trim().toUpperCase();
