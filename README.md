@@ -129,7 +129,9 @@ Important fields:
 
 - `Number`: a sticker identifier; both numeric values and special identifiers such as `T01` are supported
 - `On a`: `TRUE` when the sticker is collected
-- `Doubles`: packet number(s) where duplicate copies were received, for example `28` or `10, 28`
+- `Doubles`: slash-separated packet numbers where duplicate copies were received.
+  Leave it empty when there is no duplicate. Use `34` for one duplicate found in
+  pack 34, or `34/51/71` for three duplicates found in packs 34, 51, and 71.
 - `Type`: sticker type, such as `Coureur`, `Coureuse`, `Maillot`, `Logo`, `Equipe`, or `Vélo`
 - `Equipe`: team name
 - `Fav?`: any non-empty value marks a favourite

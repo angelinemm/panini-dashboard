@@ -21,6 +21,21 @@ const fail = (file, message) => {
   throw new Error(`Invalid snapshot ${file}: ${message}`);
 };
 
+const validateDoubles = (file, rowNumber, value) => {
+  const doubles = String(value).trim();
+
+  if (doubles === "") {
+    return;
+  }
+
+  if (!/^\d+(?:\/\d+)*$/.test(doubles)) {
+    fail(
+      file,
+      `row ${rowNumber} must use slash-separated packet numbers in "Doubles", for example 34 or 34/51/71`,
+    );
+  }
+};
+
 const getSnapshotDate = (file) => {
   const match = file.match(snapshotFilenamePattern);
 
@@ -109,6 +124,8 @@ const validateSnapshot = (filePath) => {
     if (owned !== "TRUE" && owned !== "FALSE") {
       fail(displayFile, `row ${rowNumber} must have TRUE or FALSE in "On a"`);
     }
+
+    validateDoubles(displayFile, rowNumber, row[2]);
   });
 };
 
