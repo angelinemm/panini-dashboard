@@ -290,10 +290,10 @@
 }
 
 .stat {
-  min-height: 142px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  min-height: 160px;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto minmax(0.94rem, auto);
+  gap: 10px;
   padding: 18px;
   border-radius: 8px;
   border: 1px solid rgba(13, 43, 60, 0.14);
@@ -316,6 +316,13 @@
   font-weight: 750;
 }
 
+.stat small {
+  color: rgba(13, 43, 60, 0.58);
+  font-size: 0.78rem;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
 .stat--yellow {
   background: var(--yellow);
 }
@@ -327,6 +334,10 @@
 
 .stat--green span {
   color: rgba(255, 255, 255, 0.76);
+}
+
+.stat--green small {
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .stat--polka {

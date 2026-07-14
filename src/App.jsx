@@ -36,6 +36,17 @@ const countDuplicatePackets = (value) => {
   return getPacketNumbers(value).length;
 };
 
+const formatSnapshotDate = (date) => {
+  const match = String(date).match(/^\d{4}-(\d{2})-(\d{2})$/);
+
+  if (!match) {
+    return date;
+  }
+
+  const [, month, day] = match;
+  return `${day}/${month}`;
+};
+
 const getStickerNumber = (sticker) => String(sticker.Number).trim();
 
 const isSpecialSticker = (sticker) => {
@@ -346,6 +357,11 @@ function App() {
   const owned = stickers.filter(isOwned).length;
   const percentage = total === 0 ? 0 : Math.round((owned / total) * 100);
   const remaining = total - owned;
+  const remainingWithoutInstants =
+    remaining -
+    stickers.filter((sticker) => {
+      return String(sticker.Type).trim() === "Instantané" && !isOwned(sticker);
+    }).length;
   const doubles = stickers.reduce((sum, sticker) => {
     return sum + countDuplicatePackets(sticker.Doubles);
   }, 0);
@@ -535,7 +551,7 @@ function App() {
 
     return {
       ...snapshot,
-      label: snapshot.date.slice(5).replace("-", "/"),
+      label: formatSnapshotDate(snapshot.date),
       x,
       y,
     };
@@ -579,7 +595,9 @@ function App() {
                   <strong>{team.name}</strong>
                   <span>
                     {team.owned} sur {team.total} collectés
-                    {team.reachedDate ? ` depuis le ${team.reachedDate}` : ""}
+                    {team.reachedDate
+                      ? ` depuis le ${formatSnapshotDate(team.reachedDate)}`
+                      : ""}
                   </span>
                 </div>
                 <div className="team-progress">
@@ -640,7 +658,8 @@ function App() {
               </p>
               <span>
                 {historyGain >= 0 ? "+" : ""}
-                {historyGain} stickers depuis le {historyStart.date}
+                {historyGain} stickers depuis le{" "}
+                {formatSnapshotDate(historyStart.date)}
               </span>
             </div>
 
@@ -699,8 +718,8 @@ function App() {
                       r="5"
                     >
                       <title>
-                        {point.date}: {point.percentage}% ({point.owned} sur{" "}
-                        {point.total})
+                        {formatSnapshotDate(point.date)}: {point.percentage}% (
+                        {point.owned} sur {point.total})
                       </title>
                     </circle>
                     {shouldShowDateLabel(index) && (
@@ -720,7 +739,7 @@ function App() {
             <div className="history-summary">
               <div>
                 <span>Dernière mise à jour</span>
-                <strong>{historyEnd.date}</strong>
+                <strong>{formatSnapshotDate(historyEnd.date)}</strong>
               </div>
               <div>
                 <span>Progression</span>
@@ -732,7 +751,7 @@ function App() {
                 <div>
                   <span>Meilleure journée</span>
                   <strong>
-                    {bestDay.date} · +{bestDay.gain}
+                    {formatSnapshotDate(bestDay.date)} · +{bestDay.gain}
                   </strong>
                 </div>
               )}
@@ -750,6 +769,7 @@ function App() {
             <span>Sprint</span>
             <strong>{remaining}</strong>
             <p>encore à chasser</p>
+            <small>{remainingWithoutInstants} hors instantanés</small>
           </article>
           <article className="stat stat--polka">
             <span>Montagne</span>
