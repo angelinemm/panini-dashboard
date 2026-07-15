@@ -59,7 +59,7 @@ Albums are explicitly listed in `albums.config.json`, so every configured year
 appears in the dashboard even when it has no data. An album without snapshots
 shows the coming-soon illustration.
 
-Each entry provides its display details and private data locations:
+Each entry provides its display details and data locations:
 
 ```json
 {
@@ -106,21 +106,20 @@ npm run check:snapshots
 ```
 
 This command is read-only: it never changes snapshot files. It checks the latest
-private snapshot for packet counts, owned stickers without packet or name data,
-and unowned stickers that still have packet, duplicate, or name data. Packet `0`
-is ignored because it represents the sample packet included with the album.
-Warnings include the latest affected file and the first snapshot where the issue
-appears.
+snapshot for packet counts, owned stickers without packet or name data, and
+unowned stickers that still have packet, duplicate, or name data. Packet `0` is
+ignored because it represents the sample packet included with the album. Warnings
+include the latest affected file and the first snapshot where the issue appears.
 
-The real collection files are intentionally ignored by Git:
+Snapshot CSV files are committed to Git:
 
 ```text
 public/snapshots/*.csv
 public/albums/*/snapshots/*.csv
 ```
 
-If there are no private snapshots, Vite generates the index from the committed
-demo data:
+If there are no snapshots, Vite generates the index from the committed demo
+data:
 
 ```text
 public/demo-snapshots/

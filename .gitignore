@@ -20,8 +20,6 @@ coverage
 !.env.example
 
 # Private collection data
-public/snapshots/*.csv
-public/albums/*/snapshots/*.csv
 public/albums/*/chases.json
 public/chases.json
 
