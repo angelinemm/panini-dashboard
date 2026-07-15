@@ -36,6 +36,23 @@ const countDuplicatePackets = (value) => {
   return getPacketNumbers(value).length;
 };
 
+const getDuplicateCount = (stickers) => {
+  return stickers.reduce((sum, sticker) => {
+    return sum + countDuplicatePackets(sticker.Doubles);
+  }, 0);
+};
+
+const getPacketsOpened = (stickers) => {
+  return stickers.reduce((highestPacket, sticker) => {
+    const stickerPackets = [
+      ...getPacketNumbers(sticker.Packet),
+      ...getPacketNumbers(sticker.Doubles),
+    ];
+
+    return Math.max(highestPacket, 0, ...stickerPackets);
+  }, 0);
+};
+
 const formatSnapshotDate = (date) => {
   const match = String(date).match(/^\d{4}-(\d{2})-(\d{2})$/);
 
@@ -362,17 +379,8 @@ function App() {
     stickers.filter((sticker) => {
       return String(sticker.Type).trim() === "Instantané" && !isOwned(sticker);
     }).length;
-  const doubles = stickers.reduce((sum, sticker) => {
-    return sum + countDuplicatePackets(sticker.Doubles);
-  }, 0);
-  const packetsOpened = stickers.reduce((highestPacket, sticker) => {
-    const stickerPackets = [
-      ...getPacketNumbers(sticker.Packet),
-      ...getPacketNumbers(sticker.Doubles),
-    ];
-
-    return Math.max(highestPacket, 0, ...stickerPackets);
-  }, 0);
+  const doubles = getDuplicateCount(stickers);
+  const packetsOpened = getPacketsOpened(stickers);
   const favourites = stickers.filter((sticker) => {
     return String(sticker["Fav?"]).trim() !== "";
   }).length;
@@ -513,6 +521,9 @@ function App() {
   const historyEnd = history[history.length - 1];
   const historyGain =
     historyStart && historyEnd ? historyEnd.owned - historyStart.owned : 0;
+  const duplicateGain = historyStart
+    ? doubles - getDuplicateCount(historyStart.stickers)
+    : doubles;
   const bestDay = history.slice(1).reduce((best, snapshot, index) => {
     const previousSnapshot = history[index];
     const gain = snapshot.owned - previousSnapshot.owned;
@@ -571,6 +582,47 @@ function App() {
       index % dateLabelInterval === 0
     );
   };
+  const duplicateHistory = history.map((snapshot) => {
+    const snapshotDuplicates = getDuplicateCount(snapshot.stickers);
+
+    return {
+      ...snapshot,
+      duplicates: snapshotDuplicates,
+      label: formatSnapshotDate(snapshot.date),
+    };
+  });
+  const maxDuplicates = Math.max(
+    5,
+    ...duplicateHistory.map((snapshot) => snapshot.duplicates),
+  );
+  const duplicateAxisMax = Math.ceil(maxDuplicates / 5) * 5;
+  const duplicateTicks = [
+    0,
+    Math.round(duplicateAxisMax * 0.25),
+    Math.round(duplicateAxisMax * 0.5),
+    Math.round(duplicateAxisMax * 0.75),
+    duplicateAxisMax,
+  ];
+  const duplicateChartPoints = duplicateHistory.map((snapshot, index) => {
+    const x =
+      chartPadding.left +
+      (duplicateHistory.length === 1
+        ? chartInnerWidth / 2
+        : (chartInnerWidth / (duplicateHistory.length - 1)) * index);
+    const y =
+      chartPadding.top +
+      chartInnerHeight -
+      (chartInnerHeight * snapshot.duplicates) / duplicateAxisMax;
+
+    return {
+      ...snapshot,
+      x,
+      y,
+    };
+  });
+  const duplicateChartPath = duplicateChartPoints
+    .map((point) => `${point.x},${point.y}`)
+    .join(" ");
 
   const renderTeamStandings = (teams, headingId, title, subtitle) => {
     if (teams.length === 0) {
@@ -755,6 +807,114 @@ function App() {
                   </strong>
                 </div>
               )}
+            </div>
+          </section>
+        )}
+
+        {history.length > 0 && (
+          <section
+            className="history-card history-card--duplicates"
+            aria-labelledby="duplicate-history-heading"
+          >
+            <div className="team-standings__header">
+              <p className="stage-label" id="duplicate-history-heading">
+                Évolution des doubles
+              </p>
+              <span>{doubles} doubles au dernier snapshot</span>
+            </div>
+
+            <div className="history-chart">
+              <svg
+                aria-label="Évolution du nombre de doubles"
+                role="img"
+                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+              >
+                <line
+                  className="history-axis"
+                  x1={chartPadding.left}
+                  x2={chartPadding.left}
+                  y1={chartPadding.top}
+                  y2={chartPadding.top + chartInnerHeight}
+                />
+                <line
+                  className="history-axis"
+                  x1={chartPadding.left}
+                  x2={chartPadding.left + chartInnerWidth}
+                  y1={chartPadding.top + chartInnerHeight}
+                  y2={chartPadding.top + chartInnerHeight}
+                />
+                {duplicateTicks.map((tick) => {
+                  const y =
+                    chartPadding.top +
+                    chartInnerHeight -
+                    (chartInnerHeight * tick) / duplicateAxisMax;
+
+                  return (
+                    <g key={tick}>
+                      <line
+                        className="history-grid"
+                        x1={chartPadding.left}
+                        x2={chartPadding.left + chartInnerWidth}
+                        y1={y}
+                        y2={y}
+                      />
+                      <text
+                        className="history-y-label"
+                        x={chartPadding.left - 10}
+                        y={y + 4}
+                      >
+                        {tick}
+                      </text>
+                    </g>
+                  );
+                })}
+                <polyline
+                  className="history-line history-line--duplicates"
+                  points={duplicateChartPath}
+                />
+                {duplicateChartPoints.map((point, index) => (
+                  <g key={point.date}>
+                    <circle
+                      className="history-point history-point--duplicates"
+                      cx={point.x}
+                      cy={point.y}
+                      r="5"
+                    >
+                      <title>
+                        {formatSnapshotDate(point.date)}: {point.duplicates}{" "}
+                        doubles
+                      </title>
+                    </circle>
+                    {shouldShowDateLabel(index) && (
+                      <text
+                        className="history-x-label"
+                        x={point.x}
+                        y={chartHeight - 10}
+                      >
+                        {point.label}
+                      </text>
+                    )}
+                  </g>
+                ))}
+              </svg>
+            </div>
+
+            <div className="history-summary">
+              <div>
+                <span>Doubles actuels</span>
+                <strong>{doubles}</strong>
+              </div>
+              <div>
+                <span>Dernière mise à jour</span>
+                <strong>{formatSnapshotDate(historyEnd.date)}</strong>
+              </div>
+              <div>
+                <span>Depuis le départ</span>
+                <strong>
+                  {duplicateGain >= 0 ? "+" : ""}
+                  {duplicateGain} doubles
+                </strong>
+              </div>
             </div>
           </section>
         )}

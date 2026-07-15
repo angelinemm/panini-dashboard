@@ -364,6 +364,12 @@
   border-radius: 8px;
 }
 
+.history-card--duplicates {
+  background:
+    linear-gradient(135deg, rgba(13, 43, 60, 0.95), rgba(227, 20, 45, 0.8)),
+    repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 18px);
+}
+
 .history-chart {
   padding: 10px 0 2px;
   overflow-x: auto;
@@ -395,10 +401,19 @@
   filter: drop-shadow(0 7px 8px rgba(0, 0, 0, 0.22));
 }
 
+.history-line--duplicates {
+  stroke: #ffffff;
+}
+
 .history-point {
   fill: var(--yellow);
   stroke: #fffbea;
   stroke-width: 3;
+}
+
+.history-point--duplicates {
+  fill: #ffffff;
+  stroke: var(--yellow);
 }
 
 .history-x-label,
