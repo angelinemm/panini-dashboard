@@ -99,6 +99,19 @@ checks the filename, CSV header and column count, sticker numbers, and `On a`
 values. An invalid snapshot stops the development server or production build
 with an error identifying the file and row.
 
+For collection-consistency warnings that should not block the app, run:
+
+```bash
+npm run check:snapshots
+```
+
+This command is read-only: it never changes snapshot files. It checks the latest
+private snapshot for packet counts, owned stickers without packet or name data,
+and unowned stickers that still have packet, duplicate, or name data. Packet `0`
+is ignored because it represents the sample packet included with the album.
+Warnings include the latest affected file and the first snapshot where the issue
+appears.
+
 The real collection files are intentionally ignored by Git:
 
 ```text
