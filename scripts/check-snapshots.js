@@ -90,6 +90,59 @@ const getPacketCounts = (snapshot) => {
   return counts;
 };
 
+const getMissingPacketNumbers = (packetCounts) => {
+  const trackedPackets = [...packetCounts.keys()].filter((packet) => {
+    return !ignoredPackets.has(packet) && packet > 0;
+  });
+  const highestPacket = Math.max(0, ...trackedPackets);
+  const missingPackets = [];
+
+  for (let packet = 1; packet <= highestPacket; packet += 1) {
+    if (!ignoredPackets.has(packet) && !packetCounts.has(packet)) {
+      missingPackets.push(packet);
+    }
+  }
+
+  return missingPackets;
+};
+
+const formatPacketRanges = (packets) => {
+  const ranges = [];
+  let rangeStart = null;
+  let previousPacket = null;
+
+  packets.forEach((packet) => {
+    if (rangeStart === null) {
+      rangeStart = packet;
+      previousPacket = packet;
+      return;
+    }
+
+    if (packet === previousPacket + 1) {
+      previousPacket = packet;
+      return;
+    }
+
+    ranges.push(
+      rangeStart === previousPacket
+        ? String(rangeStart)
+        : `${rangeStart}-${previousPacket}`,
+    );
+    rangeStart = packet;
+    previousPacket = packet;
+  });
+
+  if (rangeStart !== null) {
+    ranges.push(
+      rangeStart === previousPacket
+        ? String(rangeStart)
+        : `${rangeStart}-${previousPacket}`,
+    );
+  }
+
+  return ranges.join(", ");
+};
+
 const findFirstSnapshot = (snapshots, predicate) => {
   return snapshots.find(predicate)?.name ?? "unknown";
 };
@@ -135,6 +188,16 @@ snapshots.forEach((snapshot) => {
 });
 
 const latestPacketCounts = getPacketCounts(latest);
+const latestMissingPackets = getMissingPacketNumbers(latestPacketCounts);
+
+if (latestMissingPackets.length > 0) {
+  warnings += 1;
+  printWarning(
+    `${latest.name}: missing packet number(s) ${formatPacketRanges(
+      latestMissingPackets,
+    )}`,
+  );
+}
 
 [...latestPacketCounts.entries()]
   .filter(([packet, count]) => {

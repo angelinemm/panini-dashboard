@@ -106,10 +106,11 @@ npm run check:snapshots
 ```
 
 This command is read-only: it never changes snapshot files. It checks the latest
-snapshot for packet counts, owned stickers without packet or name data, and
-unowned stickers that still have packet, duplicate, or name data. Packet `0` is
-ignored because it represents the sample packet included with the album. Warnings
-include the latest affected file and the first snapshot where the issue appears.
+snapshot for packet counts, missing packet numbers, owned stickers without
+packet or name data, and unowned stickers that still have packet, duplicate, or
+name data. Packet `0` is ignored because it represents the sample packet
+included with the album. Warnings include the latest affected file and, for
+sticker-level checks, the first snapshot where the issue appears.
 
 Snapshot CSV files are committed to Git:
 
