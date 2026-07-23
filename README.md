@@ -53,6 +53,9 @@ Run linting:
 npm run lint
 ```
 
+GitHub Actions runs the production build, snapshot checks, and linting for every
+pull request and every push to `main`, including merged pull requests.
+
 ## Albums
 
 Albums are explicitly listed in `albums.config.json`, so every configured year
@@ -99,8 +102,8 @@ checks the filename, CSV header and column count, sticker numbers, and `On a`
 values. An invalid snapshot stops the development server or production build
 with an error identifying the file and row.
 
-The production build also checks collection consistency before Vite runs. To
-run that check on its own:
+CI checks collection consistency separately from the production build. To run
+that check locally:
 
 ```bash
 npm run check:snapshots
@@ -112,7 +115,7 @@ packet or name data, and unowned stickers that still have packet, duplicate, or
 name data. Packet `0` is ignored because it represents the sample packet
 included with the album. Issues include the latest affected file and, for
 sticker-level checks, the first snapshot where the issue appears. Any issue
-causes the check, and therefore the production build, to fail.
+causes the check and CI to fail.
 
 Snapshot CSV files are committed to Git:
 

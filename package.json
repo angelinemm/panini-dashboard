@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check:snapshots && vite build",
+    "build": "vite build",
     "check:snapshots": "node scripts/check-snapshots.js",
     "lint": "eslint .",
     "preview": "vite preview"
