@@ -47,6 +47,12 @@ Build for production:
 npm run build
 ```
 
+Run unit tests:
+
+```bash
+npm test
+```
+
 Run linting:
 
 ```bash
