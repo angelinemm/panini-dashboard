@@ -280,5 +280,6 @@ latestUnownedWithName.forEach((issue) => {
 if (warnings === 0) {
   console.log(`${latest.name}: no snapshot warnings found`);
 } else {
-  console.log(`${latest.name}: ${warnings} warning(s) found`);
+  console.error(`${latest.name}: ${warnings} snapshot issue(s) found`);
+  process.exitCode = 1;
 }
