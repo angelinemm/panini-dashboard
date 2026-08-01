@@ -4,7 +4,6 @@ import {
   backfillSpecialStickers,
   formatSnapshotDate,
   getDuplicateCount,
-  getPacketsOpened,
   getStickerNumber,
   isOwned,
   parseStickerCsv,
@@ -74,6 +73,7 @@ function App() {
   const [selectedAlbumId, setSelectedAlbumId] = useState("");
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
+  const [snapshotMetadata, setSnapshotMetadata] = useState({});
   const [chases, setChases] = useState({
     stickers: [],
     teams: [],
@@ -82,9 +82,13 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchAlbums()
-      .then((albumData) => {
+    Promise.all([
+      fetchAlbums(),
+      fetchJsonIfAvailable("/snapshot-metadata.json"),
+    ])
+      .then(([albumData, metadata]) => {
         setAlbums(albumData);
+        setSnapshotMetadata(metadata ?? {});
 
         const requestedAlbum = new URLSearchParams(window.location.search).get(
           "album",
@@ -259,7 +263,8 @@ function App() {
       return String(sticker.Type).trim() === "Instantané" && !isOwned(sticker);
     }).length;
   const doubles = getDuplicateCount(stickers);
-  const packetsOpened = getPacketsOpened(stickers);
+  const packetsOpened =
+    snapshotMetadata[selectedAlbumId]?.packetsOpened ?? 0;
   const favourites = stickers.filter((sticker) => {
     return String(sticker["Fav?"]).trim() !== "";
   }).length;
