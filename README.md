@@ -131,7 +131,7 @@ The snapshot with the latest `date` is used for the current dashboard totals. Al
 The app expects this column order:
 
 ```csv
-Number,On a,Doubles,Type,Name,Country,Equipe,Packet,Fav?,Top 3
+Number,On a,Doubles,Type,Name,Country,Equipe,Fav?,Top 3
 ```
 
 Newer snapshots may include the header row. Older snapshots without headers are also supported, as long as they use the same column order.

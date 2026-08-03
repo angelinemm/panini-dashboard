@@ -10,7 +10,6 @@ const snapshotColumns = [
   "Name",
   "Country",
   "Equipe",
-  "Packet",
   "Fav?",
   "Top 3",
 ];

@@ -8,7 +8,6 @@ const stickerColumns = [
   "Name",
   "Country",
   "Equipe",
-  "Packet",
   "Fav?",
   "Top 3",
 ];
@@ -37,17 +36,6 @@ const countDuplicatePackets = (value) => {
 export const getDuplicateCount = (stickers) => {
   return stickers.reduce((sum, sticker) => {
     return sum + countDuplicatePackets(sticker.Doubles);
-  }, 0);
-};
-
-export const getPacketsOpened = (stickers) => {
-  return stickers.reduce((highestPacket, sticker) => {
-    const stickerPackets = [
-      ...getPacketNumbers(sticker.Packet),
-      ...getPacketNumbers(sticker.Doubles),
-    ];
-
-    return Math.max(highestPacket, 0, ...stickerPackets);
   }, 0);
 };
 
@@ -86,7 +74,6 @@ export const backfillSpecialStickers = (snapshots) => {
         Number: number,
         "On a": "FALSE",
         Doubles: "",
-        Packet: "",
         "Fav?": "",
         "Top 3": "",
       }));
