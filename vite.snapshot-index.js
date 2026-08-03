@@ -27,10 +27,10 @@ const validateDoubles = (file, rowNumber, value) => {
     return;
   }
 
-  if (!/^\d+(?:\/\d+)*$/.test(doubles)) {
+  if (!/^\d+$/.test(doubles)) {
     fail(
       file,
-      `row ${rowNumber} must use slash-separated packet numbers in "Doubles", for example 34 or 34/51/71`,
+      `row ${rowNumber} must have a non-negative integer in "Doubles"`,
     );
   }
 };

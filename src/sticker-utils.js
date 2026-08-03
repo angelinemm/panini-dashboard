@@ -18,26 +18,15 @@ export const isOwned = (sticker) => {
     .toUpperCase() === "TRUE";
 };
 
-export const getPacketNumbers = (value) => {
-  const packetList = String(value).trim();
+const parseDuplicateCount = (value) => {
+  const doubles = Number(value);
 
-  if (packetList === "") {
-    return [];
-  }
-
-  return packetList
-    .split(/[,\s;/]+/)
-    .map((packet) => Number.parseInt(packet, 10))
-    .filter((packet) => !Number.isNaN(packet));
-};
-
-const countDuplicatePackets = (value) => {
-  return getPacketNumbers(value).length;
+  return Number.isInteger(doubles) && doubles >= 0 ? doubles : 0;
 };
 
 export const getDuplicateCount = (stickers) => {
   return stickers.reduce((sum, sticker) => {
-    return sum + countDuplicatePackets(sticker.Doubles);
+    return sum + parseDuplicateCount(sticker.Doubles);
   }, 0);
 };
 
@@ -75,7 +64,7 @@ export const backfillSpecialStickers = (snapshots) => {
         ...sticker,
         Number: number,
         Owned: "FALSE",
-        Doubles: "",
+        Doubles: 0,
         "Fav?": "",
         "Top 3": "",
       }));
@@ -115,7 +104,11 @@ export const parseStickerCsv = (csvText) => {
   return dataRows.map((row) => {
     return headers.reduce((sticker, header, index) => {
       const normalizedHeader = header === "On a" ? "Owned" : header;
-      sticker[normalizedHeader] = row[index] ?? "";
+      const value = row[index] ?? "";
+      sticker[normalizedHeader] =
+        normalizedHeader === "Doubles"
+          ? parseDuplicateCount(value)
+          : value;
       return sticker;
     }, {});
   });

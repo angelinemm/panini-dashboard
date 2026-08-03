@@ -3,7 +3,6 @@ import {
   backfillSpecialStickers,
   formatSnapshotDate,
   getDuplicateCount,
-  getPacketNumbers,
   parseStickerCsv,
 } from "./sticker-utils.js";
 
@@ -11,13 +10,13 @@ describe("snapshot data helpers", () => {
   it("parses snapshots with or without a header", () => {
     const header =
       "Number,Owned,Doubles,Type,Name,Country,Equipe,Fav?,Top 3";
-    const row = "72,TRUE,4/8,Rider,Jane Doe,GBR,Team One,,";
+    const row = "72,TRUE,2,Rider,Jane Doe,GBR,Team One,,";
 
     expect(parseStickerCsv(`${header}\n${row}`)).toEqual([
       {
         Number: "72",
         Owned: "TRUE",
-        Doubles: "4/8",
+        Doubles: 2,
         Type: "Rider",
         Name: "Jane Doe",
         Country: "GBR",
@@ -29,15 +28,16 @@ describe("snapshot data helpers", () => {
     expect(parseStickerCsv(row)).toEqual(parseStickerCsv(`${header}\n${row}`));
   });
 
-  it("accepts the packet separators used in snapshot data", () => {
-    expect(getPacketNumbers("4/8, 15; 16")).toEqual([4, 8, 15, 16]);
-    expect(getPacketNumbers("")).toEqual([]);
+  it("calculates duplicate totals", () => {
+    const stickers = [{ Doubles: 2 }, { Doubles: "3" }, { Doubles: "" }];
+
+    expect(getDuplicateCount(stickers)).toBe(5);
   });
 
-  it("calculates duplicate totals", () => {
-    const stickers = [{ Doubles: "4/8" }, { Doubles: "" }];
+  it("parses a missing duplicate count as zero", () => {
+    const row = "72,TRUE,,Rider,Jane Doe,GBR,Team One,,";
 
-    expect(getDuplicateCount(stickers)).toBe(2);
+    expect(parseStickerCsv(row)[0].Doubles).toBe(0);
   });
 
   it("backfills special stickers into earlier snapshots", () => {
@@ -63,6 +63,7 @@ describe("snapshot data helpers", () => {
     expect(earlier.stickers[1]).toMatchObject({
       Number: "P1",
       Owned: "FALSE",
+      Doubles: 0,
       Name: "Special",
     });
   });

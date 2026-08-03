@@ -140,9 +140,8 @@ Important fields:
 
 - `Number`: a sticker identifier; both numeric values and special identifiers such as `T01` are supported
 - `Owned`: `TRUE` when the sticker is collected
-- `Doubles`: slash-separated packet numbers where duplicate copies were received.
-  Leave it empty when there is no duplicate. Use `34` for one duplicate found in
-  pack 34, or `34/51/71` for three duplicates found in packs 34, 51, and 71.
+- `Doubles`: the number of duplicate copies owned, as a non-negative integer.
+  Leave it empty or use `0` when there is no duplicate.
 - `Type`: sticker type, such as `Coureur`, `Coureuse`, `Maillot`, `Logo`, `Equipe`, or `Vélo`
 - `Equipe`: team name
 - `Fav?`: any non-empty value marks a favourite
@@ -151,7 +150,7 @@ Important fields:
 When a special sticker first appears in a newer snapshot, the dashboard also
 adds it as uncollected to every older snapshot where it was absent. This repairs
 historical totals after a spreadsheet export omitted non-numeric identifiers,
-without inventing packet, duplicate, favourite, or ranking history.
+without inventing duplicate, favourite, or ranking history.
 
 ## Chases
 
