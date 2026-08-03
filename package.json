@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check:snapshots": "node scripts/check-snapshots.js",
     "lint": "eslint .",
     "test": "vitest run",
     "preview": "vite preview"

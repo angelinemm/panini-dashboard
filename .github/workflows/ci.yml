@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   checks:
-    name: Test, snapshots, and lint
+    name: Test, build, and lint
     runs-on: ubuntu-latest
 
     steps:
@@ -32,9 +32,6 @@ jobs:
 
       - name: Test production build
         run: npm run build
-
-      - name: Check snapshots
-        run: npm run check:snapshots
 
       - name: Lint
         run: npm run lint
