@@ -86,22 +86,11 @@ The selected album is stored in the URL, for example `/?album=tdf-2025`.
 
 ## Snapshot Data
 
-The existing 2026 snapshots continue to live in:
-
-```text
-public/snapshots/
-```
-
-Copy each snapshot into that directory using its date as the filename:
-
-```text
-public/snapshots/2026-06-16.csv
-```
-
-Older albums use their configured directory:
+Each album has its own configured snapshot directory:
 
 ```text
 public/albums/tdf-2025/snapshots/2025-07-12.csv
+public/albums/tdf-2026/snapshots/2026-06-16.csv
 ```
 
 Vite enriches the explicit album list with discovered snapshots and generates
@@ -113,7 +102,6 @@ with an error identifying the file and row.
 Snapshot CSV files are committed to Git:
 
 ```text
-public/snapshots/*.csv
 public/albums/*/snapshots/*.csv
 ```
 
@@ -154,14 +142,14 @@ without inventing duplicate, favourite, or ranking history.
 
 ## Chases
 
-Private chase data can live in:
+Private chase data lives in the relevant album directory:
 
 ```text
-public/chases.json
+public/albums/tdf-2026/chases.json
 ```
 
-For older albums, use the album-specific path from `albums.config.json`, such
-as `public/albums/tdf-2025/chases.json`.
+Use the album-specific path from `albums.config.json`, such as
+`public/albums/tdf-2025/chases.json`.
 
 That file is ignored by Git. Use `public/chases.example.json` as a template:
 

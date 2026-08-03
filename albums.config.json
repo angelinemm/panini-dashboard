@@ -45,8 +45,8 @@
     "id": "tdf-2026",
     "year": 2026,
     "title": "Tour de France 2026",
-    "snapshotsDirectory": "snapshots",
+    "snapshotsDirectory": "albums/tdf-2026/snapshots",
     "fallbackSnapshotsDirectory": "demo-snapshots",
-    "chases": "/chases.json"
+    "chases": "/albums/tdf-2026/chases.json"
   }
 ]
