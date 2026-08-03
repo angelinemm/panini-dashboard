@@ -4,7 +4,7 @@ import Papa from "papaparse";
 
 const snapshotColumns = [
   "Number",
-  "On a",
+  "Owned",
   "Doubles",
   "Type",
   "Name",
@@ -73,11 +73,18 @@ const validateSnapshot = (filePath) => {
   const firstRow = result.data[0].map((cell) =>
     String(cell).replace(/^\uFEFF/, "").trim(),
   );
-  const hasHeader = firstRow.some((cell) => snapshotColumns.includes(cell));
+  const normalizedFirstRow = firstRow.map((cell) =>
+    cell === "On a" ? "Owned" : cell,
+  );
+  const hasHeader = normalizedFirstRow.some((cell) =>
+    snapshotColumns.includes(cell),
+  );
 
   if (
     hasHeader &&
-    snapshotColumns.some((column, index) => firstRow[index] !== column)
+    snapshotColumns.some(
+      (column, index) => normalizedFirstRow[index] !== column,
+    )
   ) {
     fail(
       displayFile,
@@ -121,7 +128,7 @@ const validateSnapshot = (filePath) => {
 
     const owned = String(row[1]).trim().toUpperCase();
     if (owned !== "TRUE" && owned !== "FALSE") {
-      fail(displayFile, `row ${rowNumber} must have TRUE or FALSE in "On a"`);
+      fail(displayFile, `row ${rowNumber} must have TRUE or FALSE in "Owned"`);
     }
 
     validateDoubles(displayFile, rowNumber, row[2]);

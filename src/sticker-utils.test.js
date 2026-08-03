@@ -10,13 +10,13 @@ import {
 describe("snapshot data helpers", () => {
   it("parses snapshots with or without a header", () => {
     const header =
-      "Number,On a,Doubles,Type,Name,Country,Equipe,Fav?,Top 3";
+      "Number,Owned,Doubles,Type,Name,Country,Equipe,Fav?,Top 3";
     const row = "72,TRUE,4/8,Rider,Jane Doe,GBR,Team One,,";
 
     expect(parseStickerCsv(`${header}\n${row}`)).toEqual([
       {
         Number: "72",
-        "On a": "TRUE",
+        Owned: "TRUE",
         Doubles: "4/8",
         Type: "Rider",
         Name: "Jane Doe",
@@ -44,13 +44,13 @@ describe("snapshot data helpers", () => {
     const snapshots = [
       {
         date: "2026-07-01",
-        stickers: [{ Number: "1", "On a": "TRUE" }],
+        stickers: [{ Number: "1", Owned: "TRUE" }],
       },
       {
         date: "2026-07-02",
         stickers: [
-          { Number: "1", "On a": "TRUE" },
-          { Number: "P1", "On a": "TRUE", Name: "Special" },
+          { Number: "1", Owned: "TRUE" },
+          { Number: "P1", Owned: "TRUE", Name: "Special" },
         ],
       },
     ];
@@ -62,7 +62,7 @@ describe("snapshot data helpers", () => {
     expect(earlier.percentage).toBe(50);
     expect(earlier.stickers[1]).toMatchObject({
       Number: "P1",
-      "On a": "FALSE",
+      Owned: "FALSE",
       Name: "Special",
     });
   });

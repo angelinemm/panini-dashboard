@@ -2,7 +2,7 @@ import Papa from "papaparse";
 
 const stickerColumns = [
   "Number",
-  "On a",
+  "Owned",
   "Doubles",
   "Type",
   "Name",
@@ -13,7 +13,9 @@ const stickerColumns = [
 ];
 
 export const isOwned = (sticker) => {
-  return String(sticker["On a"]).trim().toUpperCase() === "TRUE";
+  return String(sticker.Owned ?? sticker["On a"])
+    .trim()
+    .toUpperCase() === "TRUE";
 };
 
 export const getPacketNumbers = (value) => {
@@ -72,7 +74,7 @@ export const backfillSpecialStickers = (snapshots) => {
       .map(([number, sticker]) => ({
         ...sticker,
         Number: number,
-        "On a": "FALSE",
+        Owned: "FALSE",
         Doubles: "",
         "Fav?": "",
         "Top 3": "",
@@ -104,13 +106,16 @@ export const parseStickerCsv = (csvText) => {
   }
 
   const firstRow = rows[0].map((cell) => String(cell).trim());
-  const hasHeader = firstRow.includes("Number") && firstRow.includes("On a");
+  const hasHeader =
+    firstRow.includes("Number") &&
+    (firstRow.includes("Owned") || firstRow.includes("On a"));
   const headers = hasHeader ? firstRow : stickerColumns;
   const dataRows = hasHeader ? rows.slice(1) : rows;
 
   return dataRows.map((row) => {
     return headers.reduce((sticker, header, index) => {
-      sticker[header] = row[index] ?? "";
+      const normalizedHeader = header === "On a" ? "Owned" : header;
+      sticker[normalizedHeader] = row[index] ?? "";
       return sticker;
     }, {});
   });

@@ -106,7 +106,7 @@ public/albums/tdf-2025/snapshots/2025-07-12.csv
 
 Vite enriches the explicit album list with discovered snapshots and generates
 `albums.json` automatically. It also
-checks the filename, CSV header and column count, sticker numbers, and `On a`
+checks the filename, CSV header and column count, sticker numbers, and `Owned`
 values. An invalid snapshot stops the development server or production build
 with an error identifying the file and row.
 
@@ -131,7 +131,7 @@ The snapshot with the latest `date` is used for the current dashboard totals. Al
 The app expects this column order:
 
 ```csv
-Number,On a,Doubles,Type,Name,Country,Equipe,Fav?,Top 3
+Number,Owned,Doubles,Type,Name,Country,Equipe,Fav?,Top 3
 ```
 
 Newer snapshots may include the header row. Older snapshots without headers are also supported, as long as they use the same column order.
@@ -139,7 +139,7 @@ Newer snapshots may include the header row. Older snapshots without headers are 
 Important fields:
 
 - `Number`: a sticker identifier; both numeric values and special identifiers such as `T01` are supported
-- `On a`: `TRUE` when the sticker is collected
+- `Owned`: `TRUE` when the sticker is collected
 - `Doubles`: slash-separated packet numbers where duplicate copies were received.
   Leave it empty when there is no duplicate. Use `34` for one duplicate found in
   pack 34, or `34/51/71` for three duplicates found in packs 34, 51, and 71.
