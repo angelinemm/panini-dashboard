@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import CollectionDashboard from "./CollectionDashboard.jsx";
 import {
   backfillSpecialStickers,
   formatSnapshotDate,
@@ -50,6 +51,15 @@ const AlbumTabs = ({ albums, selectedAlbumId, onSelect }) => {
   return (
     <nav className="album-nav" aria-label="Albums Tour de France">
       <div className="album-tabs" role="tablist">
+        <button
+          aria-selected={selectedAlbumId === ""}
+          className={selectedAlbumId === "" ? "is-active" : ""}
+          onClick={() => onSelect("")}
+          role="tab"
+          type="button"
+        >
+          Collection
+        </button>
         {albums.map((album) => (
           <button
             aria-selected={album.id === selectedAlbumId}
@@ -93,13 +103,12 @@ function App() {
         const requestedAlbum = new URLSearchParams(window.location.search).get(
           "album",
         );
-        const initialAlbum =
-          albumData.find((album) => album.id === requestedAlbum) ??
-          [...albumData].reverse().find((album) => album.snapshots.length > 0) ??
-          albumData[albumData.length - 1];
+        const initialAlbum = albumData.find(
+          (album) => album.id === requestedAlbum,
+        );
 
         setSelectedAlbumId(initialAlbum?.id ?? "");
-        if (initialAlbum?.snapshots.length === 0) {
+        if (!initialAlbum || initialAlbum.snapshots.length === 0) {
           setLoading(false);
         }
       })
@@ -123,6 +132,10 @@ function App() {
         setError("");
         setLoading(requestedAlbumData.snapshots.length > 0);
         setSelectedAlbumId(requestedAlbum);
+      } else if (!requestedAlbum) {
+        setError("");
+        setLoading(false);
+        setSelectedAlbumId("");
       }
     };
 
@@ -197,14 +210,15 @@ function App() {
   const selectAlbum = (albumId) => {
     const album = albums.find((currentAlbum) => currentAlbum.id === albumId);
     const url = new URL(window.location.href);
-    url.searchParams.set("album", albumId);
+    if (albumId) url.searchParams.set("album", albumId);
+    else url.searchParams.delete("album");
     window.history.pushState({}, "", url);
     setError("");
     setLoading(album?.snapshots.length > 0);
     setSelectedAlbumId(albumId);
   };
 
-  if (!selectedAlbum || loading || error) {
+  if (loading || error || albums.length === 0) {
     return (
       <main className="dashboard">
         <section className="race-panel">
@@ -220,6 +234,17 @@ function App() {
             <h1>{error ? "Impossible de charger l’album" : "Chargement…"}</h1>
             {error && <p>{error}</p>}
           </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (!selectedAlbum) {
+    return (
+      <main className="dashboard">
+        <section className="race-panel race-panel--collection">
+          <AlbumTabs albums={albums} onSelect={selectAlbum} selectedAlbumId="" />
+          <CollectionDashboard albums={albums} onOpenAlbum={selectAlbum} />
         </section>
       </main>
     );

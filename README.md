@@ -12,6 +12,8 @@ The app reads dated CSV snapshots, picks the latest snapshot for the main dashbo
 ## Features
 
 - Overall collection progress
+- Multi-year collection home with equally weighted album completion
+- Configurable all-time Top 10 Hall of Fame
 - Year-by-year album navigation and coming-soon states
 - Tour de France-inspired visual design
 - Snapshot history chart
@@ -82,7 +84,24 @@ Each entry provides its display details and data locations:
 }
 ```
 
-The selected album is stored in the URL, for example `/?album=tdf-2025`.
+The collection overview lives at `/`. The selected yearly album is stored in
+the URL, for example `/?album=tdf-2025`.
+
+## All-time favourites
+
+The collection-level Hall of Fame is configured in
+`public/all-time-favourites.jsonc`. Array order is the ranking; each entry only
+references a sticker already present in an album snapshot:
+
+```json
+[
+  { "year": 2026, "stickerId": "123" }, // Rider note
+  { "year": 2025, "stickerId": "45" } // Another note
+]
+```
+
+The list may contain zero to ten entries. Names, teams, types, and any optional
+`Image` value are resolved from the latest album data.
 
 ## Snapshot Data
 
