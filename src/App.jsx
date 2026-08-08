@@ -925,15 +925,16 @@ function App() {
         )}
 
         {topCards.length > 0 && (
-          <section className="favourite-cards" aria-labelledby="favourite-cards-heading">
-            <div className="team-standings__header">
-              <p className="stage-label" id="favourite-cards-heading">
-                Mes cartes préférées
-              </p>
+          <section className="hall-of-fame yearly-podium" aria-labelledby="favourite-cards-heading">
+            <div className="section-heading section-heading--light">
+              <div>
+                <p className="stage-label">Podium de l’album</p>
+                <h2 id="favourite-cards-heading">Mes cartes préférées</h2>
+              </div>
               <span>Top 3 personnel</span>
             </div>
 
-            <ol className="favourite-list">
+            <ol className="yearly-podium__list">
               {topCards.map((sticker) => {
                 const title = String(sticker.Name).trim() || `Sticker ${sticker.Number}`;
                 const details = [
@@ -941,33 +942,17 @@ function App() {
                   String(sticker.Equipe).trim(),
                   String(sticker.Country).trim(),
                 ].filter(Boolean);
-                const medalLabels = {
-                  1: "Médaille d'or",
-                  2: "Médaille d'argent",
-                  3: "Médaille de bronze",
-                };
-                const medals = {
-                  1: "🥇",
-                  2: "🥈",
-                  3: "🥉",
-                };
+                const image = String(sticker.Image ?? sticker.image ?? "").trim();
 
                 return (
-                  <li className="favourite-card" key={sticker.Number}>
-                    <span
-                      className="favourite-medal"
-                      role="img"
-                      aria-label={medalLabels[sticker.rank]}
-                      title={medalLabels[sticker.rank]}
-                    >
-                      {medals[sticker.rank]}
-                    </span>
-                    <div>
+                  <li className={`hall-card hall-card--${sticker.rank}`} key={sticker.Number}>
+                    <span className="hall-card__rank">#{sticker.rank}</span>
+                    <span className="hall-card__year">{selectedAlbum.year}</span>
+                    {image && <img src={image} alt="" />}
+                    <div className="hall-card__number">N° {sticker.Number}</div>
+                    <div className="hall-card__copy">
                       <strong>{title}</strong>
-                      <span>
-                        N° {sticker.Number}
-                        {details.length > 0 ? ` - ${details.join(" - ")}` : ""}
-                      </span>
+                      {details.length > 0 && <small>{details.join(" · ")}</small>}
                     </div>
                   </li>
                 );

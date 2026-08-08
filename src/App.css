@@ -294,6 +294,26 @@
 .hall-empty p { margin: 4px 0 0; color: rgba(255,251,234,.7); font-size: .84rem; }
 .hall-empty code { color: var(--yellow); }
 
+.yearly-podium {
+  margin-top: 18px;
+}
+
+.yearly-podium__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yearly-podium__list .hall-card,
+.yearly-podium__list .hall-card:nth-child(-n+3) {
+  grid-column: auto;
+  min-height: 280px;
+  padding: 20px;
+}
+
 .album-nav {
   margin: -8px 0 30px;
   overflow-x: auto;
@@ -1021,6 +1041,13 @@
     padding: 15px;
   }
   .hall-card:nth-child(8) { grid-column: auto; }
+  .yearly-podium__list {
+    grid-template-columns: 1fr;
+  }
+  .yearly-podium__list .hall-card,
+  .yearly-podium__list .hall-card:nth-child(-n+3) {
+    min-height: 240px;
+  }
 
   .race-panel {
     padding: 22px;
