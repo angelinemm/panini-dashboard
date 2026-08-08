@@ -100,8 +100,33 @@ references a sticker already present in an album snapshot:
 ]
 ```
 
-The list may contain zero to ten entries. Names, teams, types, and any optional
-`Image` value are resolved from the latest album data.
+The list may contain zero to ten entries. Names, teams, and types are resolved
+from the latest album data.
+
+### Sticker thumbnails
+
+An album can optionally provide photographs for its Top 3 and for stickers that
+also appear in the all-time Top 10. Put the image files in the album directory
+and add a `sticker-images.json` file that maps sticker numbers to public URLs:
+
+```text
+public/albums/tdf-2026/
+├── sticker-images.json
+└── stickers/
+    ├── 39.webp
+    └── 229.webp
+```
+
+```json
+{
+  "39": "/albums/tdf-2026/stickers/39.webp",
+  "229": "/albums/tdf-2026/stickers/229.webp"
+}
+```
+
+WebP is recommended, though browser-supported JPEG and PNG files also work. If
+the registry, a sticker entry, or an image file is missing, the ranking card is
+displayed normally without a thumbnail.
 
 ## Snapshot Data
 

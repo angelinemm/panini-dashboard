@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import CollectionDashboard from "./CollectionDashboard.jsx";
+import StickerThumbnail from "./StickerThumbnail.jsx";
+import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 import {
   backfillSpecialStickers,
   formatSnapshotDate,
@@ -185,11 +187,17 @@ function App() {
         ).then(backfillSpecialStickers);
       }),
       fetchChases(album.chases),
+      loadStickerImages(album.id),
     ])
-      .then(([snapshotHistory, chaseData]) => {
+      .then(([snapshotHistory, chaseData, images]) => {
         if (!cancelled) {
           setHistory(snapshotHistory);
-          setStickers(snapshotHistory[snapshotHistory.length - 1].stickers);
+          setStickers(
+            addStickerImages(
+              snapshotHistory[snapshotHistory.length - 1].stickers,
+              images,
+            ),
+          );
           setChases(chaseData);
           setLoading(false);
         }
@@ -947,8 +955,7 @@ function App() {
                 return (
                   <li className={`hall-card hall-card--${sticker.rank}`} key={sticker.Number}>
                     <span className="hall-card__rank">#{sticker.rank}</span>
-                    <span className="hall-card__year">{selectedAlbum.year}</span>
-                    {image && <img src={image} alt="" />}
+                    <StickerThumbnail src={image} />
                     <div className="hall-card__number">N° {sticker.Number}</div>
                     <div className="hall-card__copy">
                       <strong>{title}</strong>

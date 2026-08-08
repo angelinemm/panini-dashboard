@@ -9,6 +9,8 @@ import {
   getCollectionSummary,
   resolveAllTimeFavourites,
 } from "./collection-utils.js";
+import StickerThumbnail from "./StickerThumbnail.jsx";
+import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 
 const loadLatestAlbum = async (album) => {
   if (album.snapshots.length === 0) {
@@ -18,15 +20,21 @@ const loadLatestAlbum = async (album) => {
   const snapshots = [...album.snapshots].sort((a, b) =>
     a.date.localeCompare(b.date),
   );
-  const parsed = await Promise.all(
-    snapshots.map(async (snapshot) => {
-      const response = await fetch(snapshot.file);
-      if (!response.ok) throw new Error(`Impossible de charger ${album.title}`);
-      return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
-    }),
-  );
+  const [parsed, images] = await Promise.all([
+    Promise.all(
+      snapshots.map(async (snapshot) => {
+        const response = await fetch(snapshot.file);
+        if (!response.ok) {
+          throw new Error(`Impossible de charger ${album.title}`);
+        }
+        return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
+      }),
+    ),
+    loadStickerImages(album.id),
+  ]);
   const history = backfillSpecialStickers(parsed);
-  return getAlbumProgress(album, history.at(-1)?.stickers ?? []);
+  const stickers = addStickerImages(history.at(-1)?.stickers ?? [], images);
+  return getAlbumProgress(album, stickers);
 };
 
 const stickerTitle = (sticker) =>
@@ -162,7 +170,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
                 <li className={`hall-card hall-card--${Math.min(rank, 4)}`} key={`${album.id}-${getStickerNumber(sticker)}`}>
                   <span className="hall-card__rank">#{rank}</span>
                   <span className="hall-card__year">{album.year}</span>
-                  {image && <img src={image} alt="" />}
+                  <StickerThumbnail src={image} />
                   <div className="hall-card__number">N° {getStickerNumber(sticker)}</div>
                   <div className="hall-card__copy">
                     <strong>{stickerTitle(sticker)}</strong>
