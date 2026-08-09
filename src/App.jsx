@@ -230,7 +230,7 @@ function App() {
   if (loading || error || albums.length === 0) {
     return (
       <main className="dashboard">
-        <section className="race-panel">
+        <section className="race-panel race-panel--collection">
           {albums.length > 0 && (
             <AlbumTabs
               albums={albums}
@@ -262,7 +262,7 @@ function App() {
   if (selectedAlbum.snapshots.length === 0) {
     return (
       <main className="dashboard">
-        <section className="race-panel">
+        <section className="race-panel race-panel--collection">
           <AlbumTabs
             albums={albums}
             onSelect={selectAlbum}
@@ -588,7 +588,7 @@ function App() {
 
   return (
     <main className="dashboard">
-      <section className="race-panel">
+      <section className="race-panel race-panel--collection">
         <AlbumTabs
           albums={albums}
           onSelect={selectAlbum}
