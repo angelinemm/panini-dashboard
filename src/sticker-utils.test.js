@@ -69,7 +69,7 @@ describe("snapshot data helpers", () => {
   });
 
   it("formats snapshot dates without changing unknown values", () => {
-    expect(formatSnapshotDate("2026-07-14")).toBe("14/07");
+    expect(formatSnapshotDate("2026-07-14")).toBe("14/07/2026");
     expect(formatSnapshotDate("latest")).toBe("latest");
   });
 });

@@ -31,14 +31,14 @@ export const getDuplicateCount = (stickers) => {
 };
 
 export const formatSnapshotDate = (date) => {
-  const match = String(date).match(/^\d{4}-(\d{2})-(\d{2})$/);
+  const match = String(date).match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
   if (!match) {
     return date;
   }
 
-  const [, month, day] = match;
-  return `${day}/${month}`;
+  const [, year, month, day] = match;
+  return `${day}/${month}/${year}`;
 };
 
 export const getStickerNumber = (sticker) => String(sticker.Number).trim();
