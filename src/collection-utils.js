@@ -1,8 +1,24 @@
 import { getStickerNumber, isOwned } from "./sticker-utils.js";
 
-export const getAlbumProgress = (album, stickers = []) => {
+export const getStickerCollectedOn = (sticker, history = []) => {
+  const stickerNumber = getStickerNumber(sticker);
+
+  return history.find((snapshot) => {
+    return snapshot.stickers.some(
+      (snapshotSticker) =>
+        getStickerNumber(snapshotSticker) === stickerNumber &&
+        isOwned(snapshotSticker),
+    );
+  })?.date ?? "";
+};
+
+export const getAlbumProgress = (album, stickers = [], history = []) => {
   const total = stickers.length;
   const owned = stickers.filter(isOwned).length;
+  const startedOn = history.find((snapshot) => snapshot.owned > 0)?.date ?? "";
+  const completedOn = history.find(
+    (snapshot) => snapshot.total > 0 && snapshot.owned === snapshot.total,
+  )?.date ?? "";
 
   return {
     ...album,
@@ -11,6 +27,9 @@ export const getAlbumProgress = (album, stickers = []) => {
     owned,
     missing: total - owned,
     percentage: total === 0 ? 0 : Math.round((owned / total) * 100),
+    startedOn,
+    completedOn,
+    history,
   };
 };
 
@@ -49,6 +68,13 @@ export const resolveAllTimeFavourites = (ranking, albums) => {
         getStickerNumber(currentSticker) === String(reference?.stickerId).trim(),
     );
 
-    return sticker ? [{ album, rank: index + 1, sticker }] : [];
+    return sticker
+      ? [{
+          album,
+          rank: index + 1,
+          sticker,
+          collectedOn: getStickerCollectedOn(sticker, album.history),
+        }]
+      : [];
   });
 };

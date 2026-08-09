@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   backfillSpecialStickers,
+  formatSnapshotDate,
   getStickerNumber,
   parseStickerCsv,
 } from "./sticker-utils.js";
@@ -34,7 +35,7 @@ const loadLatestAlbum = async (album) => {
   ]);
   const history = backfillSpecialStickers(parsed);
   const stickers = addStickerImages(history.at(-1)?.stickers ?? [], images);
-  return getAlbumProgress(album, stickers);
+  return getAlbumProgress(album, stickers, history);
 };
 
 const stickerTitle = (sticker) =>
@@ -139,11 +140,17 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
             >
               <div className="album-card__top">
                 <div><span>Tour de France</span><strong>{album.year}</strong></div>
-                <b>{album.owned === 0 ? "Not started" : `${album.percentage}%`}</b>
+                <b>{album.owned === 0 ? "Pas commencé" : `${album.percentage}%`}</b>
               </div>
               <div className="progress" aria-label={`${album.percentage}% complété`}>
                 <div style={{ width: `${album.percentage}%` }} />
               </div>
+              {album.startedOn && (
+                <p className="album-card__date">
+                  {album.completedOn ? "Terminé le" : "Commencé le"}{" "}
+                  {formatSnapshotDate(album.completedOn || album.startedOn)}
+                </p>
+              )}
               <div className="album-card__footer">
                 <span>{album.owned} sur {album.total} stickers</span>
                 <button type="button" onClick={() => onOpenAlbum(album.id)}>
@@ -162,7 +169,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
         </div>
         {favourites.length > 0 ? (
           <ol className="hall-grid">
-            {favourites.map(({ album, rank, sticker }) => {
+            {favourites.map(({ album, collectedOn, rank, sticker }) => {
               const details = [sticker.Type, sticker.Equipe, sticker.Country]
                 .map((value) => String(value ?? "").trim()).filter(Boolean);
               const image = String(sticker.Image ?? sticker.image ?? "").trim();
@@ -175,6 +182,11 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
                   <div className="hall-card__copy">
                     <strong>{stickerTitle(sticker)}</strong>
                     {details.length > 0 && <small>{details.join(" · ")}</small>}
+                    {collectedOn && (
+                      <small className="hall-card__collected-on">
+                        Obtenu le {formatSnapshotDate(collectedOn)}
+                      </small>
+                    )}
                   </div>
                 </li>
               );

@@ -175,6 +175,12 @@
   line-height: 1;
 }
 .album-card .progress { margin: 18px 0 14px; }
+.album-card__date {
+  margin: -4px 0 14px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
 .album-card__footer > span { color: var(--muted); font-size: .84rem; font-weight: 750; }
 .album-card button {
   padding: 0;
@@ -220,7 +226,7 @@
   color: var(--ink);
   border: 4px solid #fff;
   border-radius: 7px;
-  grid-column: span 6;
+  grid-column: span 8;
   background:
     linear-gradient(145deg, rgba(255,255,255,.24), transparent 45%),
     linear-gradient(160deg, #65b3d1 0 45%, #e6f4f7 45%);
@@ -232,7 +238,7 @@
   min-height: 300px;
   padding: 20px;
 }
-.hall-card:nth-child(8) { grid-column: 4 / span 6; }
+.hall-grid > .hall-card:nth-child(10) { grid-column: 9 / span 8; }
 .hall-card:nth-child(even) { transform: rotate(1deg); }
 .hall-card--1 { background: linear-gradient(160deg, #ffd84a 0 45%, #fff6c8 45%); }
 .hall-card--2 { background: linear-gradient(160deg, #dce5e8 0 45%, #fff 45%); }
@@ -306,6 +312,11 @@
 .hall-card__copy strong, .hall-card__copy small { display: block; }
 .hall-card__copy strong { margin-top: 3px; font-size: 1rem; line-height: 1.08; }
 .hall-card__copy small { margin-top: 7px; color: var(--muted); font-size: .68rem; font-weight: 700; }
+.hall-card__copy .hall-card__collected-on {
+  margin-top: 5px;
+  font-size: .62rem;
+  font-weight: 800;
+}
 .hall-empty { min-height: 150px; display: flex; align-items: center; justify-content: center; gap: 20px; border: 1px dashed rgba(255,255,255,.25); border-radius: 8px; }
 .hall-empty > span { color: var(--yellow); font-size: 3.5rem; }
 .hall-empty strong { display: block; color: #fff; font-size: 1.1rem; }
@@ -834,6 +845,13 @@
   color: var(--yellow);
 }
 
+.chase-item div > .chase-collected-on {
+  margin-top: 5px;
+  color: rgba(255, 251, 234, 0.86);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
 .chase-teams {
   display: grid;
   gap: 10px;
@@ -1062,7 +1080,7 @@
     min-height: 230px;
     padding: 15px;
   }
-  .hall-card:nth-child(8) { grid-column: auto; }
+  .hall-grid > .hall-card:nth-child(10) { grid-column: auto; }
   .yearly-podium__list {
     grid-template-columns: 1fr;
   }

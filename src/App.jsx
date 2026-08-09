@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import CollectionDashboard from "./CollectionDashboard.jsx";
+import { getStickerCollectedOn } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 import {
@@ -307,6 +308,7 @@ function App() {
 
       return {
         ...sticker,
+        collectedOn: getStickerCollectedOn(sticker, history),
         rank,
       };
     })
@@ -407,6 +409,7 @@ function App() {
       });
 
       return {
+        collectedOn: sticker ? getStickerCollectedOn(sticker, history) : "",
         note: typeof chase === "object" ? chase.note : "",
         number: chaseNumber,
         owned: sticker ? isOwned(sticker) : false,
@@ -433,7 +436,9 @@ function App() {
       total: teamStickers.length,
     };
   });
-  const chaseMissing = chaseStickers.filter((chase) => !chase.owned).length;
+  const chaseMissing =
+    chaseStickers.filter((chase) => !chase.owned).length +
+    chaseTeams.reduce((sum, team) => sum + (team.total - team.owned), 0);
   const historyStart = history[0];
   const historyEnd = history[history.length - 1];
   const historyGain =
@@ -884,6 +889,10 @@ function App() {
                     String(chase.sticker?.Equipe ?? "").trim(),
                     String(chase.sticker?.Country ?? "").trim(),
                   ].filter(Boolean);
+                  const showNote =
+                    chase.note &&
+                    chase.note.trim().toLocaleLowerCase() !==
+                      title.trim().toLocaleLowerCase();
 
                   return (
                     <li
@@ -903,7 +912,12 @@ function App() {
                             ? ` - ${details.join(" - ")}`
                             : ""}
                         </span>
-                        {chase.note && <em>{chase.note}</em>}
+                        {chase.collectedOn && (
+                          <span className="chase-collected-on">
+                            Obtenu le {formatSnapshotDate(chase.collectedOn)}
+                          </span>
+                        )}
+                        {showNote && <em>{chase.note}</em>}
                       </div>
                     </li>
                   );
@@ -960,6 +974,11 @@ function App() {
                     <div className="hall-card__copy">
                       <strong>{title}</strong>
                       {details.length > 0 && <small>{details.join(" · ")}</small>}
+                      {sticker.collectedOn && (
+                        <small className="hall-card__collected-on">
+                          Obtenu le {formatSnapshotDate(sticker.collectedOn)}
+                        </small>
+                      )}
                     </div>
                   </li>
                 );
