@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import CollectionDashboard from "./CollectionDashboard.jsx";
-import { getStickerCollectedOn } from "./collection-utils.js";
+import CountryRanking from "./CountryRanking.jsx";
+import { getStickerCollectedOn, getTopRiderCountries } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 import {
@@ -321,6 +322,7 @@ function App() {
     })
     .sort((stickerA, stickerB) => stickerA.rank - stickerB.rank)
     .slice(0, 3);
+  const topCountries = getTopRiderCountries([{ stickers }]);
   const getTopTeamsByTypes = (types) => {
     const allowedTypes = new Set(types);
     const getTeamProgress = (snapshotStickers, teamName) => {
@@ -999,6 +1001,7 @@ function App() {
           "Classement femmes",
           "Top 3 des équipes femmes par stickers collectés",
         )}
+        <CountryRanking countries={topCountries} />
       </section>
     </main>
   );

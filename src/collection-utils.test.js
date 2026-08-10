@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, resolveAllTimeFavourites } from "./collection-utils.js";
+import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, getTopRiderCountries, resolveAllTimeFavourites } from "./collection-utils.js";
 
 describe("collection summaries", () => {
   it("weights every album equally", () => {
@@ -43,5 +43,33 @@ describe("collection summaries", () => {
     const albums = [{ year: 2026, stickers: [{ Number: "123", Name: "Rider" }] }];
     const result = resolveAllTimeFavourites([{ year: 2026, stickerId: "123" }], albums);
     expect(result[0]).toMatchObject({ rank: 1, sticker: { Name: "Rider" } });
+  });
+
+  it("ranks countries from owned rider stickers only", () => {
+    const albums = [{
+      stickers: [
+        { Type: "Coureur", Country: "BEL", Owned: "TRUE" },
+        { Type: "Coureuse", Country: "bel", Owned: "TRUE" },
+        { Type: "Coureur", Country: "FRA", Owned: "TRUE" },
+        { Type: "Coureur", Country: "NED", Owned: "FALSE" },
+        { Type: "Logo", Country: "BEL", Owned: "TRUE" },
+      ],
+    }];
+
+    expect(getTopRiderCountries(albums)).toEqual([
+      { country: "BEL", count: 2 },
+      { country: "FRA", count: 1 },
+    ]);
+  });
+
+  it("limits country rankings and resolves ties alphabetically", () => {
+    const albums = [{ stickers: [
+      { Type: "Coureur", Country: "USA", Owned: "TRUE" },
+      { Type: "Coureur", Country: "AUS", Owned: "TRUE" },
+    ] }];
+
+    expect(getTopRiderCountries(albums, 1)).toEqual([
+      { country: "AUS", count: 1 },
+    ]);
   });
 });

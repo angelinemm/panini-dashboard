@@ -54,6 +54,26 @@ export const getCollectionSummary = (albums) => {
   };
 };
 
+export const getTopRiderCountries = (albums, limit = 5) => {
+  const countries = new Map();
+
+  albums.forEach((album) => {
+    album.stickers.forEach((sticker) => {
+      const type = String(sticker.Type ?? "").trim().toLocaleLowerCase("fr");
+      const country = String(sticker.Country ?? "").trim().toUpperCase();
+
+      if ((type === "coureur" || type === "coureuse") && country && isOwned(sticker)) {
+        countries.set(country, (countries.get(country) ?? 0) + 1);
+      }
+    });
+  });
+
+  return [...countries.entries()]
+    .map(([country, count]) => ({ country, count }))
+    .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country))
+    .slice(0, Math.max(0, limit));
+};
+
 export const resolveAllTimeFavourites = (ranking, albums) => {
   if (!Array.isArray(ranking)) {
     return [];

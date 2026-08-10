@@ -194,6 +194,39 @@
 .album-card button:hover { color: var(--blue); }
 .album-card button:focus-visible { outline: 3px solid rgba(0, 114, 188, .3); outline-offset: 4px; }
 
+.country-ranking {
+  margin-top: 32px;
+  padding: 25px;
+  border: 1px solid rgba(13, 43, 60, .14);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 95% 5%, rgba(255, 221, 0, .24), transparent 28%),
+    rgba(255, 255, 255, .62);
+}
+
+.country-ranking .stage-label { color: var(--blue); }
+.country-ranking__list { margin: 0; padding: 0; list-style: none; }
+.country-row {
+  display: grid;
+  grid-template-columns: 32px 54px minmax(120px, .9fr) minmax(120px, 1.7fr) 92px;
+  align-items: center;
+  gap: 14px;
+  min-height: 55px;
+  border-top: 1px solid rgba(13, 43, 60, .11);
+}
+.country-row:first-child { border-top: 0; }
+.country-row__rank { color: var(--muted); font-size: .8rem; font-weight: 900; text-align: center; }
+.country-row__flag {
+  font-size: 1.65rem;
+  line-height: 1;
+  text-align: center;
+}
+.country-row strong { font-size: .95rem; }
+.country-row__bar { height: 10px; overflow: hidden; background: rgba(13, 43, 60, .09); border-radius: 999px; }
+.country-row__bar span { display: block; height: 100%; min-width: 8px; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: inherit; }
+.country-row__count { font-size: 1.25rem; font-weight: 950; text-align: right; }
+.country-row__count small { color: var(--muted); font-size: .66rem; font-weight: 800; }
+
 .hall-of-fame {
   margin-top: 32px;
   padding: 25px;
@@ -1201,4 +1234,8 @@
   .hall-of-fame { padding: 18px; }
   .hall-card { min-height: 210px; }
   .hall-empty { padding: 22px; align-items: flex-start; }
+  .country-ranking { padding: 18px; }
+  .country-row { grid-template-columns: 26px 48px minmax(0, 1fr) auto; gap: 9px; }
+  .country-row__bar { grid-column: 3 / -1; width: 100%; margin: -7px 0 10px; }
+  .country-row__count small { display: none; }
 }
