@@ -74,6 +74,42 @@ export const getTopRiderCountries = (albums, limit = 5) => {
     .slice(0, Math.max(0, limit));
 };
 
+export const getTopRepeatedRiders = (albums, limit = 5) => {
+  const riders = new Map();
+
+  albums.forEach((album) => {
+    const ridersInAlbum = new Map();
+
+    album.stickers.forEach((sticker) => {
+      const type = String(sticker.Type ?? "").trim().toLocaleLowerCase("fr");
+      const name = String(sticker.Name ?? "").trim();
+
+      if ((type === "coureur" || type === "coureuse") && name && isOwned(sticker)) {
+        const key = name.toLocaleLowerCase("fr");
+        if (!ridersInAlbum.has(key)) {
+          ridersInAlbum.set(key, name);
+        }
+      }
+    });
+
+    ridersInAlbum.forEach((name, key) => {
+      const rider = riders.get(key) ?? { name, years: [] };
+      rider.years.push(album.year);
+      riders.set(key, rider);
+    });
+  });
+
+  return [...riders.values()]
+    .filter((rider) => rider.years.length > 1)
+    .map((rider) => ({
+      ...rider,
+      years: [...rider.years].sort((a, b) => a - b),
+      albumCount: rider.years.length,
+    }))
+    .sort((a, b) => b.albumCount - a.albumCount || a.name.localeCompare(b.name, "fr"))
+    .slice(0, Math.max(0, limit));
+};
+
 export const resolveAllTimeFavourites = (ranking, albums) => {
   if (!Array.isArray(ranking)) {
     return [];

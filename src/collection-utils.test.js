@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, getTopRiderCountries, resolveAllTimeFavourites } from "./collection-utils.js";
+import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, getTopRepeatedRiders, getTopRiderCountries, resolveAllTimeFavourites } from "./collection-utils.js";
 
 describe("collection summaries", () => {
   it("weights every album equally", () => {
@@ -70,6 +70,35 @@ describe("collection summaries", () => {
 
     expect(getTopRiderCountries(albums, 1)).toEqual([
       { country: "AUS", count: 1 },
+    ]);
+  });
+
+  it("ranks owned riders by distinct albums, not sticker copies", () => {
+    const albums = [
+      { year: 2025, stickers: [
+        { Type: "Coureur", Name: "Jonas Vingegaard", Owned: "TRUE" },
+        { Type: "Coureur", Name: "Jonas Vingegaard", Owned: "TRUE" },
+        { Type: "Coureur", Name: "Tadej Pogacar", Owned: "TRUE" },
+      ] },
+      { year: 2026, stickers: [
+        { Type: "Coureur", Name: "jonas vingegaard", Owned: "TRUE" },
+        { Type: "Coureur", Name: "Tadej Pogacar", Owned: "FALSE" },
+      ] },
+    ];
+
+    expect(getTopRepeatedRiders(albums)).toEqual([
+      { name: "Jonas Vingegaard", years: [2025, 2026], albumCount: 2 },
+    ]);
+  });
+
+  it("limits repeated riders and resolves ties alphabetically", () => {
+    const albums = [2025, 2026].map((year) => ({ year, stickers: [
+      { Type: "Coureuse", Name: "Zoé", Owned: "TRUE" },
+      { Type: "Coureur", Name: "Adam", Owned: "TRUE" },
+    ] }));
+
+    expect(getTopRepeatedRiders(albums, 1)).toEqual([
+      { name: "Adam", years: [2025, 2026], albumCount: 2 },
     ]);
   });
 });

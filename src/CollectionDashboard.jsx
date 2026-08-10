@@ -8,11 +8,13 @@ import {
 import {
   getAlbumProgress,
   getCollectionSummary,
+  getTopRepeatedRiders,
   getTopRiderCountries,
   resolveAllTimeFavourites,
 } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
+import RepeatedRiderRanking from "./RepeatedRiderRanking.jsx";
 import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 
 const loadLatestAlbum = async (album) => {
@@ -95,6 +97,10 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
   );
   const topCountries = useMemo(
     () => getTopRiderCountries(albumProgress),
+    [albumProgress],
+  );
+  const topRepeatedRiders = useMemo(
+    () => getTopRepeatedRiders(albumProgress),
     [albumProgress],
   );
 
@@ -207,6 +213,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
       </section>
 
       <CountryRanking countries={topCountries} />
+      <RepeatedRiderRanking riders={topRepeatedRiders} />
     </>
   );
 }
