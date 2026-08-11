@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import CollectionDashboard from "./CollectionDashboard.jsx";
+import CollectionSearch from "./CollectionSearch.jsx";
+import RiderDetail from "./RiderDetail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
 import { getStickerCollectedOn, getTopRiderCountries } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
@@ -51,13 +53,13 @@ const fetchChases = (file) => {
   });
 };
 
-const AlbumTabs = ({ albums, selectedAlbumId, onSelect }) => {
+const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) => {
   return (
     <nav className="album-nav" aria-label="Albums Tour de France">
       <div className="album-tabs" role="tablist">
         <button
-          aria-selected={selectedAlbumId === ""}
-          className={selectedAlbumId === "" ? "is-active" : ""}
+          aria-selected={selectedAlbumId === "" && !isSearch}
+          className={selectedAlbumId === "" && !isSearch ? "is-active" : ""}
           onClick={() => onSelect("")}
           role="tab"
           type="button"
@@ -77,6 +79,20 @@ const AlbumTabs = ({ albums, selectedAlbumId, onSelect }) => {
             {album.snapshots.length === 0 && <span>À venir</span>}
           </button>
         ))}
+        <button
+          aria-label="Rechercher dans la collection"
+          aria-selected={isSearch}
+          className={`album-tabs__search ${isSearch ? "is-active" : ""}`}
+          onClick={onSearch}
+          role="tab"
+          title="Rechercher dans la collection"
+          type="button"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m16.5 16.5 4 4" />
+          </svg>
+        </button>
       </div>
     </nav>
   );
@@ -85,6 +101,8 @@ const AlbumTabs = ({ albums, selectedAlbumId, onSelect }) => {
 function App() {
   const [albums, setAlbums] = useState([]);
   const [selectedAlbumId, setSelectedAlbumId] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
+  const [riderName, setRiderName] = useState("");
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
   const [snapshotMetadata, setSnapshotMetadata] = useState({});
@@ -107,11 +125,14 @@ function App() {
         const requestedAlbum = new URLSearchParams(window.location.search).get(
           "album",
         );
+        const requestedView = new URLSearchParams(window.location.search).get("view");
         const initialAlbum = albumData.find(
           (album) => album.id === requestedAlbum,
         );
 
         setSelectedAlbumId(initialAlbum?.id ?? "");
+        setIsSearch(requestedView === "search");
+        setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
         if (!initialAlbum || initialAlbum.snapshots.length === 0) {
           setLoading(false);
         }
@@ -127,6 +148,9 @@ function App() {
       const requestedAlbum = new URLSearchParams(window.location.search).get(
         "album",
       );
+      const requestedView = new URLSearchParams(window.location.search).get("view");
+      setIsSearch(requestedView === "search");
+      setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
 
       const requestedAlbumData = albums.find(
         (album) => album.id === requestedAlbum,
@@ -222,10 +246,36 @@ function App() {
     const url = new URL(window.location.href);
     if (albumId) url.searchParams.set("album", albumId);
     else url.searchParams.delete("album");
+    url.searchParams.delete("view");
+    url.searchParams.delete("rider");
     window.history.pushState({}, "", url);
     setError("");
     setLoading(album?.snapshots.length > 0);
     setSelectedAlbumId(albumId);
+    setIsSearch(false);
+    setRiderName("");
+  };
+  const openSearch = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("album");
+    url.searchParams.delete("rider");
+    url.searchParams.set("view", "search");
+    window.history.pushState({}, "", url);
+    setError("");
+    setLoading(false);
+    setSelectedAlbumId("");
+    setIsSearch(true);
+    setRiderName("");
+  };
+  const openRider = (name) => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("album");
+    url.searchParams.set("view", "rider");
+    url.searchParams.set("rider", name);
+    window.history.pushState({}, "", url);
+    setSelectedAlbumId("");
+    setIsSearch(false);
+    setRiderName(name);
   };
 
   if (loading || error || albums.length === 0) {
@@ -235,6 +285,8 @@ function App() {
           {albums.length > 0 && (
             <AlbumTabs
               albums={albums}
+              isSearch={isSearch}
+              onSearch={openSearch}
               onSelect={selectAlbum}
               selectedAlbumId={selectedAlbumId}
             />
@@ -249,11 +301,45 @@ function App() {
     );
   }
 
+  if (isSearch) {
+    return (
+      <main className="dashboard">
+        <section className="race-panel race-panel--collection">
+          <AlbumTabs
+            albums={albums}
+            isSearch
+            onSearch={openSearch}
+            onSelect={selectAlbum}
+            selectedAlbumId=""
+          />
+          <CollectionSearch albums={albums} onOpenAlbum={selectAlbum} onOpenRider={openRider} />
+        </section>
+      </main>
+    );
+  }
+
+  if (riderName) {
+    return (
+      <main className="dashboard">
+        <section className="race-panel race-panel--collection">
+          <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
+          <RiderDetail albums={albums} name={riderName} onBackToSearch={openSearch} onOpenAlbum={selectAlbum} />
+        </section>
+      </main>
+    );
+  }
+
   if (!selectedAlbum) {
     return (
       <main className="dashboard">
         <section className="race-panel race-panel--collection">
-          <AlbumTabs albums={albums} onSelect={selectAlbum} selectedAlbumId="" />
+          <AlbumTabs
+            albums={albums}
+            isSearch={false}
+            onSearch={openSearch}
+            onSelect={selectAlbum}
+            selectedAlbumId=""
+          />
           <CollectionDashboard albums={albums} onOpenAlbum={selectAlbum} />
         </section>
       </main>
@@ -266,6 +352,8 @@ function App() {
         <section className="race-panel race-panel--collection">
           <AlbumTabs
             albums={albums}
+            isSearch={false}
+            onSearch={openSearch}
             onSelect={selectAlbum}
             selectedAlbumId={selectedAlbumId}
           />
@@ -593,6 +681,8 @@ function App() {
       <section className="race-panel race-panel--collection">
         <AlbumTabs
           albums={albums}
+          isSearch={false}
+          onSearch={openSearch}
           onSelect={selectAlbum}
           selectedAlbumId={selectedAlbumId}
         />

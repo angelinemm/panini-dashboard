@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  backfillSpecialStickers,
   formatSnapshotDate,
   getStickerNumber,
-  parseStickerCsv,
 } from "./sticker-utils.js";
 import {
-  getAlbumProgress,
   getCollectionSummary,
   getTopRepeatedRiders,
   getTopRiderCountries,
@@ -15,32 +12,7 @@ import {
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
 import RepeatedRiderRanking from "./RepeatedRiderRanking.jsx";
-import { addStickerImages, loadStickerImages } from "./sticker-images.js";
-
-const loadLatestAlbum = async (album) => {
-  if (album.snapshots.length === 0) {
-    return getAlbumProgress(album);
-  }
-
-  const snapshots = [...album.snapshots].sort((a, b) =>
-    a.date.localeCompare(b.date),
-  );
-  const [parsed, images] = await Promise.all([
-    Promise.all(
-      snapshots.map(async (snapshot) => {
-        const response = await fetch(snapshot.file);
-        if (!response.ok) {
-          throw new Error(`Impossible de charger ${album.title}`);
-        }
-        return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
-      }),
-    ),
-    loadStickerImages(album.id),
-  ]);
-  const history = backfillSpecialStickers(parsed);
-  const stickers = addStickerImages(history.at(-1)?.stickers ?? [], images);
-  return getAlbumProgress(album, stickers, history);
-};
+import { loadLatestAlbum } from "./album-loader.js";
 
 const stickerTitle = (sticker) =>
   String(sticker.Name).trim() || `Sticker ${getStickerNumber(sticker)}`;

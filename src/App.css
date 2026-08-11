@@ -456,6 +456,66 @@
   text-transform: uppercase;
 }
 
+.album-tabs .album-tabs__search {
+  min-width: 42px;
+  width: 42px;
+  place-items: center;
+  padding: 9px;
+}
+
+.album-tabs__search svg,
+.search-field svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.collection-search { max-width: 850px; margin: 0 auto; }
+.search-header { margin: 12px 0 30px; }
+.search-header h1 { margin: 4px 0 10px; font-size: clamp(2rem, 5vw, 3.6rem); line-height: .95; text-transform: uppercase; }
+.search-header > p:last-child { color: var(--muted); font-weight: 700; }
+.search-field { display: grid; gap: 8px; font-size: .76rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+.search-field > div { display: flex; align-items: center; gap: 11px; padding: 0 16px; background: #fff; border: 2px solid rgba(13, 43, 60, .2); border-radius: 8px; }
+.search-field > div:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 114, 188, .16); }
+.search-field input { width: 100%; padding: 15px 0; color: var(--ink); background: transparent; border: 0; outline: 0; font: inherit; font-size: 1rem; font-weight: 750; text-transform: none; }
+.search-results { margin-top: 25px; }
+.search-empty { padding: 30px; color: var(--muted); border: 1px dashed rgba(13, 43, 60, .25); border-radius: 8px; text-align: center; font-weight: 750; }
+.search-count { margin-bottom: 10px; color: var(--muted); font-size: .78rem; font-weight: 850; text-transform: uppercase; }
+.search-result-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.search-result-list li { min-height: 88px; display: grid; grid-template-columns: 58px minmax(0, 1fr) auto auto; align-items: center; gap: 14px; padding: 12px 15px; background: rgba(255, 255, 255, .72); border: 1px solid rgba(13, 43, 60, .14); border-radius: 8px; }
+.search-result__thumbnail { width: 52px; height: 64px; display: grid; place-items: center; overflow: hidden; color: rgba(13, 43, 60, .3); background: linear-gradient(145deg, rgba(13, 43, 60, .05), rgba(13, 43, 60, .12)); border: 1px solid rgba(13, 43, 60, .13); border-radius: 4px; }
+.search-result__thumbnail:empty::before { content: ""; width: 20px; height: 26px; border: 2px solid currentColor; border-radius: 2px; box-shadow: 4px -4px 0 -2px rgba(13, 43, 60, .16); transform: rotate(-5deg); }
+.search-result-list .hall-card__thumbnail { position: static; width: 100%; height: 100%; object-fit: cover; border-radius: 0; transform: none; }
+.search-result__copy { min-width: 0; display: grid; gap: 4px; }
+.search-result__copy strong { overflow: hidden; font-size: 1rem; text-overflow: ellipsis; white-space: nowrap; }
+.search-result__copy strong a { color: inherit; text-decoration: underline; text-decoration-color: rgba(13, 43, 60, .25); text-underline-offset: 3px; }
+.search-result__copy strong a:hover { color: var(--blue); text-decoration-color: currentColor; }
+.search-result__copy span { color: var(--muted); font-size: .77rem; font-weight: 750; }
+.search-result__copy .search-result__flag { display: inline-block; margin-left: 7px; color: inherit; font-size: 1.5em; font-weight: normal; line-height: 0; vertical-align: -0.14em; }
+.search-result__status { padding: 5px 9px; color: var(--red); background: rgba(227, 20, 45, .09); border-radius: 999px; font-size: .68rem; font-weight: 900; text-transform: uppercase; }
+.search-result__status.is-owned { color: var(--green); background: rgba(0, 132, 86, .1); }
+.search-result-list button { color: var(--ink); background: none; border: 0; cursor: pointer; font-weight: 900; }
+.search-result-list button:hover { color: var(--blue); }
+
+.rider-detail { max-width: 900px; margin: 0 auto; }
+.rider-detail__back { margin: 0 0 25px; padding: 0; color: var(--muted); background: none; border: 0; cursor: pointer; font-weight: 850; }
+.rider-detail__back:hover { color: var(--blue); }
+.rider-detail__header { display: flex; align-items: center; gap: 28px; margin-bottom: 42px; }
+.rider-detail__header h1 { margin: 4px 0 9px; font-size: clamp(2rem, 5vw, 3.6rem); line-height: .95; }
+.rider-detail__header > div:last-child > p:last-child { color: var(--muted); font-weight: 750; }
+.rider-detail__portrait { flex: 0 0 auto; width: 130px; height: 165px; display: grid; place-items: center; overflow: hidden; color: rgba(13, 43, 60, .3); background: linear-gradient(145deg, rgba(13, 43, 60, .05), rgba(13, 43, 60, .12)); border: 1px solid rgba(13, 43, 60, .13); border-radius: 7px; }
+.rider-detail__portrait:empty::before { content: ""; width: 42px; height: 56px; border: 3px solid currentColor; border-radius: 3px; box-shadow: 7px -7px 0 -3px rgba(13, 43, 60, .16); transform: rotate(-5deg); }
+.rider-detail__portrait .hall-card__thumbnail { position: static; width: 100%; height: 100%; object-fit: cover; border-radius: 0; transform: none; }
+.rider-appearances { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.rider-appearances li { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto auto; align-items: center; gap: 16px; padding: 16px; background: rgba(255, 255, 255, .72); border: 1px solid rgba(13, 43, 60, .14); border-radius: 8px; }
+.rider-appearances li > strong { font-size: 1.5rem; }
+.rider-appearances li > div { display: grid; gap: 4px; }
+.rider-appearances li > div span { color: var(--muted); font-size: .78rem; font-weight: 750; }
+.rider-appearances button { color: var(--ink); background: none; border: 0; cursor: pointer; font-weight: 900; }
+
 .coming-soon {
   position: relative;
   min-height: 520px;
@@ -1155,6 +1215,13 @@
   .album-nav {
     margin-bottom: 22px;
   }
+
+  .search-result-list li { grid-template-columns: 52px minmax(0, 1fr); }
+  .search-result__status, .search-result-list button { grid-column: 2; justify-self: start; }
+  .rider-detail__header { align-items: flex-start; }
+  .rider-detail__portrait { width: 90px; height: 115px; }
+  .rider-appearances li { grid-template-columns: 60px minmax(0, 1fr); }
+  .rider-appearances .search-result__status, .rider-appearances button { grid-column: 2; justify-self: start; }
 
   .coming-soon {
     min-height: 470px;
