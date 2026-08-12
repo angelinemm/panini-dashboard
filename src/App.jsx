@@ -15,7 +15,37 @@ import {
   isOwned,
   parseStickerCsv,
 } from "./sticker-utils.js";
-import { uiText } from "./ui-text.js";
+import { setUiLanguage, uiText } from "./ui-text.js";
+
+const getInitialLanguage = () => {
+  const savedLanguage = window.localStorage.getItem("panini-language");
+  return savedLanguage === "en" ? "en" : "fr";
+};
+
+const LanguageSwitcher = ({ language, onChange }) => (
+  <div className="language-switcher" aria-label={uiText.language.label} role="group">
+    <button
+      aria-label={uiText.language.french}
+      aria-pressed={language === "fr"}
+      className={language === "fr" ? "is-active" : ""}
+      onClick={() => onChange("fr")}
+      title={uiText.language.french}
+      type="button"
+    >
+      🇫🇷
+    </button>
+    <button
+      aria-label={uiText.language.english}
+      aria-pressed={language === "en"}
+      className={language === "en" ? "is-active" : ""}
+      onClick={() => onChange("en")}
+      title={uiText.language.english}
+      type="button"
+    >
+      🇬🇧
+    </button>
+  </div>
+);
 
 const fetchAlbums = () => {
   return fetch("/albums.json").then((response) => {
@@ -100,6 +130,8 @@ const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) =>
 };
 
 function App() {
+  const [language, setLanguage] = useState(getInitialLanguage);
+  setUiLanguage(language);
   const [albums, setAlbums] = useState([]);
   const [selectedAlbumId, setSelectedAlbumId] = useState("");
   const [isSearch, setIsSearch] = useState(false);
@@ -113,6 +145,11 @@ function App() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.title = uiText.language.pageTitle;
+  }, [language]);
 
   useEffect(() => {
     Promise.all([
@@ -278,10 +315,16 @@ function App() {
     setIsSearch(false);
     setRiderName(name);
   };
+  const changeLanguage = (nextLanguage) => {
+    setUiLanguage(nextLanguage);
+    setLanguage(nextLanguage);
+    window.localStorage.setItem("panini-language", nextLanguage);
+  };
 
   if (loading || error || albums.length === 0) {
     return (
       <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           {albums.length > 0 && (
             <AlbumTabs
@@ -305,6 +348,7 @@ function App() {
   if (isSearch) {
     return (
       <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           <AlbumTabs
             albums={albums}
@@ -322,6 +366,7 @@ function App() {
   if (riderName) {
     return (
       <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
           <RiderDetail albums={albums} name={riderName} onBackToSearch={openSearch} onOpenAlbum={selectAlbum} />
@@ -333,6 +378,7 @@ function App() {
   if (!selectedAlbum) {
     return (
       <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           <AlbumTabs
             albums={albums}
@@ -350,6 +396,7 @@ function App() {
   if (selectedAlbum.snapshots.length === 0) {
     return (
       <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           <AlbumTabs
             albums={albums}
@@ -678,6 +725,7 @@ function App() {
 
   return (
     <main className="dashboard">
+      <LanguageSwitcher language={language} onChange={changeLanguage} />
       <section className="race-panel race-panel--collection">
         <AlbumTabs
           albums={albums}
