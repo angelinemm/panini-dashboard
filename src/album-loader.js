@@ -1,6 +1,7 @@
 import { getAlbumProgress } from "./collection-utils.js";
 import { addStickerImages, loadStickerImages } from "./sticker-images.js";
 import { backfillSpecialStickers, parseStickerCsv } from "./sticker-utils.js";
+import { uiText } from "./ui-text.js";
 
 export const loadLatestAlbum = async (album) => {
   if (album.snapshots.length === 0) {
@@ -15,7 +16,7 @@ export const loadLatestAlbum = async (album) => {
       snapshots.map(async (snapshot) => {
         const response = await fetch(snapshot.file);
         if (!response.ok) {
-          throw new Error(`Impossible de charger ${album.title}`);
+          throw new Error(uiText.messages.albumDataError(album.title));
         }
         return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
       }),

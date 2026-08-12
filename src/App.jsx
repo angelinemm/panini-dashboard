@@ -15,11 +15,12 @@ import {
   isOwned,
   parseStickerCsv,
 } from "./sticker-utils.js";
+import { uiText } from "./ui-text.js";
 
 const fetchAlbums = () => {
   return fetch("/albums.json").then((response) => {
     if (!response.ok) {
-      throw new Error("No album index found");
+      throw new Error(uiText.messages.albumIndexError);
     }
 
     return response.json();
@@ -55,7 +56,7 @@ const fetchChases = (file) => {
 
 const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) => {
   return (
-    <nav className="album-nav" aria-label="Albums Tour de France">
+    <nav className="album-nav" aria-label={uiText.navigation.ariaLabel}>
       <div className="album-tabs" role="tablist">
         <button
           aria-selected={selectedAlbumId === "" && !isSearch}
@@ -64,7 +65,7 @@ const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) =>
           role="tab"
           type="button"
         >
-          Collection
+          {uiText.navigation.collection}
         </button>
         {albums.map((album) => (
           <button
@@ -76,16 +77,16 @@ const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) =>
             type="button"
           >
             {album.year}
-            {album.snapshots.length === 0 && <span>À venir</span>}
+            {album.snapshots.length === 0 && <span>{uiText.navigation.coming}</span>}
           </button>
         ))}
         <button
-          aria-label="Rechercher dans la collection"
+          aria-label={uiText.navigation.search}
           aria-selected={isSearch}
           className={`album-tabs__search ${isSearch ? "is-active" : ""}`}
           onClick={onSearch}
           role="tab"
-          title="Rechercher dans la collection"
+          title={uiText.navigation.search}
           type="button"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -194,7 +195,7 @@ function App() {
         );
 
         if (sortedSnapshots.length === 0) {
-          throw new Error("No snapshots found");
+          throw new Error(uiText.messages.snapshotsError);
         }
 
         return Promise.all(
@@ -292,8 +293,8 @@ function App() {
             />
           )}
           <div className="dashboard-message" role={error ? "alert" : "status"}>
-            <p className="eyebrow">Album Panini</p>
-            <h1>{error ? "Impossible de charger l’album" : "Chargement…"}</h1>
+            <p className="eyebrow">{uiText.messages.albumEyebrow}</p>
+            <h1>{error ? uiText.messages.albumLoadError : uiText.common.loading}</h1>
             {error && <p>{error}</p>}
           </div>
         </section>
@@ -359,15 +360,14 @@ function App() {
           />
           <section className="coming-soon" aria-labelledby="coming-soon-title">
             <img
-              alt="Cycliste gravissant une route de montagne"
+              alt={uiText.album.comingAlt}
               src="/cyclist-coming-soon.jpg"
             />
             <div className="coming-soon__copy">
               <p className="eyebrow">{selectedAlbum.title}</p>
-              <h1 id="coming-soon-title">Bientôt sur la ligne de départ</h1>
+              <h1 id="coming-soon-title">{uiText.album.comingTitle}</h1>
               <p>
-                Cette collection est au programme. Son suivi apparaîtra ici dès
-                que le premier snapshot sera ajouté.
+                {uiText.album.comingText}
               </p>
             </div>
           </section>
@@ -658,9 +658,9 @@ function App() {
                 <div className="team-row__text">
                   <strong>{team.name}</strong>
                   <span>
-                    {team.owned} sur {team.total} collectés
+                    {uiText.album.collectedOfTotalShort(team.owned, team.total)}
                     {team.reachedDate
-                      ? ` depuis le ${formatSnapshotDate(team.reachedDate)}`
+                      ? ` ${uiText.album.sinceDate(formatSnapshotDate(team.reachedDate))}`
                       : ""}
                   </span>
                 </div>
@@ -688,31 +688,31 @@ function App() {
         />
         <div className="race-panel__header">
           <div>
-            <p className="eyebrow">Album Panini</p>
+            <p className="eyebrow">{uiText.messages.albumEyebrow}</p>
             <h1>{selectedAlbum.title}</h1>
           </div>
-          <div className="race-badge" aria-label={`${percentage}% complété`}>
+          <div className="race-badge" aria-label={uiText.common.percentageCompleted(percentage)}>
             <span>{percentage}%</span>
-            <small>complété</small>
+            <small>{uiText.album.completed}</small>
           </div>
         </div>
 
         <div className="route-card">
           <div className="route-card__copy">
-            <p className="stage-label">Étape de collection</p>
+            <p className="stage-label">{uiText.album.collectionStage}</p>
             <div className="route-card__summary">
               <strong>
-                {owned} sur {total} stickers collectés
+                {uiText.album.collectedOfTotal(owned, total)}
               </strong>
-              <span>{packetsOpened} paquets ouverts</span>
+              <span>{uiText.album.packetsOpened(packetsOpened)}</span>
             </div>
           </div>
-          <div className="progress" aria-label={`${percentage}% complété`}>
+          <div className="progress" aria-label={uiText.common.percentageCompleted(percentage)}>
             <div style={{ width: `${percentage}%` }} />
           </div>
           <div className="route-card__markers" aria-hidden="true">
-            <span>Départ</span>
-            <span>Champs-Élysées</span>
+            <span>{uiText.album.start}</span>
+            <span>{uiText.album.finish}</span>
           </div>
         </div>
 
@@ -720,18 +720,16 @@ function App() {
           <section className="history-card" aria-labelledby="history-heading">
             <div className="team-standings__header">
               <p className="stage-label" id="history-heading">
-                Évolution de la collection
+                {uiText.album.collectionHistory}
               </p>
               <span>
-                {historyGain >= 0 ? "+" : ""}
-                {historyGain} stickers depuis le{" "}
-                {formatSnapshotDate(historyStart.date)}
+                {uiText.album.gainSince(historyGain, formatSnapshotDate(historyStart.date))}
               </span>
             </div>
 
             <div className="history-chart">
               <svg
-                aria-label="Progression du pourcentage de stickers collectés"
+                aria-label={uiText.album.progressChartLabel}
                 role="img"
                 viewBox={`0 0 ${chartWidth} ${chartHeight}`}
               >
@@ -784,8 +782,7 @@ function App() {
                       r="5"
                     >
                       <title>
-                        {formatSnapshotDate(point.date)}: {point.percentage}% (
-                        {point.owned} sur {point.total})
+                        {uiText.album.chartPoint(formatSnapshotDate(point.date), point.percentage, point.owned, point.total)}
                       </title>
                     </circle>
                     {shouldShowDateLabel(index) && (
@@ -804,18 +801,18 @@ function App() {
 
             <div className="history-summary">
               <div>
-                <span>Dernière mise à jour</span>
+                <span>{uiText.album.lastUpdate}</span>
                 <strong>{formatSnapshotDate(historyEnd.date)}</strong>
               </div>
               <div>
-                <span>Progression</span>
+                <span>{uiText.album.progress}</span>
                 <strong>
                   {historyStart.percentage}% → {historyEnd.percentage}%
                 </strong>
               </div>
               {bestDay && (
                 <div>
-                  <span>Meilleure journée</span>
+                  <span>{uiText.album.bestDay}</span>
                   <strong>
                     {formatSnapshotDate(bestDay.date)} · +{bestDay.gain}
                   </strong>
@@ -832,14 +829,14 @@ function App() {
           >
             <div className="team-standings__header">
               <p className="stage-label" id="duplicate-history-heading">
-                Évolution des doubles
+                {uiText.album.duplicatesHistory}
               </p>
-              <span>{doubles} doubles au dernier snapshot</span>
+              <span>{uiText.album.duplicatesLatest(doubles)}</span>
             </div>
 
             <div className="history-chart">
               <svg
-                aria-label="Évolution du nombre de doubles"
+                aria-label={uiText.album.duplicatesChartLabel}
                 role="img"
                 viewBox={`0 0 ${chartWidth} ${chartHeight}`}
               >
@@ -895,8 +892,7 @@ function App() {
                       r="5"
                     >
                       <title>
-                        {formatSnapshotDate(point.date)}: {point.duplicates}{" "}
-                        doubles
+                        {uiText.album.duplicatePoint(formatSnapshotDate(point.date), point.duplicates)}
                       </title>
                     </circle>
                     {shouldShowDateLabel(index) && (
@@ -915,18 +911,18 @@ function App() {
 
             <div className="history-summary">
               <div>
-                <span>Doubles actuels</span>
+                <span>{uiText.album.currentDuplicates}</span>
                 <strong>{doubles}</strong>
               </div>
               <div>
-                <span>Dernière mise à jour</span>
+                <span>{uiText.album.lastUpdate}</span>
                 <strong>{formatSnapshotDate(historyEnd.date)}</strong>
               </div>
               <div>
-                <span>Depuis le départ</span>
+                <span>{uiText.album.sinceStart}</span>
                 <strong>
                   {duplicateGain >= 0 ? "+" : ""}
-                  {duplicateGain} doubles
+                  {uiText.album.duplicatesCount(duplicateGain)}
                 </strong>
               </div>
             </div>
@@ -935,25 +931,25 @@ function App() {
 
         <div className="stats-grid">
           <article className="stat stat--yellow">
-            <span>Maillot jaune</span>
+            <span>{uiText.album.yellowJersey}</span>
             <strong>{owned}</strong>
-            <p>dans l'album</p>
+            <p>{uiText.album.inAlbum}</p>
           </article>
           <article className="stat stat--green">
-            <span>Sprint</span>
+            <span>{uiText.album.sprint}</span>
             <strong>{remaining}</strong>
-            <p>encore à chasser</p>
-            <small>{remainingWithoutInstants} hors instantanés</small>
+            <p>{uiText.album.leftToChase}</p>
+            <small>{uiText.album.excludingInstants(remainingWithoutInstants)}</small>
           </article>
           <article className="stat stat--polka">
-            <span>Montagne</span>
+            <span>{uiText.album.mountain}</span>
             <strong>{doubles}</strong>
-            <p>doubles à échanger</p>
+            <p>{uiText.album.duplicatesToTrade}</p>
           </article>
           <article className="stat stat--white">
-            <span>Jeune coureur</span>
+            <span>{uiText.album.youngRider}</span>
             <strong>{favourites}</strong>
-            <p>favoris marqués</p>
+            <p>{uiText.album.markedFavourites}</p>
           </article>
         </div>
 
@@ -961,11 +957,10 @@ function App() {
           <section className="chase-card" aria-labelledby="chase-heading">
             <div className="team-standings__header">
               <p className="stage-label" id="chase-heading">
-                À chasser
+                {uiText.album.chase}
               </p>
               <span>
-                {chaseMissing} sticker{chaseMissing > 1 ? "s" : ""} manquant
-                {chaseMissing > 1 ? "s" : ""}
+                {uiText.album.missingCount(chaseMissing)}
               </span>
             </div>
 
@@ -975,7 +970,7 @@ function App() {
                   const title =
                     String(chase.sticker?.Name ?? "").trim() ||
                     chase.note ||
-                    `Sticker ${chase.number}`;
+                    uiText.common.stickerFallback(chase.number);
                   const details = [
                     String(chase.sticker?.Type ?? "").trim(),
                     String(chase.sticker?.Equipe ?? "").trim(),
@@ -994,19 +989,19 @@ function App() {
                       key={chase.number}
                     >
                       <span className="chase-status">
-                        {chase.owned ? "Collecté" : "Manquant"}
+                        {chase.owned ? uiText.common.collected : uiText.common.missing}
                       </span>
                       <div>
                         <strong>{title}</strong>
                         <span>
-                          N° {chase.number}
+                          {uiText.common.stickerNumber(chase.number)}
                           {details.length > 0
                             ? ` - ${details.join(" - ")}`
                             : ""}
                         </span>
                         {chase.collectedOn && (
                           <span className="chase-collected-on">
-                            Obtenu le {formatSnapshotDate(chase.collectedOn)}
+                            {uiText.common.obtainedOn(formatSnapshotDate(chase.collectedOn))}
                           </span>
                         )}
                         {showNote && <em>{chase.note}</em>}
@@ -1024,7 +1019,7 @@ function App() {
                     <div className="chase-team__text">
                       <strong>{team.name}</strong>
                       <span>
-                        {team.owned} sur {team.total} collectés
+                        {uiText.album.collectedOfTotalShort(team.owned, team.total)}
                       </span>
                     </div>
                     <div className="team-progress">
@@ -1042,15 +1037,15 @@ function App() {
           <section className="hall-of-fame yearly-podium" aria-labelledby="favourite-cards-heading">
             <div className="section-heading section-heading--light">
               <div>
-                <p className="stage-label">Podium de l’album</p>
-                <h2 id="favourite-cards-heading">Mes cartes préférées</h2>
+                <p className="stage-label">{uiText.album.albumPodium}</p>
+                <h2 id="favourite-cards-heading">{uiText.album.favouriteCards}</h2>
               </div>
-              <span>Top 3 personnel</span>
+              <span>{uiText.album.personalTopThree}</span>
             </div>
 
             <ol className="yearly-podium__list">
               {topCards.map((sticker) => {
-                const title = String(sticker.Name).trim() || `Sticker ${sticker.Number}`;
+                const title = String(sticker.Name).trim() || uiText.common.stickerFallback(sticker.Number);
                 const details = [
                   String(sticker.Type).trim(),
                   String(sticker.Equipe).trim(),
@@ -1062,13 +1057,13 @@ function App() {
                   <li className={`hall-card hall-card--${sticker.rank}`} key={sticker.Number}>
                     <span className="hall-card__rank">#{sticker.rank}</span>
                     <StickerThumbnail src={image} />
-                    <div className="hall-card__number">N° {sticker.Number}</div>
+                    <div className="hall-card__number">{uiText.common.stickerNumber(sticker.Number)}</div>
                     <div className="hall-card__copy">
                       <strong>{title}</strong>
                       {details.length > 0 && <small>{details.join(" · ")}</small>}
                       {sticker.collectedOn && (
                         <small className="hall-card__collected-on">
-                          Obtenu le {formatSnapshotDate(sticker.collectedOn)}
+                          {uiText.common.obtainedOn(formatSnapshotDate(sticker.collectedOn))}
                         </small>
                       )}
                     </div>
@@ -1082,14 +1077,14 @@ function App() {
         {renderTeamStandings(
           mensTeams,
           "mens-team-heading",
-          "Classement hommes",
-          "Top 3 des équipes hommes par stickers collectés",
+          uiText.album.mensRanking,
+          uiText.album.mensRankingSubtitle,
         )}
         {renderTeamStandings(
           womensTeams,
           "womens-team-heading",
-          "Classement femmes",
-          "Top 3 des équipes femmes par stickers collectés",
+          uiText.album.womensRanking,
+          uiText.album.womensRankingSubtitle,
         )}
         <CountryRanking countries={topCountries} />
       </section>

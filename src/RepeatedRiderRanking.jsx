@@ -7,10 +7,10 @@ export default function RepeatedRiderRanking({ riders }) {
     <section className="rider-ranking" aria-labelledby="repeated-riders-heading">
       <div className="section-heading">
         <div>
-          <p className="stage-label">Les habitués</p>
-          <h2 id="repeated-riders-heading">Top 5 multi-albums</h2>
+          <p className="stage-label">{uiText.rankings.regulars}</p>
+          <h2 id="repeated-riders-heading">{uiText.rankings.ridersTitle}</h2>
         </div>
-        <span>Nombre d’albums où le coureur est collecté</span>
+        <span>{uiText.rankings.ridersSubtitle}</span>
       </div>
       <ol className="rider-ranking__list">
         {riders.map(({ albumCount, name, years }, index) => (
@@ -19,7 +19,7 @@ export default function RepeatedRiderRanking({ riders }) {
             <strong>{name}</strong>
             <span className="rider-row__years">{years.join(" · ")}</span>
             <span className="rider-row__count">
-              {albumCount}<small> album{albumCount > 1 ? "s" : ""}</small>
+              {albumCount}<small> {uiText.common.album(albumCount)}</small>
             </span>
           </li>
         ))}
@@ -27,3 +27,4 @@ export default function RepeatedRiderRanking({ riders }) {
     </section>
   );
 }
+import { uiText } from "./ui-text.js";

@@ -4,6 +4,7 @@ import { getStickerCollectedOn } from "./collection-utils.js";
 import { getCountryFlag } from "./country-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { formatSnapshotDate, getStickerNumber, isOwned } from "./sticker-utils.js";
+import { uiText } from "./ui-text.js";
 
 export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum }) {
   const [collection, setCollection] = useState([]);
@@ -46,8 +47,8 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
   if (loading || error) {
     return (
       <div className="dashboard-message" role={error ? "alert" : "status"}>
-        <p className="eyebrow">Fiche coureur</p>
-        <h1>{error ? "Impossible de charger le coureur" : "Chargement…"}</h1>
+        <p className="eyebrow">{uiText.rider.eyebrow}</p>
+        <h1>{error ? uiText.messages.riderLoadError : uiText.common.loading}</h1>
         {error && <p>{error}</p>}
       </div>
     );
@@ -56,15 +57,15 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
   return (
     <article className="rider-detail">
       <button className="rider-detail__back" onClick={onBackToSearch} type="button">
-        <span aria-hidden="true">←</span> Retour à la recherche
+        <span aria-hidden="true">←</span> {uiText.rider.back}
       </button>
       <header className="rider-detail__header">
         <div className="rider-detail__portrait" aria-hidden="true">
           <StickerThumbnail src={image} />
         </div>
         <div>
-          <p className="eyebrow">Fiche coureur</p>
-          <h1>{name} {flag && <span aria-label={`Pays : ${country}`} role="img">{flag}</span>}</h1>
+          <p className="eyebrow">{uiText.rider.eyebrow}</p>
+          <h1>{name} {flag && <span aria-label={uiText.common.countryLabel(country)} role="img">{flag}</span>}</h1>
           {latest && (
             <p>{[latest.sticker.Type, latest.sticker.Equipe, country].filter(Boolean).join(" · ")}</p>
           )}
@@ -72,12 +73,12 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
       </header>
 
       {occurrences.length === 0 ? (
-        <p className="search-empty">Aucune apparition connue.</p>
+        <p className="search-empty">{uiText.rider.noAppearances}</p>
       ) : (
         <section aria-labelledby="appearances-title">
           <div className="section-heading">
-            <div><p className="stage-label">Dans la collection</p><h2 id="appearances-title">Apparitions</h2></div>
-            <span>{occurrences.length} album{occurrences.length > 1 ? "s" : ""}</span>
+            <div><p className="stage-label">{uiText.rider.collectionStage}</p><h2 id="appearances-title">{uiText.rider.appearances}</h2></div>
+            <span>{occurrences.length} {uiText.common.album(occurrences.length)}</span>
           </div>
           <ul className="rider-appearances">
             {occurrences.map(({ album, sticker }) => {
@@ -86,13 +87,13 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
                 <li key={`${album.id}-${getStickerNumber(sticker)}`}>
                   <strong>{album.year}</strong>
                   <div>
-                    <b>N° {getStickerNumber(sticker)}</b>
+                    <b>{uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
                     <span>{[sticker.Type, sticker.Equipe, sticker.Country].filter((value) => String(value ?? "").trim()).join(" · ")}</span>
                   </div>
                   <span className={`search-result__status ${isOwned(sticker) ? "is-owned" : ""}`}>
-                    {isOwned(sticker) ? (collectedOn ? `Collecté le ${formatSnapshotDate(collectedOn)}` : "Collecté") : "Manquant"}
+                    {isOwned(sticker) ? (collectedOn ? uiText.rider.collectedOn(formatSnapshotDate(collectedOn)) : uiText.common.collected) : uiText.common.missing}
                   </span>
-                  <button onClick={() => onOpenAlbum(album.id)} type="button">Voir l’album <span aria-hidden="true">→</span></button>
+                  <button onClick={() => onOpenAlbum(album.id)} type="button">{uiText.common.openAlbum} <span aria-hidden="true">→</span></button>
                 </li>
               );
             })}

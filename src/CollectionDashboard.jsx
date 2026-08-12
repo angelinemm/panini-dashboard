@@ -13,9 +13,10 @@ import StickerThumbnail from "./StickerThumbnail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
 import RepeatedRiderRanking from "./RepeatedRiderRanking.jsx";
 import { loadLatestAlbum } from "./album-loader.js";
+import { uiText } from "./ui-text.js";
 
 const stickerTitle = (sticker) =>
-  String(sticker.Name).trim() || `Sticker ${getStickerNumber(sticker)}`;
+  String(sticker.Name).trim() || uiText.common.stickerFallback(getStickerNumber(sticker));
 
 const parseJsonWithComments = (text) => {
   const withoutComments = text
@@ -79,8 +80,8 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
   if (loading || error) {
     return (
       <div className="dashboard-message" role={error ? "alert" : "status"}>
-        <p className="eyebrow">Collection Panini</p>
-        <h1>{error ? "Impossible de charger la collection" : "Chargement…"}</h1>
+        <p className="eyebrow">{uiText.messages.collectionEyebrow}</p>
+        <h1>{error ? uiText.messages.collectionLoadError : uiText.common.loading}</h1>
         {error && <p>{error}</p>}
       </div>
     );
@@ -90,29 +91,29 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
     <>
       <header className="collection-header">
         <div>
-          <p className="eyebrow">Ma collection Panini</p>
-          <h1>Tour de France</h1>
+          <p className="eyebrow">{uiText.collection.eyebrow}</p>
+          <h1>{uiText.collection.title}</h1>
           <p className="collection-header__intro">
-            Tous les albums, une seule ligne d’arrivée.
+            {uiText.collection.intro}
           </p>
         </div>
-        <div className="race-badge" aria-label={`${summary.percentage}% complété`}>
+        <div className="race-badge" aria-label={uiText.common.percentageCompleted(summary.percentage)}>
           <span>{summary.percentage}%</span>
-          <small>au total</small>
+          <small>{uiText.collection.total}</small>
         </div>
       </header>
 
-      <div className="collection-stats" aria-label="Résumé de la collection">
-        <div><strong>{summary.albumCount}</strong><span>albums</span></div>
-        <div><strong>{summary.albumsCompleted}</strong><span>terminés</span></div>
-        <div><strong>{summary.collected}</strong><span>collectés</span></div>
-        <div><strong>{summary.missing}</strong><span>manquants</span></div>
+      <div className="collection-stats" aria-label={uiText.collection.summaryLabel}>
+        <div><strong>{summary.albumCount}</strong><span>{uiText.collection.albums}</span></div>
+        <div><strong>{summary.albumsCompleted}</strong><span>{uiText.collection.completed}</span></div>
+        <div><strong>{summary.collected}</strong><span>{uiText.collection.collected}</span></div>
+        <div><strong>{summary.missing}</strong><span>{uiText.collection.missing}</span></div>
       </div>
 
       <section className="album-overview" aria-labelledby="albums-heading">
         <div className="section-heading">
-          <div><p className="stage-label">Le peloton</p><h2 id="albums-heading">Mes albums</h2></div>
-          <span>Chaque année compte autant</span>
+          <div><p className="stage-label">{uiText.collection.peloton}</p><h2 id="albums-heading">{uiText.collection.myAlbums}</h2></div>
+          <span>{uiText.collection.equalWeight}</span>
         </div>
         <div className="album-card-grid">
           {albumProgress.map((album) => (
@@ -123,22 +124,22 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
               key={album.id}
             >
               <div className="album-card__top">
-                <div><span>Tour de France</span><strong>{album.year}</strong></div>
-                <b>{album.owned === 0 ? "Pas commencé" : `${album.percentage}%`}</b>
+                <div><span>{uiText.collection.title}</span><strong>{album.year}</strong></div>
+                <b>{album.owned === 0 ? uiText.collection.notStarted : `${album.percentage}%`}</b>
               </div>
-              <div className="progress" aria-label={`${album.percentage}% complété`}>
+              <div className="progress" aria-label={uiText.common.percentageCompleted(album.percentage)}>
                 <div style={{ width: `${album.percentage}%` }} />
               </div>
               {album.startedOn && (
                 <p className="album-card__date">
-                  {album.completedOn ? "Terminé le" : "Commencé le"}{" "}
+                  {album.completedOn ? uiText.collection.finishedOn : uiText.collection.startedOn}{" "}
                   {formatSnapshotDate(album.completedOn || album.startedOn)}
                 </p>
               )}
               <div className="album-card__footer">
-                <span>{album.owned} sur {album.total} stickers</span>
+                <span>{uiText.collection.ownedOfTotal(album.owned, album.total)}</span>
                 <button type="button" onClick={() => onOpenAlbum(album.id)}>
-                  Ouvrir l’album <span aria-hidden="true">→</span>
+                  {uiText.collection.openAlbum} <span aria-hidden="true">→</span>
                 </button>
               </div>
             </article>
@@ -148,8 +149,8 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
 
       <section className="hall-of-fame" aria-labelledby="hall-heading">
         <div className="section-heading section-heading--light">
-          <div><p className="stage-label">Hall of Fame</p><h2 id="hall-heading">All-time Top 10</h2></div>
-          <span>{favourites.length} sur 10 sélectionnés</span>
+          <div><p className="stage-label">{uiText.collection.hallStage}</p><h2 id="hall-heading">{uiText.collection.hallTitle}</h2></div>
+          <span>{uiText.collection.selectedOfTen(favourites.length)}</span>
         </div>
         {favourites.length > 0 ? (
           <ol className="hall-grid">
@@ -162,13 +163,13 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
                   <span className="hall-card__rank">#{rank}</span>
                   <span className="hall-card__year">{album.year}</span>
                   <StickerThumbnail src={image} />
-                  <div className="hall-card__number">N° {getStickerNumber(sticker)}</div>
+                  <div className="hall-card__number">{uiText.common.stickerNumber(getStickerNumber(sticker))}</div>
                   <div className="hall-card__copy">
                     <strong>{stickerTitle(sticker)}</strong>
                     {details.length > 0 && <small>{details.join(" · ")}</small>}
                     {collectedOn && (
                       <small className="hall-card__collected-on">
-                        Obtenu le {formatSnapshotDate(collectedOn)}
+                        {uiText.common.obtainedOn(formatSnapshotDate(collectedOn))}
                       </small>
                     )}
                   </div>
@@ -179,7 +180,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
         ) : (
           <div className="hall-empty">
             <span aria-hidden="true">★</span>
-            <div><strong>Le podium attend ses légendes</strong><p>Ajoutez jusqu’à 10 références dans <code>all-time-favourites.jsonc</code>.</p></div>
+            <div><strong>{uiText.collection.emptyHallTitle}</strong><p>{uiText.collection.emptyHallText} <code>all-time-favourites.jsonc</code>.</p></div>
           </div>
         )}
       </section>
