@@ -78,22 +78,33 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
         <section aria-labelledby="appearances-title">
           <div className="section-heading">
             <div><p className="stage-label">{uiText.rider.collectionStage}</p><h2 id="appearances-title">{uiText.rider.appearances}</h2></div>
-            <span>{occurrences.length} {uiText.common.album(occurrences.length)}</span>
+            <span>{occurrences.length} {uiText.common.sticker(occurrences.length)}</span>
           </div>
           <ul className="rider-appearances">
             {occurrences.map(({ album, sticker }) => {
               const collectedOn = getStickerCollectedOn(sticker, album.history);
+              const stickerImage = String(sticker.Image ?? sticker.image ?? "").trim();
               return (
                 <li key={`${album.id}-${getStickerNumber(sticker)}`}>
-                  <strong>{album.year}</strong>
-                  <div>
-                    <b>{uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
-                    <span>{[sticker.Type, sticker.Equipe, sticker.Country].filter((value) => String(value ?? "").trim()).join(" · ")}</span>
+                  <div className="rider-appearance__sticker">
+                    <StickerThumbnail src={stickerImage} />
+                    {!stickerImage && (
+                      <span>{uiText.common.stickerFallback(getStickerNumber(sticker))}</span>
+                    )}
                   </div>
-                  <span className={`search-result__status ${isOwned(sticker) ? "is-owned" : ""}`}>
-                    {isOwned(sticker) ? (collectedOn ? uiText.rider.collectedOn(formatSnapshotDate(collectedOn)) : uiText.common.collected) : uiText.common.missing}
-                  </span>
-                  <button onClick={() => onOpenAlbum(album.id)} type="button">{uiText.common.openAlbum} <span aria-hidden="true">→</span></button>
+                  <div className="rider-appearance__details">
+                    <div className="rider-appearance__title">
+                      <strong>{album.year}</strong>
+                      <b>{uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
+                    </div>
+                    <span>{[sticker.Type, sticker.Equipe, sticker.Country].filter((value) => String(value ?? "").trim()).join(" · ")}</span>
+                    <div className="rider-appearance__actions">
+                      <span className={`search-result__status ${isOwned(sticker) ? "is-owned" : ""}`}>
+                        {isOwned(sticker) ? (collectedOn ? uiText.rider.collectedOn(formatSnapshotDate(collectedOn)) : uiText.common.collected) : uiText.common.missing}
+                      </span>
+                      <button onClick={() => onOpenAlbum(album.id)} type="button">{uiText.common.openAlbum} <span aria-hidden="true">→</span></button>
+                    </div>
+                  </div>
                 </li>
               );
             })}
