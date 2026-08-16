@@ -601,7 +601,7 @@ function App() {
   const chartPadding = {
     bottom: 34,
     left: 58,
-    right: 18,
+    right: 58,
     top: 18,
   };
   const chartInnerWidth =
