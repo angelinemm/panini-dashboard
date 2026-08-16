@@ -27,7 +27,7 @@ const parseJsonWithComments = (text) => {
   return JSON.parse(withoutComments);
 };
 
-export default function CollectionDashboard({ albums, onOpenAlbum }) {
+export default function CollectionDashboard({ albums, onOpenAlbum, onOpenRider }) {
   const [albumProgress, setAlbumProgress] = useState([]);
   const [ranking, setRanking] = useState([]);
   const [error, setError] = useState("");
@@ -155,6 +155,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
         {favourites.length > 0 ? (
           <ol className="hall-grid">
             {favourites.map(({ album, collectedOn, rank, sticker }) => {
+              const name = String(sticker.Name ?? "").trim();
               const details = [sticker.Type, sticker.Equipe, sticker.Country]
                 .map((value) => String(value ?? "").trim()).filter(Boolean);
               const image = String(sticker.Image ?? sticker.image ?? "").trim();
@@ -165,7 +166,19 @@ export default function CollectionDashboard({ albums, onOpenAlbum }) {
                   <StickerThumbnail src={image} />
                   <div className="hall-card__number">{uiText.common.stickerNumber(getStickerNumber(sticker))}</div>
                   <div className="hall-card__copy">
-                    <strong>{stickerTitle(sticker)}</strong>
+                    <strong>
+                      {name ? (
+                        <a
+                          href={`?view=rider&rider=${encodeURIComponent(name)}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            onOpenRider(name);
+                          }}
+                        >
+                          {name}
+                        </a>
+                      ) : stickerTitle(sticker)}
+                    </strong>
                     {details.length > 0 && <small>{details.join(" · ")}</small>}
                     {collectedOn && (
                       <small className="hall-card__collected-on">

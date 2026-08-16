@@ -387,7 +387,11 @@ function App() {
             onSelect={selectAlbum}
             selectedAlbumId=""
           />
-          <CollectionDashboard albums={albums} onOpenAlbum={selectAlbum} />
+          <CollectionDashboard
+            albums={albums}
+            onOpenAlbum={selectAlbum}
+            onOpenRider={openRider}
+          />
         </section>
       </main>
     );
@@ -1093,7 +1097,8 @@ function App() {
 
             <ol className="yearly-podium__list">
               {topCards.map((sticker) => {
-                const title = String(sticker.Name).trim() || uiText.common.stickerFallback(sticker.Number);
+                const name = String(sticker.Name ?? "").trim();
+                const title = name || uiText.common.stickerFallback(sticker.Number);
                 const details = [
                   String(sticker.Type).trim(),
                   String(sticker.Equipe).trim(),
@@ -1107,7 +1112,19 @@ function App() {
                     <StickerThumbnail src={image} />
                     <div className="hall-card__number">{uiText.common.stickerNumber(sticker.Number)}</div>
                     <div className="hall-card__copy">
-                      <strong>{title}</strong>
+                      <strong>
+                        {name ? (
+                          <a
+                            href={`?view=rider&rider=${encodeURIComponent(name)}`}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              openRider(name);
+                            }}
+                          >
+                            {title}
+                          </a>
+                        ) : title}
+                      </strong>
                       {details.length > 0 && <small>{details.join(" · ")}</small>}
                       {sticker.collectedOn && (
                         <small className="hall-card__collected-on">

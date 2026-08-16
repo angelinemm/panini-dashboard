@@ -405,6 +405,8 @@
 .hall-card__number { margin-bottom: auto; padding-top: 52px; font-size: .72rem; font-weight: 900; }
 .hall-card__copy strong, .hall-card__copy small { display: block; }
 .hall-card__copy strong { margin-top: 3px; font-size: 1rem; line-height: 1.08; }
+.hall-card__copy strong a { color: inherit; text-decoration-color: rgba(13, 43, 60, .35); text-underline-offset: 3px; }
+.hall-card__copy strong a:hover { color: var(--blue); text-decoration-color: currentColor; }
 .hall-card__copy small { margin-top: 7px; color: var(--muted); font-size: .68rem; font-weight: 700; }
 .hall-card__copy .hall-card__collected-on {
   margin-top: 5px;
