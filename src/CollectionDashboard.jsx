@@ -14,6 +14,7 @@ import CountryRanking from "./CountryRanking.jsx";
 import RepeatedRiderRanking from "./RepeatedRiderRanking.jsx";
 import { loadLatestAlbum } from "./album-loader.js";
 import { uiText } from "./ui-text.js";
+import CollectionExport from "./CollectionExport.jsx";
 
 const stickerTitle = (sticker) =>
   String(sticker.Name).trim() || uiText.common.stickerFallback(getStickerNumber(sticker));
@@ -97,11 +98,16 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenRider }
             {uiText.collection.intro}
           </p>
         </div>
+        <button className="export-button" onClick={() => window.print()} type="button">
+          <span aria-hidden="true">⇩</span> {uiText.export.button}
+        </button>
         <div className="race-badge" aria-label={uiText.common.percentageCompleted(summary.percentage)}>
           <span>{summary.percentage}%</span>
           <small>{uiText.collection.total}</small>
         </div>
       </header>
+
+      <CollectionExport albums={albumProgress} summary={summary} />
 
       <div className="collection-stats" aria-label={uiText.collection.summaryLabel}>
         <div><strong>{summary.albumCount}</strong><span>{uiText.collection.albums}</span></div>

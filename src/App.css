@@ -98,6 +98,29 @@
   font-weight: 700;
 }
 
+.export-button {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 10;
+  padding: 7px 10px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .76);
+  border: 1px solid rgba(13, 43, 60, .14);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(13, 43, 60, .1);
+  cursor: pointer;
+  font-size: .7rem;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.export-button:hover { color: var(--ink); background: rgba(255, 255, 255, .96); transform: translateY(-1px); }
+.export-button:focus-visible { outline: 3px solid rgba(0, 114, 188, .3); outline-offset: 3px; }
+
+.collection-export { display: none; }
+
 .collection-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1377,4 +1400,82 @@
   .rider-row { grid-template-columns: 26px minmax(0, 1fr) auto; gap: 9px; padding: 10px 0; }
   .rider-row__years { grid-column: 2 / -1; margin-top: -7px; }
   .rider-row__count small { display: none; }
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 8mm; }
+
+  :root { color-scheme: light; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  body { background: #f8f2d8; }
+  .dashboard { display: block; min-height: auto; padding: 0; background: white; }
+  .dashboard::after,
+  .language-switcher,
+  .race-panel > :not(.collection-export) { display: none !important; }
+  .race-panel,
+  .race-panel--collection {
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: white;
+    box-shadow: none;
+  }
+  .collection-export { display: block; color: #0d2b3c; }
+  .collection-export__page {
+    position: relative;
+    min-height: 281mm;
+    box-sizing: border-box;
+    padding: 12mm;
+    border: .3mm solid rgba(13, 43, 60, .16);
+    border-radius: 2mm;
+    background:
+      linear-gradient(90deg, #ffdd00 0 4mm, transparent 4mm),
+      radial-gradient(circle at 93% 7%, rgba(0, 114, 188, .1), transparent 28%),
+      linear-gradient(180deg, #fff, #fff9e7);
+    break-after: page;
+    page-break-after: always;
+  }
+  .collection-export__page:last-child { break-after: auto; page-break-after: auto; }
+  .collection-export__cover { padding-top: 18mm; }
+  .collection-export__cover h1 {
+    max-width: 150mm;
+    margin: 2mm 0 0;
+    font-size: 44pt;
+    line-height: .86;
+    text-transform: uppercase;
+  }
+  .collection-export__stats span { color: #52666f; font-size: 9pt; font-weight: 800; text-transform: uppercase; }
+  .collection-export__stats { display: grid; grid-template-columns: repeat(4, 1fr); margin: 8mm 0; border-block: 1px solid #b8c1c5; }
+  .collection-export__stats div { display: flex; flex-direction: column; padding: 4mm; border-right: 1px solid #d7dddf; }
+  .collection-export__stats div:last-child { border: 0; }
+  .collection-export__stats strong { font-size: 21pt; }
+  .collection-export__heading { margin: 0 0 4mm; }
+  .collection-export__heading h2 { font-size: 23pt; }
+  .collection-export__album-list { gap: 3mm; margin: 0; }
+  .collection-export__album-list .album-card { padding: 4mm; }
+  .collection-export__album-list .album-card__top strong { font-size: 19pt; }
+  .collection-export__album-list .progress { height: 6mm; margin: 3mm 0; background: rgba(13, 43, 60, .1); border-color: rgba(13, 43, 60, .1); }
+  .collection-export__album { break-before: page; page-break-before: always; }
+  .collection-export__album .race-panel__header { margin-bottom: 7mm; }
+  .collection-export__album .race-panel__header h1 { margin: 2mm 0 0; font-size: 48pt; }
+  .collection-export .race-badge { width: 28mm; min-height: 28mm; border-width: 1mm; box-shadow: inset 0 -3mm 0 rgba(13, 43, 60, .08), 0 3mm 7mm rgba(13, 43, 60, .16); }
+  .collection-export .race-badge span { font-size: 22pt; }
+  .collection-export .race-badge small { font-size: 6pt; }
+  .collection-export .route-card { padding: 5mm; }
+  .collection-export .route-card__copy { margin-bottom: 4mm; }
+  .collection-export .route-card strong { font-size: 15pt; }
+  .collection-export .progress { height: 7mm; }
+  .collection-export__album-stats { gap: 3mm; margin-top: 4mm; }
+  .collection-export__album-stats .stat { min-height: 31mm; gap: 1.5mm; padding: 4mm; }
+  .collection-export__album-stats .stat strong { font-size: 25pt; }
+  .collection-export__album-stats .stat p { font-size: 8pt; }
+  .collection-export__album-stats .collection-export__stat-date { font-size: 14pt; line-height: 1.1; }
+  .collection-export__sticker-card { margin-top: 5mm; padding: 5mm; border: .3mm solid rgba(13, 43, 60, .14); border-radius: 2mm; background: rgba(255, 255, 255, .7); }
+  .collection-export__sticker-card .section-heading { margin-bottom: 3mm; }
+  .collection-export__sticker-card .section-heading h2 { margin-top: 1mm; font-size: 20pt; }
+  .collection-export__sticker-card .stage-label { color: #0072bc; }
+  .collection-export__stickers { columns: 3; column-gap: 7mm; margin: 0; padding: 0; list-style: none; }
+  .collection-export__stickers li { display: grid; grid-template-columns: 10mm 1fr; break-inside: avoid; padding: 1mm 0; border-bottom: .2mm solid #d7dddf; font-size: 7pt; }
+  .collection-export__stickers b { color: #0072bc; }
 }

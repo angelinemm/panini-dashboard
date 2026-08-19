@@ -78,6 +78,12 @@ const frenchText = {
     emptyHallTitle: "Le podium attend ses légendes",
     emptyHallText: "Ajoutez jusqu’à 10 références dans",
   },
+  export: {
+    button: "PDF",
+    collectedStickers: "Stickers collectés",
+    inventory: "Inventaire",
+    updates: "mises à jour",
+  },
   rankings: {
     nations: "Les nations",
     countriesTitle: "Top 5 pays",
@@ -220,6 +226,12 @@ const englishText = {
     selectedOfTen: (count) => `${count} of 10 selected`,
     emptyHallTitle: "The podium awaits its legends",
     emptyHallText: "Add up to 10 entries in",
+  },
+  export: {
+    button: "PDF",
+    collectedStickers: "Collected stickers",
+    inventory: "Inventory",
+    updates: "updates",
   },
   rankings: {
     nations: "The nations",
