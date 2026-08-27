@@ -18,6 +18,10 @@ export const isOwned = (sticker) => {
     .toUpperCase() === "TRUE";
 };
 
+export const isFavourite = (sticker) => {
+  return String(sticker["Fav?"] ?? "").trim() !== "";
+};
+
 const parseDuplicateCount = (value) => {
   const doubles = Number(value);
 

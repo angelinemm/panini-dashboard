@@ -12,6 +12,7 @@ import {
   formatSnapshotDate,
   getDuplicateCount,
   getStickerNumber,
+  isFavourite,
   isOwned,
   parseStickerCsv,
 } from "./sticker-utils.js";
@@ -439,9 +440,7 @@ function App() {
   const doubles = getDuplicateCount(stickers);
   const packetsOpened =
     snapshotMetadata[selectedAlbumId]?.packetsOpened ?? 0;
-  const favourites = stickers.filter((sticker) => {
-    return String(sticker["Fav?"]).trim() !== "";
-  }).length;
+  const favourites = stickers.filter(isFavourite).length;
   const topCards = stickers
     .map((sticker) => {
       const rank = Number.parseInt(sticker["Top 3"], 10);

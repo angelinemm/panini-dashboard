@@ -53,6 +53,7 @@ const frenchText = {
     collectionStage: "Dans la collection",
     appearances: "Apparitions",
     collectedOn: (date) => `Collecté le ${date}`,
+    favourite: "Coureur favori",
   },
   collection: {
     eyebrow: "Ma collection Panini",
@@ -202,6 +203,7 @@ const englishText = {
     collectionStage: "In the collection",
     appearances: "Appearances",
     collectedOn: (date) => `Collected on ${date}`,
+    favourite: "Favourite rider",
   },
   collection: {
     eyebrow: "My Panini collection",

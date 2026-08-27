@@ -565,6 +565,8 @@
 .rider-detail__back:hover { color: var(--blue); }
 .rider-detail__header { display: flex; align-items: center; gap: 28px; margin-bottom: 42px; }
 .rider-detail__header h1 { margin: 4px 0 9px; font-size: clamp(2rem, 5vw, 3.6rem); line-height: .95; }
+.rider-detail__header h1 > span { margin-left: .2em; }
+.rider-detail__favourite { display: inline-block; color: #e6a700; font-size: .58em; line-height: 1; vertical-align: .18em; filter: drop-shadow(0 2px 2px rgba(13, 43, 60, .18)); }
 .rider-detail__header > div:last-child > p:last-child { color: var(--muted); font-weight: 750; }
 .rider-detail__portrait { flex: 0 0 auto; width: 130px; height: 165px; display: grid; place-items: center; overflow: hidden; color: rgba(13, 43, 60, .3); background: linear-gradient(145deg, rgba(13, 43, 60, .05), rgba(13, 43, 60, .12)); border: 1px solid rgba(13, 43, 60, .13); border-radius: 7px; }
 .rider-detail__portrait:empty::before { content: ""; width: 42px; height: 56px; border: 3px solid currentColor; border-radius: 3px; box-shadow: 7px -7px 0 -3px rgba(13, 43, 60, .16); transform: rotate(-5deg); }

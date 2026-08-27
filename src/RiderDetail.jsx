@@ -3,7 +3,12 @@ import { loadLatestAlbum } from "./album-loader.js";
 import { getStickerCollectedOn } from "./collection-utils.js";
 import { getCountryFlag } from "./country-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
-import { formatSnapshotDate, getStickerNumber, isOwned } from "./sticker-utils.js";
+import {
+  formatSnapshotDate,
+  getStickerNumber,
+  isFavourite,
+  isOwned,
+} from "./sticker-utils.js";
 import { uiText } from "./ui-text.js";
 
 export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum }) {
@@ -43,6 +48,7 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
   ).trim();
   const country = String(latest?.sticker.Country ?? "").trim();
   const flag = getCountryFlag(country);
+  const isFavouriteRider = occurrences.some(({ sticker }) => isFavourite(sticker));
 
   if (loading || error) {
     return (
@@ -65,7 +71,20 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
         </div>
         <div>
           <p className="eyebrow">{uiText.rider.eyebrow}</p>
-          <h1>{name} {flag && <span aria-label={uiText.common.countryLabel(country)} role="img">{flag}</span>}</h1>
+          <h1>
+            {name}
+            {isFavouriteRider && (
+              <span
+                aria-label={uiText.rider.favourite}
+                className="rider-detail__favourite"
+                role="img"
+                title={uiText.rider.favourite}
+              >
+                ★
+              </span>
+            )}
+            {flag && <span aria-label={uiText.common.countryLabel(country)} role="img">{flag}</span>}
+          </h1>
           {latest && (
             <p>{[latest.sticker.Type, latest.sticker.Equipe, country].filter(Boolean).join(" · ")}</p>
           )}

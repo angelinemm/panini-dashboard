@@ -3,6 +3,7 @@ import {
   backfillSpecialStickers,
   formatSnapshotDate,
   getDuplicateCount,
+  isFavourite,
   parseStickerCsv,
 } from "./sticker-utils.js";
 
@@ -32,6 +33,12 @@ describe("snapshot data helpers", () => {
     const stickers = [{ Doubles: 2 }, { Doubles: "3" }, { Doubles: "" }];
 
     expect(getDuplicateCount(stickers)).toBe(5);
+  });
+
+  it("identifies stickers marked as favourites", () => {
+    expect(isFavourite({ "Fav?": "x" })).toBe(true);
+    expect(isFavourite({ "Fav?": "  " })).toBe(false);
+    expect(isFavourite({})).toBe(false);
   });
 
   it("parses a missing duplicate count as zero", () => {
