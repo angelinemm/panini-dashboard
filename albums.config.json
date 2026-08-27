@@ -1,5 +1,12 @@
 [
   {
+    "id": "tdf-2019",
+    "year": 2019,
+    "title": "Tour de France 2019",
+    "snapshotsDirectory": "albums/tdf-2019/snapshots",
+    "chases": "/albums/tdf-2019/chases.json"
+  },
+  {
     "id": "tdf-2020",
     "year": 2020,
     "title": "Tour de France 2020",
