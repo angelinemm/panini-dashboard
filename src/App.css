@@ -387,7 +387,47 @@
   border-radius: 4px;
   box-shadow: 0 7px 14px rgba(0, 0, 0, .22);
   transform: rotate(-1deg);
+  cursor: zoom-in;
 }
+.hall-card__thumbnail:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.sticker-lightbox {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 56px 24px 24px;
+  background: rgba(4, 17, 25, .9);
+  backdrop-filter: blur(5px);
+}
+.sticker-lightbox__image {
+  display: block;
+  max-width: min(100%, 1200px);
+  max-height: calc(100vh - 80px);
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, .55);
+}
+.sticker-lightbox__close {
+  position: fixed;
+  z-index: 1;
+  top: 14px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+}
+.sticker-lightbox__close:hover { background: rgba(255, 255, 255, .24); }
+.sticker-lightbox__close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 .hall-card:nth-child(even) .hall-card__thumbnail { transform: rotate(1deg); }
 .hall-card:nth-child(-n+3) .hall-card__thumbnail {
   top: 50px;

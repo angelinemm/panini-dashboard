@@ -14,6 +14,9 @@ const frenchText = {
     missing: "Manquant",
     obtainedOn: (date) => `Obtenu le ${date}`,
     openAlbum: "Voir l’album",
+    openFullSize: "Afficher l’image en taille réelle",
+    fullSizeImage: "Image en taille réelle",
+    closeFullSize: "Fermer l’image",
   },
   navigation: {
     ariaLabel: "Albums Tour de France",
@@ -178,6 +181,9 @@ const englishText = {
     missing: "Missing",
     obtainedOn: (date) => `Obtained on ${date}`,
     openAlbum: "View album",
+    openFullSize: "View full-size image",
+    fullSizeImage: "Full-size image",
+    closeFullSize: "Close image",
   },
   navigation: {
     ariaLabel: "Tour de France albums",
