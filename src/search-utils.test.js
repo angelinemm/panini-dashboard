@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { searchStickersByName } from "./search-utils.js";
+import { searchCountries, searchStickersByName } from "./search-utils.js";
 
 describe("searchStickersByName", () => {
   const albums = [
@@ -28,5 +28,29 @@ describe("searchStickersByName", () => {
 
   it("returns no results for an empty query", () => {
     expect(searchStickersByName(albums, "  ")).toEqual([]);
+  });
+});
+
+describe("searchCountries", () => {
+  const albums = [{
+    stickers: [
+      { Country: "FRA", Name: "Paul Lapeira", Type: "Coureur" },
+      { Country: "FRA", Name: "Juliette Labous", Type: "Coureuse" },
+      { Country: "BEL", Name: "Wout van Aert", Type: "Coureur" },
+      { Country: "FRA", Name: "Team France", Type: "Equipe" },
+    ],
+  }];
+  const countryNames = { BEL: "Belgique", FRA: "France" };
+
+  it("matches a translated country name without case sensitivity", () => {
+    expect(searchCountries(albums, "france", countryNames)).toEqual([
+      { country: "FRA", count: 2 },
+    ]);
+  });
+
+  it("matches a country code and only counts rider stickers", () => {
+    expect(searchCountries(albums, "FRA", countryNames)).toEqual([
+      { country: "FRA", count: 2 },
+    ]);
   });
 });

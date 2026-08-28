@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadLatestAlbum } from "./album-loader.js";
 import { getCountryFlag } from "./country-utils.js";
-import { searchStickersByName } from "./search-utils.js";
+import { searchCountries, searchStickersByName } from "./search-utils.js";
 import { getStickerNumber, isOwned } from "./sticker-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { uiText } from "./ui-text.js";
 
-export default function CollectionSearch({ albums, onOpenAlbum, onOpenRider }) {
+export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, onOpenRider }) {
   const [collection, setCollection] = useState([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,11 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenRider }) {
     () => searchStickersByName(collection, query),
     [collection, query],
   );
+  const countryResults = useMemo(
+    () => searchCountries(collection, query, uiText.countries),
+    [collection, query],
+  );
+  const resultCount = results.length + countryResults.length;
   const hasQuery = query.trim() !== "";
 
   if (loading || error) {
@@ -77,13 +82,38 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenRider }) {
 
       <div className="search-results" aria-live="polite">
         {!hasQuery && <p className="search-empty">{uiText.search.prompt}</p>}
-        {hasQuery && results.length === 0 && (
+        {hasQuery && resultCount === 0 && (
           <p className="search-empty">{uiText.search.noResults(query.trim())}</p>
         )}
-        {hasQuery && results.length > 0 && (
+        {hasQuery && resultCount > 0 && (
           <>
-            <p className="search-count">{uiText.search.resultCount(results.length)}</p>
+            <p className="search-count">{uiText.search.resultCount(resultCount)}</p>
             <ul className="search-result-list">
+              {countryResults.map(({ country, count }) => (
+                <li className="search-result--country" key={`country-${country}`}>
+                  <div className="search-result__country-flag" aria-hidden="true">
+                    {getCountryFlag(country) || "🌍"}
+                  </div>
+                  <div className="search-result__copy">
+                    <strong>
+                      <a
+                        href={`?view=country&country=${encodeURIComponent(country)}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          onOpenCountry(country);
+                        }}
+                      >
+                        {uiText.countries[country] ?? country}
+                      </a>
+                    </strong>
+                    <span>{country} · {uiText.search.countryStickerCount(count)}</span>
+                  </div>
+                  <span className="search-result__type">{uiText.search.country}</span>
+                  <button type="button" onClick={() => onOpenCountry(country)}>
+                    {uiText.search.openCountry} <span aria-hidden="true">→</span>
+                  </button>
+                </li>
+              ))}
               {results.map(({ name, occurrences }) => {
                 const sortedOccurrences = [...occurrences].sort(
                   (a, b) => b.album.year - a.album.year,

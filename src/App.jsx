@@ -4,6 +4,7 @@ import CollectionDashboard from "./CollectionDashboard.jsx";
 import CollectionSearch from "./CollectionSearch.jsx";
 import RiderDetail from "./RiderDetail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
+import CountryDetail from "./CountryDetail.jsx";
 import { getStickerCollectedOn, getTopRiderCountries } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { addStickerImages, loadStickerImages } from "./sticker-images.js";
@@ -137,6 +138,7 @@ function App() {
   const [selectedAlbumId, setSelectedAlbumId] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [riderName, setRiderName] = useState("");
+  const [countryCode, setCountryCode] = useState("");
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
   const [snapshotMetadata, setSnapshotMetadata] = useState({});
@@ -172,6 +174,7 @@ function App() {
         setSelectedAlbumId(initialAlbum?.id ?? "");
         setIsSearch(requestedView === "search");
         setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
+        setCountryCode(requestedView === "country" ? (new URLSearchParams(window.location.search).get("country") ?? "").toUpperCase() : "");
         if (!initialAlbum || initialAlbum.snapshots.length === 0) {
           setLoading(false);
         }
@@ -190,6 +193,7 @@ function App() {
       const requestedView = new URLSearchParams(window.location.search).get("view");
       setIsSearch(requestedView === "search");
       setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
+      setCountryCode(requestedView === "country" ? (new URLSearchParams(window.location.search).get("country") ?? "").toUpperCase() : "");
 
       const requestedAlbumData = albums.find(
         (album) => album.id === requestedAlbum,
@@ -287,17 +291,20 @@ function App() {
     else url.searchParams.delete("album");
     url.searchParams.delete("view");
     url.searchParams.delete("rider");
+    url.searchParams.delete("country");
     window.history.pushState({}, "", url);
     setError("");
     setLoading(album?.snapshots.length > 0);
     setSelectedAlbumId(albumId);
     setIsSearch(false);
     setRiderName("");
+    setCountryCode("");
   };
   const openSearch = () => {
     const url = new URL(window.location.href);
     url.searchParams.delete("album");
     url.searchParams.delete("rider");
+    url.searchParams.delete("country");
     url.searchParams.set("view", "search");
     window.history.pushState({}, "", url);
     setError("");
@@ -305,16 +312,32 @@ function App() {
     setSelectedAlbumId("");
     setIsSearch(true);
     setRiderName("");
+    setCountryCode("");
   };
   const openRider = (name) => {
     const url = new URL(window.location.href);
     url.searchParams.delete("album");
     url.searchParams.set("view", "rider");
     url.searchParams.set("rider", name);
+    url.searchParams.delete("country");
     window.history.pushState({}, "", url);
     setSelectedAlbumId("");
     setIsSearch(false);
     setRiderName(name);
+    setCountryCode("");
+  };
+  const openCountry = (country) => {
+    const code = String(country ?? "").trim().toUpperCase();
+    const url = new URL(window.location.href);
+    url.searchParams.delete("album");
+    url.searchParams.delete("rider");
+    url.searchParams.set("view", "country");
+    url.searchParams.set("country", code);
+    window.history.pushState({}, "", url);
+    setSelectedAlbumId("");
+    setIsSearch(false);
+    setRiderName("");
+    setCountryCode(code);
   };
   const changeLanguage = (nextLanguage) => {
     setUiLanguage(nextLanguage);
@@ -358,7 +381,7 @@ function App() {
             onSelect={selectAlbum}
             selectedAlbumId=""
           />
-          <CollectionSearch albums={albums} onOpenAlbum={selectAlbum} onOpenRider={openRider} />
+          <CollectionSearch albums={albums} onOpenAlbum={selectAlbum} onOpenCountry={openCountry} onOpenRider={openRider} />
         </section>
       </main>
     );
@@ -371,6 +394,18 @@ function App() {
         <section className="race-panel race-panel--collection">
           <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
           <RiderDetail albums={albums} name={riderName} onBackToSearch={openSearch} onOpenAlbum={selectAlbum} />
+        </section>
+      </main>
+    );
+  }
+
+  if (countryCode) {
+    return (
+      <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
+        <section className="race-panel race-panel--collection">
+          <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
+          <CountryDetail albums={albums} country={countryCode} onBack={() => selectAlbum("")} onOpenAlbum={selectAlbum} onOpenRider={openRider} />
         </section>
       </main>
     );
@@ -391,6 +426,7 @@ function App() {
           <CollectionDashboard
             albums={albums}
             onOpenAlbum={selectAlbum}
+            onOpenCountry={openCountry}
             onOpenRider={openRider}
           />
         </section>
@@ -1150,7 +1186,7 @@ function App() {
           uiText.album.womensRanking,
           uiText.album.womensRankingSubtitle,
         )}
-        <CountryRanking countries={topCountries} />
+        <CountryRanking countries={topCountries} onOpenCountry={openCountry} />
       </section>
     </main>
   );

@@ -1,4 +1,4 @@
-const normalizeSearchText = (value) =>
+export const normalizeSearchText = (value) =>
   String(value ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -25,4 +25,34 @@ export const searchStickersByName = (albums, query) => {
     groups.set(name, group);
     return groups;
   }, new Map()).values()];
+};
+
+export const searchCountries = (albums, query, countryNames) => {
+  const normalizedQuery = normalizeSearchText(query);
+
+  if (!normalizedQuery) return [];
+
+  const countries = new Map();
+  albums.forEach((album) => {
+    album.stickers.forEach((sticker) => {
+      const type = normalizeSearchText(sticker.Type);
+      const country = String(sticker.Country ?? "").trim().toUpperCase();
+      if ((type === "coureur" || type === "coureuse") && country) {
+        countries.set(country, (countries.get(country) ?? 0) + 1);
+      }
+    });
+  });
+
+  return [...countries.entries()]
+    .filter(([country]) =>
+      normalizeSearchText(country).includes(normalizedQuery) ||
+      normalizeSearchText(countryNames[country]).includes(normalizedQuery),
+    )
+    .map(([country, count]) => ({ country, count }))
+    .sort((a, b) =>
+      String(countryNames[a.country] ?? a.country).localeCompare(
+        String(countryNames[b.country] ?? b.country),
+        "fr",
+      ),
+    );
 };

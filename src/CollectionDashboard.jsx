@@ -28,7 +28,7 @@ const parseJsonWithComments = (text) => {
   return JSON.parse(withoutComments);
 };
 
-export default function CollectionDashboard({ albums, onOpenAlbum, onOpenRider }) {
+export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry, onOpenRider }) {
   const [albumProgress, setAlbumProgress] = useState([]);
   const [ranking, setRanking] = useState([]);
   const [error, setError] = useState("");
@@ -204,7 +204,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenRider }
         )}
       </section>
 
-      <CountryRanking countries={topCountries} />
+      <CountryRanking countries={topCountries} onOpenCountry={onOpenCountry} />
       <RepeatedRiderRanking riders={topRepeatedRiders} />
     </>
   );

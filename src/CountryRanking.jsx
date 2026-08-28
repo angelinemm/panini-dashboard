@@ -9,7 +9,7 @@ const countryFlags = {
   POL: "🇵🇱", POR: "🇵🇹", SUI: "🇨🇭", SVN: "🇸🇮", USA: "🇺🇸",
 };
 
-export default function CountryRanking({ countries }) {
+export default function CountryRanking({ countries, onOpenCountry }) {
   if (countries.length === 0) {
     return null;
   }
@@ -27,7 +27,17 @@ export default function CountryRanking({ countries }) {
             <span className="country-row__flag" aria-hidden="true">
               {countryFlags[country] ?? "🌍"}
             </span>
-            <strong>{uiText.countries[country] ?? country}</strong>
+            <strong>
+              <a
+                href={`?view=country&country=${encodeURIComponent(country)}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onOpenCountry(country);
+                }}
+              >
+                {uiText.countries[country] ?? country}
+              </a>
+            </strong>
             <div className="country-row__bar" aria-hidden="true">
               <span style={{ width: `${(count / countries[0].count) * 100}%` }} />
             </div>
