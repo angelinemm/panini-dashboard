@@ -626,6 +626,7 @@
 .country-detail__filter input:focus-visible { outline: 3px solid rgba(0, 114, 188, .3); outline-offset: 2px; }
 .country-detail__rider { color: inherit !important; font: inherit !important; text-align: left; text-decoration: underline; text-decoration-color: rgba(13, 43, 60, .25); text-underline-offset: 3px; }
 .country-detail__rider:hover { color: var(--blue) !important; }
+.country-detail__favourite { margin-left: .25em; }
 .rider-appearances { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 210px)); justify-content: center; gap: 16px; margin: 0; padding: 0; list-style: none; }
 .rider-appearances li { min-width: 0; display: flex; flex-direction: column; overflow: hidden; background: rgba(255, 255, 255, .72); border: 1px solid rgba(13, 43, 60, .14); border-radius: 8px; box-shadow: 0 12px 25px rgba(13, 43, 60, .08); }
 .rider-appearance__sticker { position: relative; aspect-ratio: 4 / 5; display: grid; place-items: center; overflow: hidden; color: rgba(13, 43, 60, .45); background: linear-gradient(145deg, rgba(13, 43, 60, .04), rgba(13, 43, 60, .13)); font-size: .76rem; font-weight: 850; text-transform: uppercase; }

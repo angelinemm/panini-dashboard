@@ -6,6 +6,7 @@ import StickerThumbnail from "./StickerThumbnail.jsx";
 import {
   formatSnapshotDate,
   getStickerNumber,
+  isFavourite,
   isOwned,
 } from "./sticker-utils.js";
 import { uiText } from "./ui-text.js";
@@ -48,6 +49,10 @@ export default function CountryDetail({ albums, country, onBack, onOpenAlbum, on
 
   const countryName = uiText.countries[country] ?? country;
   const flag = getCountryFlag(country);
+  const favouriteRiders = new Set(collection.flatMap((album) => album.stickers)
+    .filter(isFavourite)
+    .map((sticker) => String(sticker.Name ?? "").trim())
+    .filter(Boolean));
   const visibleStickers = picturesOnly
     ? stickers.filter(({ sticker }) =>
       String(sticker.Image ?? sticker.image ?? "").trim(),
@@ -110,6 +115,16 @@ export default function CountryDetail({ albums, country, onBack, onOpenAlbum, on
                     <div className="rider-appearance__title">
                       <strong>
                         {name ? <button className="country-detail__rider" onClick={() => onOpenRider(name)} type="button">{name}</button> : album.year}
+                        {name && favouriteRiders.has(name) && (
+                          <span
+                            aria-label={uiText.rider.favourite}
+                            className="rider-detail__favourite country-detail__favourite"
+                            role="img"
+                            title={uiText.rider.favourite}
+                          >
+                            ★
+                          </span>
+                        )}
                       </strong>
                       <b>{album.year} · {uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
                     </div>
