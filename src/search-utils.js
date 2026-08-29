@@ -56,3 +56,26 @@ export const searchCountries = (albums, query, countryNames) => {
       ),
     );
 };
+
+export const searchTeams = (albums, teams, query) => {
+  const normalizedQuery = normalizeSearchText(query);
+
+  if (!normalizedQuery) return [];
+
+  return teams
+    .filter((team) =>
+      [team.name, ...team.aliases.map((alias) => alias.name)]
+        .some((name) => normalizeSearchText(name).includes(normalizedQuery)),
+    )
+    .map((team) => {
+      const aliases = new Map(team.aliases.map((alias) => [alias.name, alias]));
+      const count = albums.reduce((total, album) => total + album.stickers.filter((sticker) => {
+        const alias = aliases.get(String(sticker.Equipe ?? "").trim());
+        return alias && (!Array.isArray(alias.years) || alias.years.includes(album.year));
+      }).length, 0);
+
+      return { ...team, count };
+    })
+    .filter((team) => team.count > 0)
+    .sort((teamA, teamB) => teamA.name.localeCompare(teamB.name, "fr"));
+};

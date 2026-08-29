@@ -1,0 +1,356 @@
+[
+  {
+    "id": "ag-insurance-soudal",
+    "name": "AG Insurance–Soudal",
+    "category": "women",
+    "aliases": [
+      { "name": "AG INSURANCE - SOUDAL QUICK-STEP TEAM", "years": [2023] },
+      { "name": "AG INSURANCE - SOUDAL TEAM", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "decathlon-ag2r",
+    "name": "Decathlon CMA CGM",
+    "category": "men",
+    "aliases": [
+      { "name": "AG2R CITROËN TEAM", "years": [2022, 2023] },
+      { "name": "DECATHLON AG2R LA MONDIALE", "years": [2024] },
+      { "name": "DECATHLON AG2R LA MONDIALE TEAM", "years": [2025] },
+      { "name": "DECATHLON CMA CGM TEAM", "years": [2026] }
+    ]
+  },
+  {
+    "id": "alpecin",
+    "name": "Alpecin–Premier Tech",
+    "category": "men",
+    "aliases": [
+      { "name": "ALPECIN-FENIX", "years": [2022] },
+      { "name": "ALPECIN-DECEUNINCK", "years": [2023, 2024, 2025] },
+      { "name": "ALPECIN-PREMIER TECH", "years": [2026] }
+    ]
+  },
+  {
+    "id": "arkea",
+    "name": "Arkéa–B&B Hotels",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM ARKEA - SAMSIC", "years": [2022, 2023] },
+      { "name": "ARKEA PRO CYCLING TEAM", "years": [2023] },
+      { "name": "ARKEA-B&B HOTELS", "years": [2024, 2025] }
+    ]
+  },
+  {
+    "id": "astana",
+    "name": "XDS Astana",
+    "category": "men",
+    "aliases": [
+      { "name": "ASTANA QAZAQSTAN TEAM", "years": [2022, 2023, 2024] },
+      { "name": "XDS ASTANA TEAM", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "b-and-b-hotels-ktm",
+    "name": "B&B Hotels–KTM",
+    "category": "men",
+    "aliases": [
+      { "name": "B&B HOTELS - KTM", "years": [2022] }
+    ]
+  },
+  {
+    "id": "bahrain-victorious",
+    "name": "Bahrain Victorious",
+    "category": "men",
+    "aliases": [
+      { "name": "BAHRAIN VICTORIOUS", "years": [2022, 2023, 2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "red-bull-bora-hansgrohe",
+    "name": "Red Bull–Bora–Hansgrohe",
+    "category": "men",
+    "aliases": [
+      { "name": "BORA-HANSGROHE", "years": [2022, 2023, 2024] },
+      { "name": "RED BULL-BORA-HANSGROHE", "years": [2025] },
+      { "name": "RED BULL - BORA - HANSGROHE", "years": [2026] }
+    ]
+  },
+  {
+    "id": "canyon-sram",
+    "name": "Canyon//SRAM zondacrypto",
+    "category": "women",
+    "aliases": [
+      { "name": "CANYON/SRAM RACING", "years": [2023] },
+      { "name": "CANYON // SRAM ZONDACRYPTO", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "ceratizit",
+    "name": "Ceratizit Pro Cycling Team",
+    "category": "women",
+    "aliases": [
+      { "name": "CERATIZIT-WNT PRO CYCLING TEAM", "years": [2023] },
+      { "name": "CERATIZIT PRO CYCLING TEAM", "years": [2025] }
+    ]
+  },
+  {
+    "id": "cofidis",
+    "name": "Cofidis",
+    "category": "men",
+    "aliases": [
+      { "name": "COFIDIS", "years": [2022, 2023, 2024, 2025] }
+    ]
+  },
+  {
+    "id": "cofidis-women",
+    "name": "Cofidis Women Team",
+    "category": "women",
+    "aliases": [
+      { "name": "COFIDIS WOMEN TEAM", "years": [2023] }
+    ]
+  },
+  {
+    "id": "ef-education-easypost",
+    "name": "EF Education–EasyPost",
+    "category": "men",
+    "aliases": [
+      { "name": "EF EDUCATION-EASYPOST", "years": [2022, 2023, 2024] },
+      { "name": "EF EDUCATION - EASYPOST", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "ef-education-oatly",
+    "name": "EF Education–Oatly",
+    "category": "women",
+    "aliases": [
+      { "name": "EF EDUCATION - TIBCO - SVB", "years": [2023] },
+      { "name": "EF EDUCATION - OATLY", "years": [2026] }
+    ]
+  },
+  {
+    "id": "fdj-suez",
+    "name": "FDJ United–Suez",
+    "category": "women",
+    "aliases": [
+      { "name": "FDJ - SUEZ", "years": [2023, 2025] },
+      { "name": "FDJ UNITED SUEZ", "years": [2026] }
+    ]
+  },
+  {
+    "id": "fenix",
+    "name": "Fenix–Premier Tech",
+    "category": "women",
+    "aliases": [
+      { "name": "FENIX - DECEUNINCK", "years": [2023, 2025] },
+      { "name": "FENIX - PREMIER TECH", "years": [2026] }
+    ]
+  },
+  {
+    "id": "groupama-fdj",
+    "name": "Groupama–FDJ United",
+    "category": "men",
+    "aliases": [
+      { "name": "GROUPAMA-FDJ", "years": [2022, 2023, 2024, 2025] },
+      { "name": "GROUPAMA - FDJ UNITED", "years": [2026] }
+    ]
+  },
+  {
+    "id": "human-powered-health",
+    "name": "Human Powered Health",
+    "category": "women",
+    "aliases": [
+      { "name": "HUMAN POWERED HEALTH", "years": [2023, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "ineos-grenadiers",
+    "name": "Ineos Grenadiers",
+    "category": "men",
+    "aliases": [
+      { "name": "INEOS GRENADIERS", "years": [2022, 2023, 2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "intermarche-wanty",
+    "name": "Intermarché–Wanty",
+    "category": "men",
+    "aliases": [
+      { "name": "INTERMARCHÉ - WANTY - GOBERT MATERIAUX", "years": [2022] },
+      { "name": "INTERMARCHÉ-CIRCUS-WANTY", "years": [2023] },
+      { "name": "INTERMARCHÉ-WANTY", "years": [2024] },
+      { "name": "INTERMARCHÉ | WANTY", "years": [2025] }
+    ]
+  },
+  {
+    "id": "nsn-cycling-team",
+    "name": "NSN Cycling Team",
+    "category": "men",
+    "aliases": [
+      { "name": "ISRAEL-PREMIER TECH", "years": [2022, 2023, 2024, 2025] },
+      { "name": "NSN CYCLING TEAM", "years": [2026] }
+    ]
+  },
+  {
+    "id": "roland",
+    "name": "Roland Pro Cycling Team",
+    "category": "women",
+    "aliases": [
+      { "name": "ISRAEL PREMIER TECH ROLAND", "years": [2023] },
+      { "name": "ROLAND PRO CYCLING TEAM", "years": [2025] }
+    ]
+  },
+  {
+    "id": "jayco-alula",
+    "name": "Jayco AlUla",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM BIKEEXCHANGE - JAYCO", "years": [2022] },
+      { "name": "TEAM JAYCO ALULA", "years": [2023, 2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "visma-lease-a-bike",
+    "name": "Visma–Lease a Bike",
+    "category": "men",
+    "aliases": [
+      { "name": "JUMBO-VISMA", "years": [2022] },
+      { "name": "TEAM JUMBO-VISMA", "years": [2023] },
+      { "name": "TEAM VISMA | LEASE A BIKE", "years": [2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "lidl-trek",
+    "name": "Lidl–Trek",
+    "category": "men",
+    "aliases": [
+      { "name": "TREK-SEGAFREDO", "years": [2022, 2023] },
+      { "name": "LIDL-TREK", "years": [2024, 2025] },
+      { "name": "LIDL - TREK", "years": [2026] },
+      { "name": "LIDL -TREK", "years": [2026] }
+    ]
+  },
+  {
+    "id": "lifeplus-wahoo",
+    "name": "Lifeplus Wahoo",
+    "category": "women",
+    "aliases": [
+      { "name": "LIFEPLUS WAHOO", "years": [2023] }
+    ]
+  },
+  {
+    "id": "liv-alula-jayco",
+    "name": "Liv AlUla Jayco",
+    "category": "women",
+    "aliases": [
+      { "name": "LIV RACING TEQFIND", "years": [2023] },
+      { "name": "LIV - ALULA - JAYCO", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "lotto",
+    "name": "Lotto–Intermarché",
+    "category": "men",
+    "aliases": [
+      { "name": "LOTTO SOUDAL", "years": [2022] },
+      { "name": "LOTTO DSTNY", "years": [2023, 2024] },
+      { "name": "LOTTO", "years": [2025] },
+      { "name": "LOTTO - INTERMARCHE", "years": [2026] }
+    ]
+  },
+  {
+    "id": "movistar",
+    "name": "Movistar Team",
+    "category": "men",
+    "aliases": [
+      { "name": "MOVISTAR TEAM", "years": [2022, 2023, 2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "movistar-women",
+    "name": "Movistar Team Women",
+    "category": "women",
+    "aliases": [
+      { "name": "MOVISTAR TEAM WOMEN", "years": [2023, 2026] }
+    ]
+  },
+  {
+    "id": "soudal-quick-step",
+    "name": "Soudal Quick-Step",
+    "category": "men",
+    "aliases": [
+      { "name": "QUICK-STEP ALPHA VINYL TEAM", "years": [2022] },
+      { "name": "SOUDAL QUICK-STEP", "years": [2023, 2024, 2025] },
+      { "name": "SOUDAL QUICK STEP", "years": [2026] }
+    ]
+  },
+  {
+    "id": "st-michel-mavic-auber93",
+    "name": "St Michel–Mavic–Auber93",
+    "category": "women",
+    "aliases": [
+      { "name": "ST MICHEL - MAVIC- AUBER93", "years": [2023] }
+    ]
+  },
+  {
+    "id": "picnic-postnl",
+    "name": "Picnic PostNL",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM DSM", "years": [2022, 2023] },
+      { "name": "TEAM DSM-FIRMENICH POSTNL", "years": [2024] },
+      { "name": "TEAM PICNIC POSTNL", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "sd-worx-protime",
+    "name": "SD Worx–Protime",
+    "category": "women",
+    "aliases": [
+      { "name": "TEAM SD WORX", "years": [2023] },
+      { "name": "TEAM SD WORX - PROTIME", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "totalenergies",
+    "name": "TotalEnergies",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM TOTALENERGIES", "years": [2022, 2023] },
+      { "name": "TOTALENERGIES", "years": [2024, 2025] }
+    ]
+  },
+  {
+    "id": "tudor",
+    "name": "Tudor Pro Cycling Team",
+    "category": "men",
+    "aliases": [
+      { "name": "TUDOR PRO CYCLING TEAM", "years": [2025] }
+    ]
+  },
+  {
+    "id": "uae-team-adq",
+    "name": "UAE Team ADQ",
+    "category": "women",
+    "aliases": [
+      { "name": "UAE TEAM ADQ", "years": [2023, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "uae-team-emirates-xrg",
+    "name": "UAE Team Emirates–XRG",
+    "category": "men",
+    "aliases": [
+      { "name": "UAE TEAM EMIRATES", "years": [2022, 2023, 2024] },
+      { "name": "UAE TEAM EMIRATES - XRG", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "uno-x-mobility",
+    "name": "Uno-X Mobility",
+    "category": "men",
+    "aliases": [
+      { "name": "UNO-X PRO CYCLING TEAM", "years": [2023] },
+      { "name": "UNO-X MOBILITY", "years": [2024, 2025] },
+      { "name": "UNO - X MOBILITY", "years": [2026] }
+    ]
+  }
+]

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadLatestAlbum } from "./album-loader.js";
 import { getCountryFlag } from "./country-utils.js";
-import { searchCountries, searchStickersByName } from "./search-utils.js";
+import { searchCountries, searchStickersByName, searchTeams } from "./search-utils.js";
 import { getStickerNumber, isOwned } from "./sticker-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { uiText } from "./ui-text.js";
 
-export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, onOpenRider }) {
+export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, onOpenRider, onOpenTeam, teams }) {
   const [collection, setCollection] = useState([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -42,7 +42,11 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
     () => searchCountries(collection, query, uiText.countries),
     [collection, query],
   );
-  const resultCount = results.length + countryResults.length;
+  const teamResults = useMemo(
+    () => searchTeams(collection, teams, query),
+    [collection, query, teams],
+  );
+  const resultCount = results.length + countryResults.length + teamResults.length;
   const hasQuery = query.trim() !== "";
 
   if (loading || error) {
@@ -89,6 +93,29 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
           <>
             <p className="search-count">{uiText.search.resultCount(resultCount)}</p>
             <ul className="search-result-list">
+              {teamResults.map((team) => (
+                <li className="search-result--team" key={`team-${team.id}`}>
+                  <div className="search-result__team-icon" aria-hidden="true">🚴</div>
+                  <div className="search-result__copy">
+                    <strong>
+                      <a
+                        href={`?view=team&team=${encodeURIComponent(team.id)}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          onOpenTeam(team.id);
+                        }}
+                      >
+                        {team.name}
+                      </a>
+                    </strong>
+                    <span>{uiText.search.teamStickerCount(team.count)}</span>
+                  </div>
+                  <span className="search-result__type">{uiText.search.team}</span>
+                  <button type="button" onClick={() => onOpenTeam(team.id)}>
+                    {uiText.search.openTeam} <span aria-hidden="true">→</span>
+                  </button>
+                </li>
+              ))}
               {countryResults.map(({ country, count }) => (
                 <li className="search-result--country" key={`country-${country}`}>
                   <div className="search-result__country-flag" aria-hidden="true">

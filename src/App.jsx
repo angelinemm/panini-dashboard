@@ -5,6 +5,7 @@ import CollectionSearch from "./CollectionSearch.jsx";
 import RiderDetail from "./RiderDetail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
 import CountryDetail from "./CountryDetail.jsx";
+import TeamDetail from "./TeamDetail.jsx";
 import { getStickerCollectedOn, getTopRiderCountries } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { addStickerImages } from "./sticker-images.js";
@@ -53,6 +54,16 @@ const fetchAlbums = () => {
   return fetch("/albums.json").then((response) => {
     if (!response.ok) {
       throw new Error(uiText.messages.albumIndexError);
+    }
+
+    return response.json();
+  });
+};
+
+const fetchTeams = () => {
+  return fetch("/teams.json").then((response) => {
+    if (!response.ok) {
+      throw new Error(uiText.messages.teamIndexError);
     }
 
     return response.json();
@@ -139,6 +150,8 @@ function App() {
   const [isSearch, setIsSearch] = useState(false);
   const [riderName, setRiderName] = useState("");
   const [countryCode, setCountryCode] = useState("");
+  const [teamId, setTeamId] = useState("");
+  const [teams, setTeams] = useState([]);
   const [stickers, setStickers] = useState([]);
   const [history, setHistory] = useState([]);
   const [snapshotMetadata, setSnapshotMetadata] = useState({});
@@ -157,10 +170,12 @@ function App() {
   useEffect(() => {
     Promise.all([
       fetchAlbums(),
+      fetchTeams(),
       fetchJsonIfAvailable("/snapshot-metadata.json"),
     ])
-      .then(([albumData, metadata]) => {
+      .then(([albumData, teamData, metadata]) => {
         setAlbums(albumData);
+        setTeams(teamData);
         setSnapshotMetadata(metadata ?? {});
 
         const requestedAlbum = new URLSearchParams(window.location.search).get(
@@ -175,6 +190,7 @@ function App() {
         setIsSearch(requestedView === "search");
         setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
         setCountryCode(requestedView === "country" ? (new URLSearchParams(window.location.search).get("country") ?? "").toUpperCase() : "");
+        setTeamId(requestedView === "team" ? new URLSearchParams(window.location.search).get("team") ?? "" : "");
         if (!initialAlbum || initialAlbum.snapshots.length === 0) {
           setLoading(false);
         }
@@ -194,6 +210,7 @@ function App() {
       setIsSearch(requestedView === "search");
       setRiderName(requestedView === "rider" ? new URLSearchParams(window.location.search).get("rider") ?? "" : "");
       setCountryCode(requestedView === "country" ? (new URLSearchParams(window.location.search).get("country") ?? "").toUpperCase() : "");
+      setTeamId(requestedView === "team" ? new URLSearchParams(window.location.search).get("team") ?? "" : "");
 
       const requestedAlbumData = albums.find(
         (album) => album.id === requestedAlbum,
@@ -283,6 +300,7 @@ function App() {
   }, [albums, selectedAlbumId]);
 
   const selectedAlbum = albums.find((album) => album.id === selectedAlbumId);
+  const selectedTeam = teams.find((team) => team.id === teamId);
   const selectAlbum = (albumId) => {
     const album = albums.find((currentAlbum) => currentAlbum.id === albumId);
     const url = new URL(window.location.href);
@@ -291,6 +309,7 @@ function App() {
     url.searchParams.delete("view");
     url.searchParams.delete("rider");
     url.searchParams.delete("country");
+    url.searchParams.delete("team");
     window.history.pushState({}, "", url);
     setError("");
     setLoading(album?.snapshots.length > 0);
@@ -298,12 +317,14 @@ function App() {
     setIsSearch(false);
     setRiderName("");
     setCountryCode("");
+    setTeamId("");
   };
   const openSearch = () => {
     const url = new URL(window.location.href);
     url.searchParams.delete("album");
     url.searchParams.delete("rider");
     url.searchParams.delete("country");
+    url.searchParams.delete("team");
     url.searchParams.set("view", "search");
     window.history.pushState({}, "", url);
     setError("");
@@ -312,6 +333,7 @@ function App() {
     setIsSearch(true);
     setRiderName("");
     setCountryCode("");
+    setTeamId("");
   };
   const openRider = (name) => {
     const url = new URL(window.location.href);
@@ -319,11 +341,13 @@ function App() {
     url.searchParams.set("view", "rider");
     url.searchParams.set("rider", name);
     url.searchParams.delete("country");
+    url.searchParams.delete("team");
     window.history.pushState({}, "", url);
     setSelectedAlbumId("");
     setIsSearch(false);
     setRiderName(name);
     setCountryCode("");
+    setTeamId("");
   };
   const openCountry = (country) => {
     const code = String(country ?? "").trim().toUpperCase();
@@ -332,11 +356,27 @@ function App() {
     url.searchParams.delete("rider");
     url.searchParams.set("view", "country");
     url.searchParams.set("country", code);
+    url.searchParams.delete("team");
     window.history.pushState({}, "", url);
     setSelectedAlbumId("");
     setIsSearch(false);
     setRiderName("");
     setCountryCode(code);
+    setTeamId("");
+  };
+  const openTeam = (id) => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("album");
+    url.searchParams.delete("rider");
+    url.searchParams.delete("country");
+    url.searchParams.set("view", "team");
+    url.searchParams.set("team", id);
+    window.history.pushState({}, "", url);
+    setSelectedAlbumId("");
+    setIsSearch(false);
+    setRiderName("");
+    setCountryCode("");
+    setTeamId(id);
   };
   const changeLanguage = (nextLanguage) => {
     setUiLanguage(nextLanguage);
@@ -380,7 +420,7 @@ function App() {
             onSelect={selectAlbum}
             selectedAlbumId=""
           />
-          <CollectionSearch albums={albums} onOpenAlbum={selectAlbum} onOpenCountry={openCountry} onOpenRider={openRider} />
+          <CollectionSearch albums={albums} onOpenAlbum={selectAlbum} onOpenCountry={openCountry} onOpenRider={openRider} onOpenTeam={openTeam} teams={teams} />
         </section>
       </main>
     );
@@ -405,6 +445,18 @@ function App() {
         <section className="race-panel race-panel--collection">
           <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
           <CountryDetail albums={albums} country={countryCode} onBack={() => selectAlbum("")} onOpenAlbum={selectAlbum} onOpenRider={openRider} />
+        </section>
+      </main>
+    );
+  }
+
+  if (selectedTeam) {
+    return (
+      <main className="dashboard">
+        <LanguageSwitcher language={language} onChange={changeLanguage} />
+        <section className="race-panel race-panel--collection">
+          <AlbumTabs albums={albums} isSearch={false} onSearch={openSearch} onSelect={selectAlbum} selectedAlbumId="" />
+          <TeamDetail albums={albums} onBack={openSearch} onOpenAlbum={selectAlbum} onOpenRider={openRider} team={selectedTeam} />
         </section>
       </main>
     );

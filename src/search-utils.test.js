@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { searchCountries, searchStickersByName } from "./search-utils.js";
+import { searchCountries, searchStickersByName, searchTeams } from "./search-utils.js";
 
 describe("searchStickersByName", () => {
   const albums = [
@@ -52,5 +52,33 @@ describe("searchCountries", () => {
     expect(searchCountries(albums, "FRA", countryNames)).toEqual([
       { country: "FRA", count: 2 },
     ]);
+  });
+});
+
+describe("searchTeams", () => {
+  const teams = [{
+    id: "visma-lease-a-bike",
+    name: "Visma–Lease a Bike",
+    aliases: [
+      { name: "JUMBO-VISMA", years: [2022] },
+      { name: "TEAM VISMA | LEASE A BIKE", years: [2024] },
+    ],
+  }];
+  const albums = [
+    { year: 2022, stickers: [{ Equipe: "JUMBO-VISMA" }, { Equipe: "JUMBO-VISMA" }] },
+    { year: 2024, stickers: [{ Equipe: "TEAM VISMA | LEASE A BIKE" }] },
+  ];
+
+  it("matches both the canonical name and historical aliases", () => {
+    expect(searchTeams(albums, teams, "visma")[0]).toMatchObject({
+      id: "visma-lease-a-bike",
+      count: 3,
+    });
+    expect(searchTeams(albums, teams, "jumbo")).toHaveLength(1);
+  });
+
+  it("does not use an alias outside its configured years", () => {
+    const albumsWithWrongYear = [{ year: 2023, stickers: [{ Equipe: "JUMBO-VISMA" }] }];
+    expect(searchTeams(albumsWithWrongYear, teams, "jumbo")).toEqual([]);
   });
 });
