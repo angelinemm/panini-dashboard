@@ -1,4 +1,6 @@
-export default function RepeatedRiderRanking({ riders }) {
+import { uiText } from "./ui-text.js";
+
+export default function RepeatedRiderRanking({ onOpenRider, riders }) {
   if (riders.length === 0) {
     return null;
   }
@@ -16,7 +18,17 @@ export default function RepeatedRiderRanking({ riders }) {
         {riders.map(({ albumCount, name, years }, index) => (
           <li className="rider-row" key={name.toLocaleLowerCase("fr")}>
             <span className="rider-row__rank">{index + 1}</span>
-            <strong>{name}</strong>
+            <strong>
+              <a
+                href={`?view=rider&rider=${encodeURIComponent(name)}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onOpenRider(name);
+                }}
+              >
+                {name}
+              </a>
+            </strong>
             <span className="rider-row__years">{years.join(" · ")}</span>
             <span className="rider-row__count">
               {albumCount}<small> {uiText.common.album(albumCount)}</small>
@@ -27,4 +39,3 @@ export default function RepeatedRiderRanking({ riders }) {
     </section>
   );
 }
-import { uiText } from "./ui-text.js";

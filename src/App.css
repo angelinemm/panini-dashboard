@@ -309,6 +309,8 @@
 .rider-row:first-child { border-top: 0; }
 .rider-row__rank { color: var(--muted); font-size: .8rem; font-weight: 900; text-align: center; }
 .rider-row strong { font-size: .95rem; }
+.rider-row strong a { color: inherit; text-decoration-color: rgba(13, 43, 60, .25); text-underline-offset: 3px; }
+.rider-row strong a:hover { color: var(--blue); }
 .rider-row__years { color: var(--muted); font-size: .78rem; font-weight: 800; }
 .rider-row__count { font-size: 1.25rem; font-weight: 950; text-align: right; }
 .rider-row__count small { color: var(--muted); font-size: .66rem; font-weight: 800; }

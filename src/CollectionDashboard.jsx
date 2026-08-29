@@ -205,7 +205,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
       </section>
 
       <CountryRanking countries={topCountries} onOpenCountry={onOpenCountry} />
-      <RepeatedRiderRanking riders={topRepeatedRiders} />
+      <RepeatedRiderRanking onOpenRider={onOpenRider} riders={topRepeatedRiders} />
     </>
   );
 }
