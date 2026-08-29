@@ -40,7 +40,8 @@ export default function TeamDetail({ albums, onBack, onOpenAlbum, onOpenRider, t
       .flatMap((album) => album.stickers
         .filter((sticker) => {
           const alias = aliases.get(String(sticker.Equipe ?? "").trim());
-          return alias && (!Array.isArray(alias.years) || alias.years.includes(album.year));
+          return isOwned(sticker) && alias &&
+            (!Array.isArray(alias.years) || alias.years.includes(album.year));
         })
         .map((sticker) => ({ album, sticker })))
       .sort((a, b) => b.album.year - a.album.year ||
