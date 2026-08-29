@@ -479,6 +479,8 @@ function App() {
             onOpenAlbum={selectAlbum}
             onOpenCountry={openCountry}
             onOpenRider={openRider}
+            onOpenTeam={openTeam}
+            teams={teams}
           />
         </section>
       </main>

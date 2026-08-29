@@ -315,6 +315,36 @@
 .rider-row__count { font-size: 1.25rem; font-weight: 950; text-align: right; }
 .rider-row__count small { color: var(--muted); font-size: .66rem; font-weight: 800; }
 
+.team-ranking {
+  margin-top: 32px;
+  padding: 25px;
+  border: 1px solid rgba(13, 43, 60, .14);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 95% 5%, rgba(227, 20, 45, .14), transparent 28%),
+    rgba(255, 255, 255, .62);
+}
+.team-ranking .stage-label { color: var(--red); }
+.team-ranking__list { margin: 0; padding: 0; list-style: none; }
+.owned-team-row {
+  display: grid;
+  grid-template-columns: 32px 54px minmax(120px, .9fr) minmax(120px, 1.7fr) 92px;
+  align-items: center;
+  gap: 14px;
+  min-height: 55px;
+  border-top: 1px solid rgba(13, 43, 60, .11);
+}
+.owned-team-row:first-child { border-top: 0; }
+.owned-team-row__rank { color: var(--muted); font-size: .8rem; font-weight: 900; text-align: center; }
+.owned-team-row__icon { font-size: 1.5rem; line-height: 1; text-align: center; }
+.owned-team-row strong { font-size: .95rem; }
+.owned-team-row strong a { color: inherit; text-decoration-color: rgba(13, 43, 60, .25); text-underline-offset: 3px; }
+.owned-team-row strong a:hover { color: var(--blue); }
+.owned-team-row__bar { height: 10px; overflow: hidden; background: rgba(13, 43, 60, .09); border-radius: 999px; }
+.owned-team-row__bar span { display: block; height: 100%; min-width: 8px; background: linear-gradient(90deg, var(--red), var(--yellow)); border-radius: inherit; }
+.owned-team-row__count { font-size: 1.25rem; font-weight: 950; text-align: right; }
+.owned-team-row__count small { color: var(--muted); font-size: .66rem; font-weight: 800; }
+
 .hall-of-fame {
   margin-top: 32px;
   padding: 25px;
@@ -1457,12 +1487,16 @@
   .hall-empty { padding: 22px; align-items: flex-start; }
   .country-ranking { padding: 18px; }
   .rider-ranking { padding: 18px; }
+  .team-ranking { padding: 18px; }
   .country-row { grid-template-columns: 26px 48px minmax(0, 1fr) auto; gap: 9px; }
   .country-row__bar { grid-column: 3 / -1; width: 100%; margin: -7px 0 10px; }
   .country-row__count small { display: none; }
   .rider-row { grid-template-columns: 26px minmax(0, 1fr) auto; gap: 9px; padding: 10px 0; }
   .rider-row__years { grid-column: 2 / -1; margin-top: -7px; }
   .rider-row__count small { display: none; }
+  .owned-team-row { grid-template-columns: 26px 48px minmax(0, 1fr) auto; gap: 9px; }
+  .owned-team-row__bar { grid-column: 3 / -1; width: 100%; margin: -7px 0 10px; }
+  .owned-team-row__count small { display: none; }
 }
 
 @media print {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, getTopRepeatedRiders, getTopRiderCountries, resolveAllTimeFavourites } from "./collection-utils.js";
+import { getAlbumProgress, getCollectionSummary, getStickerCollectedOn, getTopOwnedTeams, getTopRepeatedRiders, getTopRiderCountries, resolveAllTimeFavourites } from "./collection-utils.js";
 
 describe("collection summaries", () => {
   it("weights every album equally", () => {
@@ -99,6 +99,33 @@ describe("collection summaries", () => {
 
     expect(getTopRepeatedRiders(albums, 1)).toEqual([
       { name: "Adam", years: [2025, 2026], albumCount: 2 },
+    ]);
+  });
+
+  it("ranks owned stickers under canonical teams across year-specific aliases", () => {
+    const albums = [
+      { year: 2025, stickers: [
+        { Equipe: "OLD ALPHA", Owned: "TRUE" },
+        { Equipe: "OLD ALPHA", Owned: "FALSE" },
+        { Equipe: "BETA", Owned: "TRUE" },
+      ] },
+      { year: 2026, stickers: [
+        { Equipe: "NEW ALPHA", Owned: "TRUE" },
+        { Equipe: "NEW ALPHA", Owned: "TRUE" },
+        { Equipe: "OLD ALPHA", Owned: "TRUE" },
+      ] },
+    ];
+    const teams = [
+      { id: "alpha", name: "Alpha", aliases: [
+        { name: "OLD ALPHA", years: [2025] },
+        { name: "NEW ALPHA", years: [2026] },
+      ] },
+      { id: "beta", name: "Beta", aliases: [{ name: "BETA" }] },
+    ];
+
+    expect(getTopOwnedTeams(albums, teams)).toEqual([
+      { id: "alpha", name: "Alpha", count: 3 },
+      { id: "beta", name: "Beta", count: 1 },
     ]);
   });
 });

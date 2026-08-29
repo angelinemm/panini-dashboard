@@ -110,6 +110,39 @@ export const getTopRepeatedRiders = (albums, limit = 5) => {
     .slice(0, Math.max(0, limit));
 };
 
+export const getTopOwnedTeams = (albums, teams, limit = 5) => {
+  const counts = new Map(teams.map((team) => [team.id, 0]));
+
+  albums.forEach((album) => {
+    const aliases = new Map();
+
+    teams.forEach((team) => {
+      team.aliases.forEach((alias) => {
+        if (!Array.isArray(alias.years) || alias.years.includes(album.year)) {
+          aliases.set(String(alias.name).trim(), team.id);
+        }
+      });
+    });
+
+    album.stickers.forEach((sticker) => {
+      if (!isOwned(sticker)) {
+        return;
+      }
+
+      const teamId = aliases.get(String(sticker.Equipe ?? "").trim());
+      if (teamId) {
+        counts.set(teamId, counts.get(teamId) + 1);
+      }
+    });
+  });
+
+  return teams
+    .map((team) => ({ id: team.id, name: team.name, count: counts.get(team.id) ?? 0 }))
+    .filter((team) => team.count > 0)
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "fr"))
+    .slice(0, Math.max(0, limit));
+};
+
 export const resolveAllTimeFavourites = (ranking, albums) => {
   if (!Array.isArray(ranking)) {
     return [];

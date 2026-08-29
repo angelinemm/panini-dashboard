@@ -124,6 +124,9 @@ const frenchText = {
     regulars: "Les habitués",
     ridersTitle: "Top 5 multi-albums",
     ridersSubtitle: "Nombre d’albums où le coureur est collecté",
+    teams: "Les équipes",
+    teamsTitle: "Top 5 équipes possédées",
+    teamsSubtitle: "Stickers collectés sur tous les albums",
   },
   album: {
     completed: "complété",
@@ -306,6 +309,9 @@ const englishText = {
     regulars: "The regulars",
     ridersTitle: "Top 5 across albums",
     ridersSubtitle: "Number of albums in which the rider is collected",
+    teams: "The teams",
+    teamsTitle: "Top 5 teams owned",
+    teamsSubtitle: "Collected stickers across all albums",
   },
   album: {
     completed: "complete",

@@ -5,6 +5,7 @@ import {
 } from "./sticker-utils.js";
 import {
   getCollectionSummary,
+  getTopOwnedTeams,
   getTopRepeatedRiders,
   getTopRiderCountries,
   resolveAllTimeFavourites,
@@ -12,6 +13,7 @@ import {
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import CountryRanking from "./CountryRanking.jsx";
 import RepeatedRiderRanking from "./RepeatedRiderRanking.jsx";
+import TeamRanking from "./TeamRanking.jsx";
 import { loadLatestAlbum } from "./album-loader.js";
 import { uiText } from "./ui-text.js";
 import CollectionExport from "./CollectionExport.jsx";
@@ -28,7 +30,7 @@ const parseJsonWithComments = (text) => {
   return JSON.parse(withoutComments);
 };
 
-export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry, onOpenRider }) {
+export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry, onOpenRider, onOpenTeam, teams }) {
   const [albumProgress, setAlbumProgress] = useState([]);
   const [ranking, setRanking] = useState([]);
   const [error, setError] = useState("");
@@ -76,6 +78,10 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
   const topRepeatedRiders = useMemo(
     () => getTopRepeatedRiders(albumProgress),
     [albumProgress],
+  );
+  const topOwnedTeams = useMemo(
+    () => getTopOwnedTeams(albumProgress, teams),
+    [albumProgress, teams],
   );
 
   if (loading || error) {
@@ -206,6 +212,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
 
       <CountryRanking countries={topCountries} onOpenCountry={onOpenCountry} />
       <RepeatedRiderRanking onOpenRider={onOpenRider} riders={topRepeatedRiders} />
+      <TeamRanking onOpenTeam={onOpenTeam} teams={topOwnedTeams} />
     </>
   );
 }
