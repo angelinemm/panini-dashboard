@@ -15,6 +15,7 @@ const snapshotColumns = [
 ];
 
 const snapshotFilenamePattern = /^(\d{4})-(\d{2})-(\d{2})\.csv$/;
+const stickerImagePattern = /^(\S+)(?: .*)?\.(jpe?g|png|webp|avif)$/i;
 
 const fail = (file, message) => {
   throw new Error(`Invalid snapshot ${file}: ${message}`);
@@ -157,6 +158,41 @@ const readSnapshotDirectory = (publicDir, directoryName) => {
     .sort((snapshotA, snapshotB) => snapshotA.date.localeCompare(snapshotB.date));
 };
 
+const readStickerImages = (publicDir, albumId) => {
+  const directoryName = path.posix.join("albums", albumId, "stickers");
+  const directory = path.join(publicDir, directoryName);
+
+  if (!fs.existsSync(directory)) {
+    return {};
+  }
+
+  return fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .reduce((images, entry) => {
+      const match = entry.name.match(stickerImagePattern);
+
+      if (!match) {
+        throw new Error(
+          `Invalid sticker image ${path.join(directoryName, entry.name)}: ` +
+            "filename must start with <sticker number>, optionally followed " +
+            "by a space and description, and use .jpg, .jpeg, .png, .webp, or .avif",
+        );
+      }
+
+      const stickerNumber = match[1];
+
+      if (images[stickerNumber]) {
+        throw new Error(
+          `Duplicate sticker images for ${albumId} sticker ${stickerNumber}`,
+        );
+      }
+
+      images[stickerNumber] = `/${directoryName}/${encodeURIComponent(entry.name)}`;
+      return images;
+    }, {});
+};
+
 export const snapshotIndexPlugin = () => {
   let root;
   let publicDir;
@@ -203,6 +239,7 @@ export const snapshotIndexPlugin = () => {
         year: album.year,
         title: album.title,
         chases: album.chases ?? null,
+        images: readStickerImages(publicDir, album.id),
         snapshots,
       };
     });

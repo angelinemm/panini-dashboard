@@ -105,28 +105,25 @@ from the latest album data.
 
 ### Sticker thumbnails
 
-An album can optionally provide photographs for its Top 3 and for stickers that
-also appear in the all-time Top 10. Put the image files in the album directory
-and add a `sticker-images.json` file that maps sticker numbers to public URLs:
+An album can optionally provide photographs for its stickers. Put each image in
+the album's `stickers` directory and start its filename with the sticker number,
+followed optionally by a space and a readable description:
 
 ```text
 public/albums/tdf-2026/
-├── sticker-images.json
 └── stickers/
-    ├── 39.webp
-    └── 229.webp
+    ├── 39 J Philipsen.webp
+    ├── 229 J Vingegaard.jpeg
+    └── T01 Stage one.png
 ```
 
-```json
-{
-  "39": "/albums/tdf-2026/stickers/39.webp",
-  "229": "/albums/tdf-2026/stickers/229.webp"
-}
-```
-
-WebP is recommended, though browser-supported JPEG and PNG files also work. If
-the registry, a sticker entry, or an image file is missing, the ranking card is
-displayed normally without a thumbnail.
+The first space-delimited part of the filename must exactly match the `Number`
+value in the album snapshot, including special identifiers such as `T01`.
+Everything after the first space is only for readability and may be changed
+freely. The build discovers the files and connects them to their sticker records
+automatically; no image registry is needed. WebP is recommended, though JPEG,
+PNG, and AVIF also work. If an image is missing, the sticker is displayed
+normally without a thumbnail.
 
 ## Snapshot Data
 

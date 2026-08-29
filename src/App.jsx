@@ -7,7 +7,7 @@ import CountryRanking from "./CountryRanking.jsx";
 import CountryDetail from "./CountryDetail.jsx";
 import { getStickerCollectedOn, getTopRiderCountries } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
-import { addStickerImages, loadStickerImages } from "./sticker-images.js";
+import { addStickerImages } from "./sticker-images.js";
 import {
   backfillSpecialStickers,
   formatSnapshotDate,
@@ -256,15 +256,14 @@ function App() {
         ).then(backfillSpecialStickers);
       }),
       fetchChases(album.chases),
-      loadStickerImages(album.id),
     ])
-      .then(([snapshotHistory, chaseData, images]) => {
+      .then(([snapshotHistory, chaseData]) => {
         if (!cancelled) {
           setHistory(snapshotHistory);
           setStickers(
             addStickerImages(
               snapshotHistory[snapshotHistory.length - 1].stickers,
-              images,
+              album.images,
             ),
           );
           setChases(chaseData);

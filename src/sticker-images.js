@@ -17,23 +17,3 @@ export const addStickerImages = (stickers, images = {}) => {
       : sticker;
   });
 };
-
-export const loadStickerImages = (albumId) => {
-  if (!albumId) {
-    return Promise.resolve({});
-  }
-
-  return fetch(`/albums/${albumId}/sticker-images.json`)
-    .then((response) => {
-      const contentType = response.headers.get("content-type") ?? "";
-
-      if (!response.ok || !contentType.includes("application/json")) {
-        return {};
-      }
-
-      return response.json().then((images) => {
-        return isImageRegistry(images) ? images : {};
-      });
-    })
-    .catch(() => ({}));
-};

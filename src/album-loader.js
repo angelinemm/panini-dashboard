@@ -1,5 +1,5 @@
 import { getAlbumProgress } from "./collection-utils.js";
-import { addStickerImages, loadStickerImages } from "./sticker-images.js";
+import { addStickerImages } from "./sticker-images.js";
 import { backfillSpecialStickers, parseStickerCsv } from "./sticker-utils.js";
 import { uiText } from "./ui-text.js";
 
@@ -11,19 +11,19 @@ export const loadLatestAlbum = async (album) => {
   const snapshots = [...album.snapshots].sort((a, b) =>
     a.date.localeCompare(b.date),
   );
-  const [parsed, images] = await Promise.all([
-    Promise.all(
-      snapshots.map(async (snapshot) => {
-        const response = await fetch(snapshot.file);
-        if (!response.ok) {
-          throw new Error(uiText.messages.albumDataError(album.title));
-        }
-        return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
-      }),
-    ),
-    loadStickerImages(album.id),
-  ]);
+  const parsed = await Promise.all(
+    snapshots.map(async (snapshot) => {
+      const response = await fetch(snapshot.file);
+      if (!response.ok) {
+        throw new Error(uiText.messages.albumDataError(album.title));
+      }
+      return { ...snapshot, stickers: parseStickerCsv(await response.text()) };
+    }),
+  );
   const history = backfillSpecialStickers(parsed);
-  const stickers = addStickerImages(history.at(-1)?.stickers ?? [], images);
+  const stickers = addStickerImages(
+    history.at(-1)?.stickers ?? [],
+    album.images,
+  );
   return getAlbumProgress(album, stickers, history);
 };
