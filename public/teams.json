@@ -13,7 +13,7 @@
     "name": "Decathlon CMA CGM",
     "category": "men",
     "aliases": [
-      { "name": "AG2R CITROËN TEAM", "years": [2022, 2023] },
+      { "name": "AG2R CITROËN TEAM", "years": [2021, 2022, 2023] },
       { "name": "DECATHLON AG2R LA MONDIALE", "years": [2024] },
       { "name": "DECATHLON AG2R LA MONDIALE TEAM", "years": [2025] },
       { "name": "DECATHLON CMA CGM TEAM", "years": [2026] }
@@ -24,7 +24,7 @@
     "name": "Alpecin–Premier Tech",
     "category": "men",
     "aliases": [
-      { "name": "ALPECIN-FENIX", "years": [2022] },
+      { "name": "ALPECIN-FENIX", "years": [2021, 2022] },
       { "name": "ALPECIN-DECEUNINCK", "years": [2023, 2024, 2025] },
       { "name": "ALPECIN-PREMIER TECH", "years": [2026] }
     ]
@@ -34,6 +34,7 @@
     "name": "Arkéa–B&B Hotels",
     "category": "men",
     "aliases": [
+      { "name": "ARKEA - SAMSIC", "years": [2021] },
       { "name": "TEAM ARKEA - SAMSIC", "years": [2022, 2023] },
       { "name": "ARKEA PRO CYCLING TEAM", "years": [2023] },
       { "name": "ARKEA-B&B HOTELS", "years": [2024, 2025] }
@@ -44,6 +45,7 @@
     "name": "XDS Astana",
     "category": "men",
     "aliases": [
+      { "name": "ASTANA PREMIER TECH", "years": [2021] },
       { "name": "ASTANA QAZAQSTAN TEAM", "years": [2022, 2023, 2024] },
       { "name": "XDS ASTANA TEAM", "years": [2025, 2026] }
     ]
@@ -53,6 +55,7 @@
     "name": "B&B Hotels–KTM",
     "category": "men",
     "aliases": [
+      { "name": "B&B HOTELS P/B KTM", "years": [2021] },
       { "name": "B&B HOTELS - KTM", "years": [2022] }
     ]
   },
@@ -61,7 +64,7 @@
     "name": "Bahrain Victorious",
     "category": "men",
     "aliases": [
-      { "name": "BAHRAIN VICTORIOUS", "years": [2022, 2023, 2024, 2025, 2026] }
+      { "name": "BAHRAIN VICTORIOUS", "years": [2021, 2022, 2023, 2024, 2025, 2026] }
     ]
   },
   {
@@ -69,7 +72,7 @@
     "name": "Red Bull–Bora–Hansgrohe",
     "category": "men",
     "aliases": [
-      { "name": "BORA-HANSGROHE", "years": [2022, 2023, 2024] },
+      { "name": "BORA-HANSGROHE", "years": [2021, 2022, 2023, 2024] },
       { "name": "RED BULL-BORA-HANSGROHE", "years": [2025] },
       { "name": "RED BULL - BORA - HANSGROHE", "years": [2026] }
     ]
@@ -97,7 +100,7 @@
     "name": "Cofidis",
     "category": "men",
     "aliases": [
-      { "name": "COFIDIS", "years": [2022, 2023, 2024, 2025] }
+      { "name": "COFIDIS", "years": [2021, 2022, 2023, 2024, 2025] }
     ]
   },
   {
@@ -113,6 +116,7 @@
     "name": "EF Education–EasyPost",
     "category": "men",
     "aliases": [
+      { "name": "EF EDUCATION-NIPPO", "years": [2021] },
       { "name": "EF EDUCATION-EASYPOST", "years": [2022, 2023, 2024] },
       { "name": "EF EDUCATION - EASYPOST", "years": [2025, 2026] }
     ]
@@ -149,7 +153,7 @@
     "name": "Groupama–FDJ United",
     "category": "men",
     "aliases": [
-      { "name": "GROUPAMA-FDJ", "years": [2022, 2023, 2024, 2025] },
+      { "name": "GROUPAMA-FDJ", "years": [2021, 2022, 2023, 2024, 2025] },
       { "name": "GROUPAMA - FDJ UNITED", "years": [2026] }
     ]
   },
@@ -166,7 +170,7 @@
     "name": "Ineos Grenadiers",
     "category": "men",
     "aliases": [
-      { "name": "INEOS GRENADIERS", "years": [2022, 2023, 2024, 2025, 2026] }
+      { "name": "INEOS GRENADIERS", "years": [2021, 2022, 2023, 2024, 2025, 2026] }
     ]
   },
   {
@@ -174,7 +178,7 @@
     "name": "Intermarché–Wanty",
     "category": "men",
     "aliases": [
-      { "name": "INTERMARCHÉ - WANTY - GOBERT MATERIAUX", "years": [2022] },
+      { "name": "INTERMARCHÉ - WANTY - GOBERT MATERIAUX", "years": [2021, 2022] },
       { "name": "INTERMARCHÉ-CIRCUS-WANTY", "years": [2023] },
       { "name": "INTERMARCHÉ-WANTY", "years": [2024] },
       { "name": "INTERMARCHÉ | WANTY", "years": [2025] }
@@ -185,6 +189,7 @@
     "name": "NSN Cycling Team",
     "category": "men",
     "aliases": [
+      { "name": "ISRAEL START-UP NATION", "years": [2021] },
       { "name": "ISRAEL-PREMIER TECH", "years": [2022, 2023, 2024, 2025] },
       { "name": "NSN CYCLING TEAM", "years": [2026] }
     ]
@@ -203,6 +208,7 @@
     "name": "Jayco AlUla",
     "category": "men",
     "aliases": [
+      { "name": "TEAM BIKEEXCHANGE", "years": [2021] },
       { "name": "TEAM BIKEEXCHANGE - JAYCO", "years": [2022] },
       { "name": "TEAM JAYCO ALULA", "years": [2023, 2024, 2025, 2026] }
     ]
@@ -212,7 +218,7 @@
     "name": "Visma–Lease a Bike",
     "category": "men",
     "aliases": [
-      { "name": "JUMBO-VISMA", "years": [2022] },
+      { "name": "JUMBO-VISMA", "years": [2021, 2022] },
       { "name": "TEAM JUMBO-VISMA", "years": [2023] },
       { "name": "TEAM VISMA | LEASE A BIKE", "years": [2024, 2025, 2026] }
     ]
@@ -222,7 +228,7 @@
     "name": "Lidl–Trek",
     "category": "men",
     "aliases": [
-      { "name": "TREK-SEGAFREDO", "years": [2022, 2023] },
+      { "name": "TREK-SEGAFREDO", "years": [2021, 2022, 2023] },
       { "name": "LIDL-TREK", "years": [2024, 2025] },
       { "name": "LIDL - TREK", "years": [2026] },
       { "name": "LIDL -TREK", "years": [2026] }
@@ -250,7 +256,7 @@
     "name": "Lotto–Intermarché",
     "category": "men",
     "aliases": [
-      { "name": "LOTTO SOUDAL", "years": [2022] },
+      { "name": "LOTTO SOUDAL", "years": [2021, 2022] },
       { "name": "LOTTO DSTNY", "years": [2023, 2024] },
       { "name": "LOTTO", "years": [2025] },
       { "name": "LOTTO - INTERMARCHE", "years": [2026] }
@@ -261,7 +267,7 @@
     "name": "Movistar Team",
     "category": "men",
     "aliases": [
-      { "name": "MOVISTAR TEAM", "years": [2022, 2023, 2024, 2025, 2026] }
+      { "name": "MOVISTAR TEAM", "years": [2021, 2022, 2023, 2024, 2025, 2026] }
     ]
   },
   {
@@ -295,9 +301,17 @@
     "name": "Picnic PostNL",
     "category": "men",
     "aliases": [
-      { "name": "TEAM DSM", "years": [2022, 2023] },
+      { "name": "TEAM DSM", "years": [2021, 2022, 2023] },
       { "name": "TEAM DSM-FIRMENICH POSTNL", "years": [2024] },
       { "name": "TEAM PICNIC POSTNL", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "qhubeka-assos",
+    "name": "Qhubeka Assos",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM QHUBEKA ASSOS", "years": [2021] }
     ]
   },
   {
@@ -314,6 +328,7 @@
     "name": "TotalEnergies",
     "category": "men",
     "aliases": [
+      { "name": "TOTAL DIRECT ENERGIE", "years": [2021] },
       { "name": "TEAM TOTALENERGIES", "years": [2022, 2023] },
       { "name": "TOTALENERGIES", "years": [2024, 2025] }
     ]
@@ -339,7 +354,7 @@
     "name": "UAE Team Emirates–XRG",
     "category": "men",
     "aliases": [
-      { "name": "UAE TEAM EMIRATES", "years": [2022, 2023, 2024] },
+      { "name": "UAE TEAM EMIRATES", "years": [2021, 2022, 2023, 2024] },
       { "name": "UAE TEAM EMIRATES - XRG", "years": [2025, 2026] }
     ]
   },
