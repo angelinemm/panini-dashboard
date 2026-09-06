@@ -357,6 +357,7 @@
 
 .section-heading--light .stage-label { color: var(--yellow); }
 .section-heading--light h2 { color: #fff; }
+.hall-of-fame__intro { margin: 8px 0 0; color: rgba(255, 251, 234, .78); font-size: .88rem; font-style: italic; line-height: 1.45; white-space: nowrap; }
 .section-heading--light > span { color: rgba(255, 251, 234, .68); }
 .hall-grid {
   display: grid;

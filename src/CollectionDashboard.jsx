@@ -161,7 +161,11 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
 
       <section className="hall-of-fame" aria-labelledby="hall-heading">
         <div className="section-heading section-heading--light">
-          <div><p className="stage-label">{uiText.collection.hallStage}</p><h2 id="hall-heading">{uiText.collection.hallTitle}</h2></div>
+          <div>
+            <p className="stage-label">{uiText.collection.hallStage}</p>
+            <h2 id="hall-heading">{uiText.collection.hallTitle}</h2>
+            <p className="hall-of-fame__intro">{uiText.collection.hallIntro}</p>
+          </div>
           <span>{uiText.collection.selectedOfTen(favourites.length)}</span>
         </div>
         {favourites.length > 0 ? (

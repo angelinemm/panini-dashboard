@@ -1,12 +1,12 @@
 [
   { "year": 2026, "stickerId": "229" }, // J. Vingegaard
   { "year": 2026, "stickerId": "39" }, // J. Philipsen
+  { "year": 2026, "stickerId": "61" }, // O. Kooij
   { "year": 2026, "stickerId": "62" }, // P. Seixas
-  { "year": 2026, "stickerId": "243" }, // T. Pogacar
+  { "year": 2026, "stickerId": "232" }, // M. Jorgenson
+  { "year": 2021, "stickerId": "355" }, // T. Pogacar
   { "year": 2026, "stickerId": "33" }, // M. Van der Poel
   { "year": 2024, "stickerId": "282" }, // W. Van Aert
   { "year": 2023, "stickerId": "272" }, // S. Kuss
-  { "year": 2026, "stickerId": "232" }, // M. Jorgenson
-  { "year": 2026, "stickerId": "61" }, // O. Kooij
   { "year": 2026, "stickerId": "113" } // J. Tarling
 ]
