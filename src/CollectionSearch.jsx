@@ -64,6 +64,7 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
       <header className="search-header">
         <p className="eyebrow">{uiText.search.collectionEyebrow}</p>
         <h1 id="search-title">{uiText.search.title}</h1>
+        <p className="search-header__subtitle">{uiText.search.subtitle}</p>
         <p>{uiText.search.intro}</p>
       </header>
 
@@ -110,7 +111,9 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
                     </strong>
                     <span>{uiText.search.teamStickerCount(team.count)}</span>
                   </div>
-                  <span className="search-result__type">{uiText.search.team}</span>
+                  <span className="search-result__type">
+                    {uiText.search.teamType(team.category)}
+                  </span>
                   <button type="button" onClick={() => onOpenTeam(team.id)}>
                     {uiText.search.openTeam} <span aria-hidden="true">→</span>
                   </button>
