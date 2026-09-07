@@ -69,12 +69,18 @@ export const searchTeams = (albums, teams, query) => {
     )
     .map((team) => {
       const aliases = new Map(team.aliases.map((alias) => [alias.name, alias]));
-      const count = albums.reduce((total, album) => total + album.stickers.filter((sticker) => {
-        const alias = aliases.get(String(sticker.Equipe ?? "").trim());
-        return alias && (!Array.isArray(alias.years) || alias.years.includes(album.year));
-      }).length, 0);
+      const matchingStickers = albums.flatMap((album) => album.stickers.filter((sticker) => {
+          const alias = aliases.get(String(sticker.Equipe ?? "").trim());
+          return alias && (!Array.isArray(alias.years) || alias.years.includes(album.year));
+        }));
+      const riderTypes = new Set(matchingStickers
+        .map((sticker) => normalizeSearchText(sticker.Type))
+        .filter((type) => type === "coureur" || type === "coureuse"));
+      const category = riderTypes.has("coureur") && riderTypes.has("coureuse")
+        ? "mixed"
+        : team.category;
 
-      return { ...team, count };
+      return { ...team, category, count: matchingStickers.length };
     })
     .filter((team) => team.count > 0)
     .sort((teamA, teamB) => teamA.name.localeCompare(teamB.name, "fr"));

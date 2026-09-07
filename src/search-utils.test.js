@@ -81,4 +81,20 @@ describe("searchTeams", () => {
     const albumsWithWrongYear = [{ year: 2023, stickers: [{ Equipe: "JUMBO-VISMA" }] }];
     expect(searchTeams(albumsWithWrongYear, teams, "jumbo")).toEqual([]);
   });
+
+  it("labels a team as mixed when it has both men and women riders", () => {
+    const mixedAlbums = [{
+      year: 2024,
+      stickers: [
+        { Equipe: "TEAM VISMA | LEASE A BIKE", Type: "Coureur" },
+        { Equipe: "TEAM VISMA | LEASE A BIKE", Type: "Coureuse" },
+      ],
+    }];
+    const categorizedTeams = [{ ...teams[0], category: "men" }];
+
+    expect(searchTeams(mixedAlbums, categorizedTeams, "visma")[0]).toMatchObject({
+      category: "mixed",
+      count: 2,
+    });
+  });
 });

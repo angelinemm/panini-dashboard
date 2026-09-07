@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { loadLatestAlbum } from "./album-loader.js";
 import { getStickerCollectedOn } from "./collection-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
@@ -15,6 +16,26 @@ export default function TeamDetail({ albums, onBack, onOpenAlbum, onOpenRider, t
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [picturesOnly, setPicturesOnly] = useState(false);
+  const [showAliases, setShowAliases] = useState(false);
+  const aliasesButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!showAliases) return undefined;
+
+    const aliasesButton = aliasesButtonRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setShowAliases(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+      aliasesButton?.focus();
+    };
+  }, [showAliases]);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,8 +91,59 @@ export default function TeamDetail({ albums, onBack, onOpenAlbum, onOpenRider, t
       <header className="country-detail__header">
         <p className="eyebrow">{uiText.team.eyebrow}</p>
         <h1>{team.name}</h1>
-        <p>{uiText.team.summary(stickers.length, team.aliases.length)}</p>
+        <p className="team-detail__summary">
+          <span>{uiText.team.summary(stickers.length)}</span>
+          {team.aliases.length > 1 && <>
+            <span aria-hidden="true"> · </span>
+            <span>{uiText.team.historicalNameCount(team.aliases.length)}</span>
+            <button
+              aria-label={uiText.team.showHistoricalNames}
+              className="team-detail__aliases-button"
+              onClick={() => setShowAliases(true)}
+              ref={aliasesButtonRef}
+              title={uiText.team.showHistoricalNames}
+              type="button"
+            >?</button>
+          </>}
+        </p>
       </header>
+
+      {showAliases && createPortal(
+        <div
+          aria-labelledby="team-aliases-title"
+          aria-modal="true"
+          className="team-aliases-modal"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setShowAliases(false);
+          }}
+          role="dialog"
+        >
+          <div className="team-aliases-modal__content">
+            <button
+              aria-label={uiText.team.closeHistoricalNames}
+              autoFocus
+              className="team-aliases-modal__close"
+              onClick={() => setShowAliases(false)}
+              type="button"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <p className="eyebrow">{uiText.team.eyebrow}</p>
+            <h2 id="team-aliases-title">{uiText.team.historicalNames}</h2>
+            <ul>
+              {team.aliases.map((alias) => (
+                <li key={`${alias.name}-${(alias.years ?? []).join("-")}`}>
+                  <strong>{alias.name}</strong>
+                  {Array.isArray(alias.years) && alias.years.length > 0 && (
+                    <span>{alias.years.join(", ")}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>,
+        document.body,
+      )}
 
       {stickers.length === 0 ? (
         <p className="search-empty">{uiText.team.noStickers}</p>
