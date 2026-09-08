@@ -73,8 +73,7 @@
     "category": "men",
     "aliases": [
       { "name": "BORA-HANSGROHE", "years": [2021, 2022, 2023, 2024] },
-      { "name": "RED BULL-BORA-HANSGROHE", "years": [2025] },
-      { "name": "RED BULL - BORA - HANSGROHE", "years": [2026] }
+      { "name": "RED BULL - BORA - HANSGROHE", "years": [2025, 2026] }
     ]
   },
   {
@@ -116,9 +115,8 @@
     "name": "EF Education–EasyPost",
     "category": "men",
     "aliases": [
-      { "name": "EF EDUCATION-NIPPO", "years": [2021] },
-      { "name": "EF EDUCATION-EASYPOST", "years": [2022, 2023, 2024] },
-      { "name": "EF EDUCATION - EASYPOST", "years": [2025, 2026] }
+      { "name": "EF EDUCATION - NIPPO", "years": [2021] },
+      { "name": "EF EDUCATION - EASYPOST", "years": [2022, 2023, 2024, 2025, 2026] }
     ]
   },
   {
@@ -229,9 +227,7 @@
     "category": "men",
     "aliases": [
       { "name": "TREK-SEGAFREDO", "years": [2021, 2022, 2023] },
-      { "name": "LIDL-TREK", "years": [2024, 2025] },
-      { "name": "LIDL - TREK", "years": [2026] },
-      { "name": "LIDL -TREK", "years": [2026] }
+      { "name": "LIDL - TREK", "years": [2024, 2025, 2026] }
     ]
   },
   {
@@ -284,8 +280,7 @@
     "category": "men",
     "aliases": [
       { "name": "QUICK-STEP ALPHA VINYL TEAM", "years": [2022] },
-      { "name": "SOUDAL QUICK-STEP", "years": [2023, 2024, 2025] },
-      { "name": "SOUDAL QUICK STEP", "years": [2026] }
+      { "name": "SOUDAL QUICK-STEP", "years": [2023, 2024, 2025, 2026] }
     ]
   },
   {
@@ -364,8 +359,7 @@
     "category": "men",
     "aliases": [
       { "name": "UNO-X PRO CYCLING TEAM", "years": [2023] },
-      { "name": "UNO-X MOBILITY", "years": [2024, 2025] },
-      { "name": "UNO - X MOBILITY", "years": [2026] }
+      { "name": "UNO-X MOBILITY", "years": [2024, 2025, 2026] }
     ]
   }
 ]
