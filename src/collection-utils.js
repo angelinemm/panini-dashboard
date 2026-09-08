@@ -149,8 +149,10 @@ export const resolveAllTimeFavourites = (ranking, albums) => {
   }
 
   return ranking.slice(0, 10).flatMap((reference, index) => {
-    const album = albums.find(
-      (currentAlbum) => currentAlbum.year === Number(reference?.year),
+    const album = albums.find((currentAlbum) =>
+      reference?.albumId
+        ? currentAlbum.id === reference.albumId
+        : currentAlbum.year === Number(reference?.year),
     );
     const sticker = album?.stickers.find(
       (currentSticker) =>

@@ -49,6 +49,15 @@
     "chases": "/albums/tdf-2025/chases.json"
   },
   {
+    "id": "giro-2025",
+    "year": 2025,
+    "title": "Giro d'Italia 2025",
+    "label": "Giro 2025",
+    "theme": "pink",
+    "snapshotsDirectory": "albums/giro-2025/snapshots",
+    "chases": "/albums/giro-2025/chases.json"
+  },
+  {
     "id": "tdf-2026",
     "year": 2026,
     "title": "Tour de France 2026",

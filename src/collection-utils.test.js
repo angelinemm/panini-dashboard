@@ -15,6 +15,15 @@ describe("collection summaries", () => {
     expect(getAlbumProgress({ id: "tdf-2026" }, [{ Number: "1", Owned: "TRUE" }, { Number: "2", Owned: "FALSE" }])).toMatchObject({ owned: 1, total: 2, missing: 1, percentage: 50 });
   });
 
+  it("resolves favourites by album id when races share a year", () => {
+    const albums = [
+      { id: "tdf-2025", year: 2025, stickers: [{ Number: "1" }], history: [] },
+      { id: "giro-2025", year: 2025, stickers: [{ Number: "2" }], history: [] },
+    ];
+
+    expect(resolveAllTimeFavourites([{ albumId: "giro-2025", stickerId: "2" }], albums)[0].album.id).toBe("giro-2025");
+  });
+
   it("derives started and completed dates from album history", () => {
     const history = [
       { date: "2025-06-01", owned: 0, total: 2 },

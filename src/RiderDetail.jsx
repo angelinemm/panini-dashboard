@@ -113,7 +113,7 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
                   </div>
                   <div className="rider-appearance__details">
                     <div className="rider-appearance__title">
-                      <strong>{album.year}</strong>
+                      <strong>{album.label ?? album.year}</strong>
                       <b>{uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
                     </div>
                     <span>{[sticker.Type, sticker.Equipe, sticker.Country].filter((value) => String(value ?? "").trim()).join(" · ")}</span>

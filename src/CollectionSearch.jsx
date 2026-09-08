@@ -160,7 +160,7 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
                 const countryFlag = getCountryFlag(country);
                 const albumDetails = sortedOccurrences
                   .map(({ album, sticker }) =>
-                    uiText.search.albumOccurrence(album.year, getStickerNumber(sticker)),
+                    uiText.search.albumOccurrence(album.label ?? album.year, getStickerNumber(sticker)),
                   )
                   .join(", ");
                 return (

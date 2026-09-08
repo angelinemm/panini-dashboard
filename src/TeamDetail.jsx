@@ -177,10 +177,10 @@ export default function TeamDetail({ albums, onBack, onOpenAlbum, onOpenRider, t
                   <div className="rider-appearance__details">
                     <div className="rider-appearance__title">
                       <strong>
-                        {name && isRider ? <button className="country-detail__rider" onClick={() => onOpenRider(name)} type="button">{name}</button> : name || type || album.year}
+                        {name && isRider ? <button className="country-detail__rider" onClick={() => onOpenRider(name)} type="button">{name}</button> : name || type || album.label || album.year}
                         {isFavourite(sticker) && <span aria-label={uiText.rider.favourite} className="rider-detail__favourite country-detail__favourite" role="img" title={uiText.rider.favourite}>★</span>}
                       </strong>
-                      <b>{album.year} · {uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
+                      <b>{album.label ?? album.year} · {uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
                     </div>
                     <span>{[type, sticker.Equipe].filter((value) => String(value ?? "").trim()).join(" · ")}</span>
                     <div className="rider-appearance__actions">

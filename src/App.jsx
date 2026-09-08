@@ -119,7 +119,7 @@ const AlbumTabs = ({ albums, isSearch, selectedAlbumId, onSearch, onSelect }) =>
             role="tab"
             type="button"
           >
-            {album.year}
+            {album.label ?? album.year}
             {album.snapshots.length === 0 && <span>{uiText.navigation.coming}</span>}
           </button>
         ))}
@@ -386,7 +386,7 @@ function App() {
 
   if (loading || error || albums.length === 0) {
     return (
-      <main className="dashboard">
+      <main className={`dashboard dashboard--${selectedAlbum?.theme ?? "yellow"}`}>
         <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           {albums.length > 0 && (
@@ -489,7 +489,7 @@ function App() {
 
   if (selectedAlbum.snapshots.length === 0) {
     return (
-      <main className="dashboard">
+      <main className={`dashboard dashboard--${selectedAlbum.theme}`}>
         <LanguageSwitcher language={language} onChange={changeLanguage} />
         <section className="race-panel race-panel--collection">
           <AlbumTabs
@@ -816,7 +816,7 @@ function App() {
   };
 
   return (
-    <main className="dashboard">
+    <main className={`dashboard dashboard--${selectedAlbum.theme}`}>
       <LanguageSwitcher language={language} onChange={changeLanguage} />
       <section className="race-panel race-panel--collection">
         <AlbumTabs

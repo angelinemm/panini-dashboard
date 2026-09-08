@@ -6,6 +6,39 @@
   overflow: hidden;
 }
 
+.dashboard--pink {
+  --yellow: #f3a6c1;
+}
+
+.dashboard--pink::before {
+  background:
+    linear-gradient(115deg, rgba(243, 166, 193, 0.78), rgba(243, 166, 193, 0.1) 38%),
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.96) 0 2px, transparent 3px),
+    radial-gradient(circle at 82% 20%, rgba(227, 20, 45, 0.42) 0 3px, transparent 4px),
+    radial-gradient(circle at 74% 76%, rgba(0, 132, 86, 0.28) 0 3px, transparent 4px),
+    linear-gradient(145deg, #fff1f6 0%, #fff8fb 44%, #e6edf2 100%);
+}
+
+.dashboard--pink .progress div {
+  background: linear-gradient(90deg, #e97fa5, #ffd3e2 58%, var(--green));
+  box-shadow: 0 0 24px rgba(243, 166, 193, 0.5);
+}
+
+.dashboard--pink .favourite-cards {
+  background:
+    linear-gradient(135deg, rgba(243, 166, 193, 0.92), rgba(255, 222, 234, 0.95)),
+    repeating-linear-gradient(120deg, rgba(13, 43, 60, 0.09) 0 1px, transparent 1px 18px);
+}
+
+.dashboard--pink .chase-item--owned {
+  background: rgba(243, 166, 193, 0.16);
+}
+
+/* The yellow-jersey statistic remains literal yellow, even on Giro albums. */
+.dashboard--pink .stat--yellow {
+  background: #ffdd00;
+}
+
 .language-switcher {
   position: fixed;
   top: 18px;

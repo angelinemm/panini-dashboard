@@ -114,7 +114,7 @@ export default function CountryDetail({ albums, country, onBack, onOpenAlbum, on
                   <div className="rider-appearance__details">
                     <div className="rider-appearance__title">
                       <strong>
-                        {name ? <button className="country-detail__rider" onClick={() => onOpenRider(name)} type="button">{name}</button> : album.year}
+                        {name ? <button className="country-detail__rider" onClick={() => onOpenRider(name)} type="button">{name}</button> : album.label ?? album.year}
                         {name && favouriteRiders.has(name) && (
                           <span
                             aria-label={uiText.rider.favourite}
@@ -126,7 +126,7 @@ export default function CountryDetail({ albums, country, onBack, onOpenAlbum, on
                           </span>
                         )}
                       </strong>
-                      <b>{album.year} · {uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
+                      <b>{album.label ?? album.year} · {uiText.common.stickerNumber(getStickerNumber(sticker))}</b>
                     </div>
                     <span>{[sticker.Type, sticker.Equipe].filter((value) => String(value ?? "").trim()).join(" · ")}</span>
                     <div className="rider-appearance__actions">

@@ -206,7 +206,6 @@ export const snapshotIndexPlugin = () => {
     }
 
     const albumIds = new Set();
-    const albumYears = new Set();
     const indexedAlbums = albums.map((album) => {
       if (
         typeof album.id !== "string" ||
@@ -219,11 +218,17 @@ export const snapshotIndexPlugin = () => {
         );
       }
 
-      if (albumIds.has(album.id) || albumYears.has(album.year)) {
-        throw new Error(`Duplicate album id or year for ${album.id}`);
+      if (albumIds.has(album.id)) {
+        throw new Error(`Duplicate album id for ${album.id}`);
       }
       albumIds.add(album.id);
-      albumYears.add(album.year);
+
+      if (album.label !== undefined && typeof album.label !== "string") {
+        throw new Error(`Album label must be a string for ${album.id}`);
+      }
+      if (album.theme !== undefined && !["yellow", "pink"].includes(album.theme)) {
+        throw new Error(`Album theme must be yellow or pink for ${album.id}`);
+      }
 
       const discoveredSnapshots = readSnapshotDirectory(
         publicDir,
@@ -238,6 +243,8 @@ export const snapshotIndexPlugin = () => {
         id: album.id,
         year: album.year,
         title: album.title,
+        label: album.label ?? String(album.year),
+        theme: album.theme ?? "yellow",
         chases: album.chases ?? null,
         images: readStickerImages(publicDir, album.id),
         snapshots,

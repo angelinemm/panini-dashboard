@@ -136,7 +136,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
               key={album.id}
             >
               <div className="album-card__top">
-                <div><span>{uiText.collection.title}</span><strong>{album.year}</strong></div>
+                <div><span>{uiText.collection.title}</span><strong>{album.label ?? album.year}</strong></div>
                 <b>{album.owned === 0 ? uiText.collection.notStarted : `${album.percentage}%`}</b>
               </div>
               <div className="progress" aria-label={uiText.common.percentageCompleted(album.percentage)}>
@@ -178,7 +178,7 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
               return (
                 <li className={`hall-card hall-card--${Math.min(rank, 4)}`} key={`${album.id}-${getStickerNumber(sticker)}`}>
                   <span className="hall-card__rank">#{rank}</span>
-                  <span className="hall-card__year">{album.year}</span>
+                  <span className="hall-card__year">{album.label ?? album.year}</span>
                   <StickerThumbnail src={image} />
                   <div className="hall-card__number">{uiText.common.stickerNumber(getStickerNumber(sticker))}</div>
                   <div className="hall-card__copy">

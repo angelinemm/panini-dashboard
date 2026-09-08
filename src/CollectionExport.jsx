@@ -36,7 +36,7 @@ export default function CollectionExport({ albums, summary }) {
           {startedAlbums.map((album) => (
             <article className="album-card" key={album.id}>
               <div className="album-card__top">
-                <div><span>{uiText.collection.title}</span><strong>{album.year}</strong></div>
+                <div><span>{uiText.collection.title}</span><strong>{album.label ?? album.year}</strong></div>
                 <b>{album.percentage}%</b>
               </div>
               <div className="progress"><div style={{ width: `${album.percentage}%` }} /></div>
@@ -57,7 +57,7 @@ export default function CollectionExport({ albums, summary }) {
             <header className="race-panel__header">
               <div>
                 <p className="eyebrow">{album.title}</p>
-                <h1>{album.year}</h1>
+                <h1>{album.label ?? album.year}</h1>
               </div>
               <div className="race-badge">
                 <span>{album.percentage}%</span>
