@@ -227,7 +227,8 @@
     "category": "men",
     "aliases": [
       { "name": "TREK-SEGAFREDO", "years": [2021, 2022, 2023] },
-      { "name": "LIDL - TREK", "years": [2024, 2025, 2026] }
+      { "name": "LIDL-TREK", "years": [2024, 2025] },
+      { "name": "LIDL - TREK", "years": [2025, 2026] }
     ]
   },
   {
@@ -302,6 +303,14 @@
     ]
   },
   {
+    "id": "q365-pro-cycling-team",
+    "name": "Q36.5 Pro Cycling Team",
+    "category": "men",
+    "aliases": [
+      { "name": "Q36.5 PRO CYCLING TEAM", "years": [2025] }
+    ]
+  },
+  {
     "id": "qhubeka-assos",
     "name": "Qhubeka Assos",
     "category": "men",
@@ -316,6 +325,14 @@
     "aliases": [
       { "name": "TEAM SD WORX", "years": [2023] },
       { "name": "TEAM SD WORX - PROTIME", "years": [2025, 2026] }
+    ]
+  },
+  {
+    "id": "team-polti-visitmalta",
+    "name": "Team Polti VisitMalta",
+    "category": "men",
+    "aliases": [
+      { "name": "TEAM POLTI VISITMALTA", "years": [2025] }
     ]
   },
   {
@@ -360,6 +377,14 @@
     "aliases": [
       { "name": "UNO-X PRO CYCLING TEAM", "years": [2023] },
       { "name": "UNO-X MOBILITY", "years": [2024, 2025, 2026] }
+    ]
+  },
+  {
+    "id": "vf-group-bardiani-csf-faizane",
+    "name": "VF Group Bardiani–CSF–Faizanè",
+    "category": "men",
+    "aliases": [
+      { "name": "VF GROUP BARDIANI CSF-FAIZANE", "years": [2025] }
     ]
   }
 ]
