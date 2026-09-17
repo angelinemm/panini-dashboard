@@ -95,13 +95,15 @@ references a sticker already present in an album snapshot:
 
 ```json
 [
-  { "year": 2026, "stickerId": "123" }, // Rider note
-  { "year": 2025, "stickerId": "45" } // Another note
+  { "albumId": "tdf-2026", "stickerId": "123" }, // Rider note
+  { "albumId": "giro-2025", "stickerId": "45" } // Another note
 ]
 ```
 
-The list may contain zero to ten entries. Names, teams, and types are resolved
-from the latest album data.
+Use the album's `id` from `albums.config.json`; unlike a year, it remains
+unambiguous when multiple albums were released in the same year. The list may
+contain zero to ten entries. Names, teams, and types are resolved from the
+latest album data.
 
 ### Sticker thumbnails
 

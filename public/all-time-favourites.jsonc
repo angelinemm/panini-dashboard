@@ -1,12 +1,12 @@
 [
-  { "year": 2026, "stickerId": "229" }, // J. Vingegaard
-  { "year": 2021, "stickerId": "62" }, // J. Philipsen
-  { "year": 2026, "stickerId": "61" }, // O. Kooij
-  { "year": 2026, "stickerId": "62" }, // P. Seixas
-  { "year": 2026, "stickerId": "232" }, // M. Jorgenson
-  { "year": 2021, "stickerId": "355" }, // T. Pogacar
-  { "year": 2026, "stickerId": "33" }, // M. Van der Poel
-  { "year": 2024, "stickerId": "282" }, // W. Van Aert
-  { "year": 2023, "stickerId": "272" }, // S. Kuss
-  { "year": 2026, "stickerId": "113" } // J. Tarling
+  { "albumId": "tdf-2026", "stickerId": "229" }, // J. Vingegaard
+  { "albumId": "tdf-2021", "stickerId": "62" }, // J. Philipsen
+  { "albumId": "tdf-2026", "stickerId": "61" }, // O. Kooij
+  { "albumId": "tdf-2026", "stickerId": "62" }, // P. Seixas
+  { "albumId": "tdf-2026", "stickerId": "232" }, // M. Jorgenson
+  { "albumId": "giro-2025", "stickerId": "240" }, // W. Van Aert
+  { "albumId": "tdf-2023", "stickerId": "272" }, // S. Kuss
+  { "albumId": "tdf-2026", "stickerId": "113" }, // J. Tarling
+  { "albumId": "tdf-2021", "stickerId": "355" }, // T. Pogacar
+  { "albumId": "tdf-2026", "stickerId": "33" } // M. Van der Poel
 ]
