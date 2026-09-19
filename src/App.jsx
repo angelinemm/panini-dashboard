@@ -549,7 +549,7 @@ function App() {
     })
     .sort((stickerA, stickerB) => stickerA.rank - stickerB.rank)
     .slice(0, 3);
-  const topCountries = getTopRiderCountries([{ stickers }]);
+  const topCountries = getTopRiderCountries([{ stickers }], Infinity);
   const getTopTeamsByTypes = (types) => {
     const allowedTypes = new Set(types);
     const getTeamProgress = (snapshotStickers, teamName) => {

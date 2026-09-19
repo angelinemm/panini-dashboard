@@ -72,15 +72,15 @@ export default function CollectionDashboard({ albums, onOpenAlbum, onOpenCountry
     [ranking, albumProgress],
   );
   const topCountries = useMemo(
-    () => getTopRiderCountries(albumProgress),
+    () => getTopRiderCountries(albumProgress, Infinity),
     [albumProgress],
   );
   const topRepeatedRiders = useMemo(
-    () => getTopRepeatedRiders(albumProgress),
+    () => getTopRepeatedRiders(albumProgress, Infinity),
     [albumProgress],
   );
   const topOwnedTeams = useMemo(
-    () => getTopOwnedTeams(albumProgress, teams),
+    () => getTopOwnedTeams(albumProgress, teams, Infinity),
     [albumProgress, teams],
   );
 

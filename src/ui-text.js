@@ -127,6 +127,11 @@ const frenchText = {
   rankings: {
     nations: "Les nations",
     countriesTitle: "Top 5 pays",
+    showAll: "Tout voir",
+    close: "Fermer",
+    allCountries: "Tous les pays",
+    allRiders: "Tous les coureurs multi-albums",
+    allTeams: "Toutes les équipes possédées",
     countriesSubtitle: "Stickers de coureurs collectés",
     regulars: "Les habitués",
     ridersTitle: "Top 5 multi-albums",
@@ -319,6 +324,11 @@ const englishText = {
   rankings: {
     nations: "The nations",
     countriesTitle: "Top 5 countries",
+    showAll: "Show all",
+    close: "Close",
+    allCountries: "All countries",
+    allRiders: "All riders across albums",
+    allTeams: "All teams owned",
     countriesSubtitle: "Collected rider stickers",
     regulars: "The regulars",
     ridersTitle: "Top 5 across albums",
