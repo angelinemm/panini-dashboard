@@ -82,6 +82,24 @@ describe("collection summaries", () => {
     ]);
   });
 
+  it("breaks country count ties by owned rider favourite flags before limiting", () => {
+    const albums = [{ stickers: ["AUS", "BEL", "FRA", "USA", "NZL"].flatMap((Country) => [
+      { Country, Type: "Coureur", Owned: "TRUE", "Fav?": ["BEL", "FRA", "USA"].includes(Country) ? "x" : " " },
+      { Country: Country.toLowerCase(), Type: "Coureuse", Owned: "TRUE", "Fav?": Country === "USA" ? "x" : "" },
+      { Country, Type: "Logo", Owned: "TRUE", "Fav?": "x" },
+      { Country, Type: "Coureur", Owned: "FALSE", "Fav?": "x" },
+      ...(Country === "NZL" ? [{ Country, Type: "Coureur", Owned: "TRUE" }] : []),
+    ]) }];
+
+    expect(getTopRiderCountries(albums).map(({ country }) => country)).toEqual([
+      "NZL", "USA", "BEL", "FRA", "AUS",
+    ]);
+    expect(getTopRiderCountries(albums, 2)).toEqual([
+      { country: "NZL", count: 3 },
+      { country: "USA", count: 2 },
+    ]);
+  });
+
   it("ranks owned riders by distinct albums, not sticker copies", () => {
     const albums = [
       { year: 2025, stickers: [
@@ -111,6 +129,26 @@ describe("collection summaries", () => {
     ]);
   });
 
+  it("prioritises favourites only when album counts tie, before limiting results", () => {
+    const albums = [2024, 2025, 2026].map((year) => ({ year, stickers: [
+      { Type: "Coureur", Name: "Leader", Owned: "TRUE" },
+      ...["Adam", "Bella", "Zoé"].map((Name) => ({
+        Type: "Coureuse", Name, Owned: year === 2024 ? "FALSE" : "TRUE",
+        "Fav?": Name === "Adam" ? " " : "",
+      })),
+      { Type: "Coureuse", Name: "zoé", Owned: year === 2026 ? "TRUE" : "FALSE", "Fav?": "x" },
+      { Type: "Coureuse", Name: "Bella", Owned: year === 2024 ? "FALSE" : "TRUE", "Fav?": year === 2025 ? "x" : "" },
+      { Type: "Coureuse", Name: "Adam", Owned: "FALSE", "Fav?": "x" },
+    ] }));
+
+    expect(getTopRepeatedRiders(albums).map(({ name }) => name)).toEqual([
+      "Leader", "Bella", "Zoé", "Adam",
+    ]);
+    expect(getTopRepeatedRiders(albums, 2).map(({ name }) => name)).toEqual([
+      "Leader", "Bella",
+    ]);
+  });
+
   it("ranks owned stickers under canonical teams across year-specific aliases", () => {
     const albums = [
       { year: 2025, stickers: [
@@ -135,6 +173,26 @@ describe("collection summaries", () => {
     expect(getTopOwnedTeams(albums, teams)).toEqual([
       { id: "alpha", name: "Alpha", count: 3 },
       { id: "beta", name: "Beta", count: 1 },
+    ]);
+  });
+
+  it("breaks team count ties by owned rider favourite flags before limiting", () => {
+    const teams = ["Alpha", "Beta", "Gamma", "Leader", "Zeta"].map((name) => ({
+      id: name, name, aliases: [{ name }],
+    }));
+    const albums = [{ year: 2026, stickers: teams.flatMap(({ name }) => [
+      { Equipe: name, Owned: "TRUE", Type: "Coureur", "Fav?": name === "Alpha" || name === "Leader" ? " " : "x" },
+      { Equipe: name, Owned: "TRUE", Type: "Coureuse", "Fav?": name === "Zeta" ? "x" : "" },
+      { Equipe: name, Owned: "TRUE", Type: "Logo", "Fav?": name === "Alpha" ? "x" : "" },
+      { Equipe: name, Owned: "FALSE", Type: "Coureur", "Fav?": "x" },
+      ...(name === "Leader" ? [{ Equipe: name, Owned: "TRUE", Type: "Maillot" }] : []),
+    ]) }];
+
+    expect(getTopOwnedTeams(albums, teams).map(({ name }) => name)).toEqual([
+      "Leader", "Zeta", "Beta", "Gamma", "Alpha",
+    ]);
+    expect(getTopOwnedTeams(albums, teams, 2).map(({ name }) => name)).toEqual([
+      "Leader", "Zeta",
     ]);
   });
 });

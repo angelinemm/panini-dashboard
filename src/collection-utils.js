@@ -1,4 +1,4 @@
-import { getStickerNumber, isOwned } from "./sticker-utils.js";
+import { getStickerNumber, isFavourite, isOwned } from "./sticker-utils.js";
 
 export const getStickerCollectedOn = (sticker, history = []) => {
   const stickerNumber = getStickerNumber(sticker);
@@ -56,6 +56,7 @@ export const getCollectionSummary = (albums) => {
 
 export const getTopRiderCountries = (albums, limit = 5) => {
   const countries = new Map();
+  const favouriteCounts = new Map();
 
   albums.forEach((album) => {
     album.stickers.forEach((sticker) => {
@@ -64,18 +65,26 @@ export const getTopRiderCountries = (albums, limit = 5) => {
 
       if ((type === "coureur" || type === "coureuse") && country && isOwned(sticker)) {
         countries.set(country, (countries.get(country) ?? 0) + 1);
+        if (isFavourite(sticker)) {
+          favouriteCounts.set(country, (favouriteCounts.get(country) ?? 0) + 1);
+        }
       }
     });
   });
 
   return [...countries.entries()]
     .map(([country, count]) => ({ country, count }))
-    .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country))
+    .sort((a, b) =>
+      b.count - a.count ||
+      (favouriteCounts.get(b.country) ?? 0) - (favouriteCounts.get(a.country) ?? 0) ||
+      a.country.localeCompare(b.country)
+    )
     .slice(0, Math.max(0, limit));
 };
 
 export const getTopRepeatedRiders = (albums, limit = 5) => {
   const riders = new Map();
+  const favourites = new Set();
 
   albums.forEach((album) => {
     const ridersInAlbum = new Map();
@@ -86,6 +95,9 @@ export const getTopRepeatedRiders = (albums, limit = 5) => {
 
       if ((type === "coureur" || type === "coureuse") && name && isOwned(sticker)) {
         const key = name.toLocaleLowerCase("fr");
+        if (isFavourite(sticker)) {
+          favourites.add(key);
+        }
         if (!ridersInAlbum.has(key)) {
           ridersInAlbum.set(key, name);
         }
@@ -106,12 +118,18 @@ export const getTopRepeatedRiders = (albums, limit = 5) => {
       years: [...rider.years].sort((a, b) => a - b),
       albumCount: rider.years.length,
     }))
-    .sort((a, b) => b.albumCount - a.albumCount || a.name.localeCompare(b.name, "fr"))
+    .sort((a, b) =>
+      b.albumCount - a.albumCount ||
+      Number(favourites.has(b.name.toLocaleLowerCase("fr"))) -
+        Number(favourites.has(a.name.toLocaleLowerCase("fr"))) ||
+      a.name.localeCompare(b.name, "fr")
+    )
     .slice(0, Math.max(0, limit));
 };
 
 export const getTopOwnedTeams = (albums, teams, limit = 5) => {
   const counts = new Map(teams.map((team) => [team.id, 0]));
+  const favouriteCounts = new Map(teams.map((team) => [team.id, 0]));
 
   albums.forEach((album) => {
     const aliases = new Map();
@@ -132,6 +150,10 @@ export const getTopOwnedTeams = (albums, teams, limit = 5) => {
       const teamId = aliases.get(String(sticker.Equipe ?? "").trim());
       if (teamId) {
         counts.set(teamId, counts.get(teamId) + 1);
+        const type = String(sticker.Type ?? "").trim().toLocaleLowerCase("fr");
+        if ((type === "coureur" || type === "coureuse") && isFavourite(sticker)) {
+          favouriteCounts.set(teamId, favouriteCounts.get(teamId) + 1);
+        }
       }
     });
   });
@@ -139,7 +161,11 @@ export const getTopOwnedTeams = (albums, teams, limit = 5) => {
   return teams
     .map((team) => ({ id: team.id, name: team.name, count: counts.get(team.id) ?? 0 }))
     .filter((team) => team.count > 0)
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "fr"))
+    .sort((a, b) =>
+      b.count - a.count ||
+      favouriteCounts.get(b.id) - favouriteCounts.get(a.id) ||
+      a.name.localeCompare(b.name, "fr")
+    )
     .slice(0, Math.max(0, limit));
 };
 
