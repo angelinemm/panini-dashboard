@@ -5,7 +5,7 @@ const countryFlags = {
   AUS: "🇦🇺", AUT: "🇦🇹", BEL: "🇧🇪", BRA: "🇧🇷", CAN: "🇨🇦",
   COL: "🇨🇴", CZE: "🇨🇿", DEN: "🇩🇰", ECU: "🇪🇨", ERI: "🇪🇷",
   ESP: "🇪🇸", FRA: "🇫🇷", GBR: "🇬🇧", GER: "🇩🇪", HUN: "🇭🇺",
-  IRL: "🇮🇪", ITA: "🇮🇹", KAZ: "🇰🇿", LAT: "🇱🇻", LVA: "🇱🇻",
+  IRL: "🇮🇪", ITA: "🇮🇹", KAZ: "🇰🇿", LVA: "🇱🇻",
   MEX: "🇲🇽", MRI: "🇲🇺", NED: "🇳🇱", NOR: "🇳🇴", NZL: "🇳🇿",
   POL: "🇵🇱", POR: "🇵🇹", SUI: "🇨🇭", SVN: "🇸🇮", USA: "🇺🇸",
 };
