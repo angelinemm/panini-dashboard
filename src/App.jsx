@@ -884,6 +884,60 @@ function App() {
           </section>
         )}
 
+        {topCards.length > 0 && (
+          <section className="hall-of-fame yearly-podium" aria-labelledby="favourite-cards-heading">
+            <div className="section-heading section-heading--light">
+              <div>
+                <p className="stage-label">{uiText.album.albumPodium}</p>
+                <h2 id="favourite-cards-heading">{uiText.album.favouriteCards}</h2>
+              </div>
+              <span>{uiText.album.personalTopThree}</span>
+            </div>
+
+            <ol className="yearly-podium__list">
+              {topCards.map((sticker) => {
+                const name = String(sticker.Name ?? "").trim();
+                const title = name || uiText.common.stickerFallback(sticker.Number);
+                const details = [
+                  String(sticker.Type).trim(),
+                  String(sticker.Equipe).trim(),
+                  String(sticker.Country).trim(),
+                ].filter(Boolean);
+                const image = String(sticker.Image ?? sticker.image ?? "").trim();
+
+                return (
+                  <li className={`hall-card hall-card--${sticker.rank}`} key={sticker.Number}>
+                    <span className="hall-card__rank">#{sticker.rank}</span>
+                    <StickerThumbnail src={image} />
+                    <div className="hall-card__number">{uiText.common.stickerNumber(sticker.Number)}</div>
+                    <div className="hall-card__copy">
+                      <strong>
+                        {name ? (
+                          <a
+                            href={`?view=rider&rider=${encodeURIComponent(name)}`}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              openRider(name);
+                            }}
+                          >
+                            {title}
+                          </a>
+                        ) : title}
+                      </strong>
+                      {details.length > 0 && <small>{details.join(" · ")}</small>}
+                      {sticker.collectedOn && (
+                        <small className="hall-card__collected-on">
+                          {uiText.common.obtainedOn(formatSnapshotDate(sticker.collectedOn))}
+                        </small>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        )}
+
         {history.length > 0 && (
           <section className="history-card" aria-labelledby="history-heading">
             <div className="team-standings__header">
@@ -1201,59 +1255,7 @@ function App() {
           </section>
         )}
 
-        {topCards.length > 0 && (
-          <section className="hall-of-fame yearly-podium" aria-labelledby="favourite-cards-heading">
-            <div className="section-heading section-heading--light">
-              <div>
-                <p className="stage-label">{uiText.album.albumPodium}</p>
-                <h2 id="favourite-cards-heading">{uiText.album.favouriteCards}</h2>
-              </div>
-              <span>{uiText.album.personalTopThree}</span>
-            </div>
 
-            <ol className="yearly-podium__list">
-              {topCards.map((sticker) => {
-                const name = String(sticker.Name ?? "").trim();
-                const title = name || uiText.common.stickerFallback(sticker.Number);
-                const details = [
-                  String(sticker.Type).trim(),
-                  String(sticker.Equipe).trim(),
-                  String(sticker.Country).trim(),
-                ].filter(Boolean);
-                const image = String(sticker.Image ?? sticker.image ?? "").trim();
-
-                return (
-                  <li className={`hall-card hall-card--${sticker.rank}`} key={sticker.Number}>
-                    <span className="hall-card__rank">#{sticker.rank}</span>
-                    <StickerThumbnail src={image} />
-                    <div className="hall-card__number">{uiText.common.stickerNumber(sticker.Number)}</div>
-                    <div className="hall-card__copy">
-                      <strong>
-                        {name ? (
-                          <a
-                            href={`?view=rider&rider=${encodeURIComponent(name)}`}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              openRider(name);
-                            }}
-                          >
-                            {title}
-                          </a>
-                        ) : title}
-                      </strong>
-                      {details.length > 0 && <small>{details.join(" · ")}</small>}
-                      {sticker.collectedOn && (
-                        <small className="hall-card__collected-on">
-                          {uiText.common.obtainedOn(formatSnapshotDate(sticker.collectedOn))}
-                        </small>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
-        )}
 
         {renderTeamStandings(
           mensTeams,
