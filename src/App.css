@@ -554,6 +554,41 @@
   margin-top: 18px;
 }
 
+.favourite-stages__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.favourite-stages__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  color: var(--ink);
+  background: #e6f4f7;
+  border: 4px solid #fff;
+  border-radius: 7px;
+}
+
+.favourite-stages__card .hall-card__thumbnail {
+  position: static;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  transform: none;
+}
+
+.favourite-stages__card small,
+.favourite-stages__card strong {
+  display: block;
+}
+
+.favourite-stages__card strong { margin-top: 6px; }
+
 .yearly-podium__list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

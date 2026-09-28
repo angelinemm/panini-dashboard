@@ -530,6 +530,9 @@ function App() {
   const packetsOpened =
     snapshotMetadata[selectedAlbumId]?.packetsOpened ?? 0;
   const favourites = stickers.filter(isFavourite).length;
+  const favouriteStages = stickers
+    .filter((sticker) => String(sticker.Type).trim() === "Instantané" && isFavourite(sticker))
+    .sort((a, b) => getStickerNumber(a).localeCompare(getStickerNumber(b), "fr", { numeric: true }));
   const topCards = stickers
     .map((sticker) => {
       const rank = Number.parseInt(sticker["Top 3"], 10);
@@ -855,6 +858,31 @@ function App() {
             <span>{uiText.album.finish}</span>
           </div>
         </div>
+
+        {favouriteStages.length > 0 && (
+          <section className="hall-of-fame favourite-stages" aria-labelledby="favourite-stages-heading">
+            <div className="section-heading section-heading--light">
+              <h2 id="favourite-stages-heading">{uiText.album.favouriteStages}</h2>
+            </div>
+            <ul className="favourite-stages__list">
+              {favouriteStages.map((sticker) => {
+                const code = getStickerNumber(sticker);
+                const name = String(sticker.Name ?? "").trim();
+                const image = String(sticker.Image ?? sticker.image ?? "").trim();
+
+                return (
+                  <li className="favourite-stages__card" key={code}>
+                    <StickerThumbnail src={image} alt={name || uiText.common.stickerFallback(code)} />
+                    <div>
+                      <small>{uiText.common.stickerNumber(code)}</small>
+                      {name && <strong>{name}</strong>}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         {history.length > 0 && (
           <section className="history-card" aria-labelledby="history-heading">
@@ -1240,6 +1268,7 @@ function App() {
           uiText.album.womensRankingSubtitle,
         )}
         <CountryRanking countries={topCountries} onOpenCountry={openCountry} />
+
       </section>
     </main>
   );
