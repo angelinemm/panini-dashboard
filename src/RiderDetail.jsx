@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadLatestAlbum } from "./album-loader.js";
 import { getStickerCollectedOn } from "./collection-utils.js";
 import { getCountryFlag } from "./country-utils.js";
+import { searchStickersByName } from "./search-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import {
   formatSnapshotDate,
@@ -34,15 +35,16 @@ export default function RiderDetail({ albums, name, onBackToSearch, onOpenAlbum 
     return () => { cancelled = true; };
   }, [albums]);
 
-  const occurrences = useMemo(() => collection
-    .flatMap((album) => album.stickers
-      .filter((sticker) => String(sticker.Name ?? "").trim() === name)
-      .map((sticker) => ({ album, sticker })))
+  const occurrences = useMemo(() => searchStickersByName(collection, name)
+    .flatMap((group) => group.occurrences)
     .sort((a, b) => b.album.year - a.album.year), [collection, name]);
   const latest = occurrences[0];
-  const imageOccurrence = occurrences.find(({ sticker }) =>
+  const imageOccurrences = occurrences.filter(({ sticker }) =>
     String(sticker.Image ?? sticker.image ?? "").trim(),
   );
+  const imageOccurrence = imageOccurrences.find(({ sticker }) =>
+    String(sticker.Type ?? "").trim() === "Coureur",
+  ) ?? imageOccurrences[0];
   const image = String(
     imageOccurrence?.sticker.Image ?? imageOccurrence?.sticker.image ?? "",
   ).trim();
