@@ -29,6 +29,20 @@ describe("searchStickersByName", () => {
   it("returns no results for an empty query", () => {
     expect(searchStickersByName(albums, "  ")).toEqual([]);
   });
+
+  it("puts rider names first, including groups with a later rider occurrence", () => {
+    const stickers = [
+      { Name: "Alex Special", Type: "Special" },
+      { Name: "Alex Martin", Type: "Portrait" },
+      { Name: "Alex Dupont", Type: " Coureuse " },
+      { Name: "Alex Martin", Type: "Coureur" },
+      { Name: "Alex Team" },
+    ];
+
+    expect(searchStickersByName([{ stickers }], "Alex").map(({ name }) => name))
+      .toEqual(["Alex Martin", "Alex Dupont", "Alex Special", "Alex Team"]);
+    expect(stickers[0].Name).toBe("Alex Special");
+  });
 });
 
 describe("searchCountries", () => {

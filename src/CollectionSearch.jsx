@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadLatestAlbum } from "./album-loader.js";
 import { getCountryFlag } from "./country-utils.js";
-import { searchCountries, searchStickersByName, searchTeams } from "./search-utils.js";
+import { isRiderSticker, searchCountries, searchStickersByName, searchTeams } from "./search-utils.js";
 import { getStickerNumber, isOwned } from "./sticker-utils.js";
 import StickerThumbnail from "./StickerThumbnail.jsx";
 import { uiText } from "./ui-text.js";
@@ -149,7 +149,10 @@ export default function CollectionSearch({ albums, onOpenAlbum, onOpenCountry, o
                   (a, b) => b.album.year - a.album.year,
                 );
                 const latestOccurrence = sortedOccurrences[0];
-                const imageOccurrence = sortedOccurrences.find(({ sticker }) =>
+                const imageOccurrences = [...sortedOccurrences].sort((a, b) =>
+                  Number(isRiderSticker(b.sticker)) - Number(isRiderSticker(a.sticker)),
+                );
+                const imageOccurrence = imageOccurrences.find(({ sticker }) =>
                   String(sticker.Image ?? sticker.image ?? "").trim(),
                 );
                 const image = String(

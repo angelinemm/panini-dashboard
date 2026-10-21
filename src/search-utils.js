@@ -5,6 +5,9 @@ export const normalizeSearchText = (value) =>
     .toLocaleLowerCase("fr")
     .trim();
 
+export const isRiderSticker = (sticker) =>
+  ["coureur", "coureuse"].includes(normalizeSearchText(sticker.Type));
+
 export const searchStickersByName = (albums, query) => {
   const normalizedQuery = normalizeSearchText(query);
 
@@ -24,7 +27,10 @@ export const searchStickersByName = (albums, query) => {
     group.occurrences.push(match);
     groups.set(name, group);
     return groups;
-  }, new Map()).values()];
+  }, new Map()).values()].sort((a, b) =>
+    Number(b.occurrences.some(({ sticker }) => isRiderSticker(sticker))) -
+    Number(a.occurrences.some(({ sticker }) => isRiderSticker(sticker))),
+  );
 };
 
 export const searchCountries = (albums, query, countryNames) => {
