@@ -5,8 +5,8 @@
   { "albumId": "giro-2025", "stickerId": "189" }, // P. Magnier
   { "albumId": "tdf-2026", "stickerId": "62" }, // P. Seixas
   { "albumId": "tdf-2026", "stickerId": "232" }, // M. Jorgenson
+  { "albumId": "tdf-2025", "stickerId": "97" }, // B. Tronchon
   { "albumId": "giro-2025", "stickerId": "240" }, // W. Van Aert
   { "albumId": "tdf-2023", "stickerId": "272" }, // S. Kuss
-  { "albumId": "giro-2025", "stickerId": "107" }, // J. Tarling
-  { "albumId": "tdf-2021", "stickerId": "355" } // T. Pogacar
+  { "albumId": "giro-2025", "stickerId": "107" } // J. Tarling
 ]
